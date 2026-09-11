@@ -19,17 +19,21 @@ const ui = {
     modeMixed: 'Всё вперемешку',
     modeFlags: 'Флаги',
     modeAnimals: 'Животные',
-    levelMax: 'Максимальный',
-    levelEasy: 'Базовый',
-    quizEyebrow: 'ЭКСПЕДИЦИЯ НА ПЯТЬ ЗАГАДОК',
+    levelEasy: 'Простой',
+    levelMedium: 'Средний',
+    levelMax: 'Сложный',
+    lengthGroup: 'Длина',
+    lengthFixed: 'Раунд',
+    lengthEndless: 'Бесконечно',
+    quizEyebrow: 'ЭКСПЕДИЦИЯ С ЗАГАДКАМИ',
     quizTitle: 'Куда отправимся?',
     exploreEyebrow: 'АТЛАС ДЛЯ ИССЛЕДОВАНИЯ',
     exploreTitle: 'Что найдём на карте?',
     clueTag: 'ЗАГАДКА {current} / {total}',
     finishEyebrow: 'ЭКСПЕДИЦИЯ ЗАВЕРШЕНА',
-    finishTitle: 'Пять загадок раскрыты!',
+    finishTitle: 'Раунд завершён!',
     finishText: 'Выбери другую тему или отправляйся в новый раунд.',
-    playAgain: 'Ещё пять загадок',
+    playAgain: 'Новый раунд',
     flagQuestion: 'Чей это флаг?',
     animalQuestion: 'Где его родной дом?',
     flagAltHidden: 'Фрагмент флага',
@@ -56,7 +60,7 @@ const ui = {
     sourcesTitle: 'Об игре и источниках',
     sourceFlags: 'Флаги:',
     sourceMap: 'Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны. У животных отмечен пример места в регионе обитания, а не весь ареал. Значки животных условные.',
-    sourceFacts: 'Факты:',
+    sourceFacts: 'Факты о животных — краткие учебные справки для игры; подробные источники по карточкам добавим отдельным инкрементом.',
   },
   en: {
     weekdays: 'Weekdays ↗',
@@ -73,17 +77,21 @@ const ui = {
     modeMixed: 'Mixed',
     modeFlags: 'Flags',
     modeAnimals: 'Animals',
-    levelMax: 'Maximum',
-    levelEasy: 'Basic',
-    quizEyebrow: 'FIVE-CLUE EXPEDITION',
+    levelEasy: 'Easy',
+    levelMedium: 'Medium',
+    levelMax: 'Hard',
+    lengthGroup: 'Length',
+    lengthFixed: 'Round',
+    lengthEndless: 'Endless',
+    quizEyebrow: 'GEOGRAPHY EXPEDITION',
     quizTitle: 'Where shall we go?',
     exploreEyebrow: 'EXPLORATION ATLAS',
     exploreTitle: 'What can we find on the map?',
     clueTag: 'CLUE {current} / {total}',
     finishEyebrow: 'EXPEDITION COMPLETE',
-    finishTitle: 'Five clues solved!',
+    finishTitle: 'Round complete!',
     finishText: 'Choose another topic or start a new round.',
-    playAgain: 'Five more clues',
+    playAgain: 'New round',
     flagQuestion: 'Whose flag is this?',
     animalQuestion: 'Where is its native home?',
     flagAltHidden: 'Flag fragment',
@@ -110,7 +118,7 @@ const ui = {
     sourcesTitle: 'About the game and sources',
     sourceFlags: 'Flags:',
     sourceMap: 'Outlines: Natural Earth / D3 Maps. The world map is schematic; small countries may be hard to see. Animal points mark one example place in the habitat region, not the whole range. Animal icons are symbolic.',
-    sourceFacts: 'Facts:',
+    sourceFacts: 'Animal facts are short study notes for the game; detailed card sources can come in a later increment.',
   },
   pt: {
     weekdays: 'Dias da semana ↗',
@@ -127,17 +135,21 @@ const ui = {
     modeMixed: 'Misturado',
     modeFlags: 'Bandeiras',
     modeAnimals: 'Animais',
-    levelMax: 'Máximo',
-    levelEasy: 'Básico',
-    quizEyebrow: 'EXPEDIÇÃO DE CINCO PISTAS',
+    levelEasy: 'Fácil',
+    levelMedium: 'Médio',
+    levelMax: 'Difícil',
+    lengthGroup: 'Duração',
+    lengthFixed: 'Rodada',
+    lengthEndless: 'Sem fim',
+    quizEyebrow: 'EXPEDIÇÃO GEOGRÁFICA',
     quizTitle: 'Para onde vamos?',
     exploreEyebrow: 'ATLAS PARA EXPLORAR',
     exploreTitle: 'O que vamos encontrar no mapa?',
     clueTag: 'PISTA {current} / {total}',
     finishEyebrow: 'EXPEDIÇÃO CONCLUÍDA',
-    finishTitle: 'Cinco pistas resolvidas!',
+    finishTitle: 'Rodada concluída!',
     finishText: 'Escolhe outro tema ou começa uma nova rodada.',
-    playAgain: 'Mais cinco pistas',
+    playAgain: 'Nova rodada',
     flagQuestion: 'De quem é esta bandeira?',
     animalQuestion: 'Onde vive na natureza?',
     flagAltHidden: 'Fragmento da bandeira',
@@ -164,7 +176,7 @@ const ui = {
     sourcesTitle: 'Sobre o jogo e as fontes',
     sourceFlags: 'Bandeiras:',
     sourceMap: 'Contornos: Natural Earth / D3 Maps. O mapa-múndi é esquemático; países pequenos podem ficar difíceis de ver. Os pontos dos animais mostram um exemplo de lugar na região de habitat, não toda a área. Os ícones de animais são simbólicos.',
-    sourceFacts: 'Fatos:',
+    sourceFacts: 'Os fatos sobre animais são notas curtas para o jogo; fontes detalhadas por carta podem vir num próximo incremento.',
   },
 };
 
@@ -211,19 +223,67 @@ const regions = [
   { ru: 'Антарктика', en: 'Antarctica', pt: 'Antártida' },
   { ru: 'Южная Америка', en: 'South America', pt: 'América do Sul' },
   { ru: 'Европа', en: 'Europe', pt: 'Europa' },
+  { ru: 'Мексика', en: 'Mexico', pt: 'México' },
+  { ru: 'Центральная Африка', en: 'Central Africa', pt: 'África Central' },
+  { ru: 'Восточная Африка', en: 'East Africa', pt: 'África Oriental' },
+  { ru: 'Тропическая Африка и Азия', en: 'Tropical Africa and Asia', pt: 'África tropical e Ásia' },
+  { ru: 'Центральная Азия', en: 'Central Asia', pt: 'Ásia Central' },
+  { ru: 'Северная Африка', en: 'North Africa', pt: 'África do Norte' },
+  { ru: 'Арктика', en: 'Arctic', pt: 'Ártico' },
+  { ru: 'Мадагаскар', en: 'Madagascar', pt: 'Madagascar' },
+  { ru: 'Африканские саванны', en: 'African savannas', pt: 'Savanas africanas' },
+  { ru: 'Новая Зеландия', en: 'New Zealand', pt: 'Nova Zelândia' },
+  { ru: 'Балканские пещеры', en: 'Balkan caves', pt: 'Cavernas dos Balcãs' },
+  { ru: 'Калифорнийский залив', en: 'Gulf of California', pt: 'Golfo da Califórnia' },
+  { ru: 'Западная Австралия', en: 'Western Australia', pt: 'Austrália Ocidental' },
+  { ru: 'Новая Гвинея и север Австралии', en: 'New Guinea and northern Australia', pt: 'Nova Guiné e norte da Austrália' },
+  { ru: 'Гиндукуш и Гималаи', en: 'Hindu Kush and Himalayas', pt: 'Hindu Kush e Himalaia' },
+  { ru: 'Центральная Америка', en: 'Central America', pt: 'América Central' },
+  { ru: 'Восточная Австралия', en: 'Eastern Australia', pt: 'Austrália Oriental' },
+  { ru: 'Юго-Восточная Азия', en: 'Southeast Asia', pt: 'Sudeste Asiático' },
+  { ru: 'Южная и Юго-Восточная Азия', en: 'South and Southeast Asia', pt: 'Sul e Sudeste Asiático' },
+  { ru: 'Травянистые равнины Южной Америки', en: 'South American grasslands', pt: 'Campos da América do Sul' },
+  { ru: 'Галапагосские острова', en: 'Galapagos Islands', pt: 'Ilhas Galápagos' },
+  { ru: 'Высокогорья Азии', en: 'High Asia', pt: 'Alta Ásia' },
 ];
 
 const animals = [
-  { id: 'panda', type: 'animal', key: 'animal:panda', emoji: '🐼', names: { ru: 'Большая панда', en: 'Giant panda', pt: 'Panda-gigante' }, region: 0, point: [103, 31], facts: { ru: 'Дикие большие панды живут в горных лесах центрального Китая. Их главная еда — бамбук.', en: 'Wild giant pandas live in mountain forests of central China. Their main food is bamboo.', pt: 'Pandas-gigantes selvagens vivem nas florestas montanhosas da China central. O seu alimento principal é o bambu.' } },
-  { id: 'koala', type: 'animal', key: 'animal:koala', emoji: '🐨', names: { ru: 'Коала', en: 'Koala', pt: 'Coala' }, region: 1, point: [151, -28], facts: { ru: 'Коалы живут в восточной и юго-восточной Австралии и питаются главным образом листьями эвкалипта. Это сумчатые, а не медведи.', en: 'Koalas live in eastern and southeastern Australia and mostly eat eucalyptus leaves. They are marsupials, not bears.', pt: 'Coalas vivem no leste e sudeste da Austrália e comem principalmente folhas de eucalipto. São marsupiais, não ursos.' } },
-  { id: 'penguin', type: 'animal', key: 'animal:penguin', emoji: '🐧', names: { ru: 'Императорский пингвин', en: 'Emperor penguin', pt: 'Pinguim-imperador' }, region: 2, point: [40, -70], facts: { ru: 'Императорские пингвины живут у берегов Антарктиды. Они размножаются на морском льду во время антарктической зимы.', en: 'Emperor penguins live around Antarctica. They breed on sea ice during the Antarctic winter.', pt: 'Pinguins-imperadores vivem perto da costa da Antártida. Reproduzem-se no gelo marinho durante o inverno antártico.' } },
-  { id: 'kangaroo', type: 'animal', key: 'animal:kangaroo', emoji: '🦘', names: { ru: 'Рыжий кенгуру', en: 'Red kangaroo', pt: 'Canguru-vermelho' }, region: 1, point: [134, -25], facts: { ru: 'Рыжие кенгуру населяют открытые засушливые области Австралии. Это самые крупные современные сумчатые.', en: 'Red kangaroos live in open dry regions of Australia. They are the largest living marsupials.', pt: 'Cangurus-vermelhos vivem em regiões abertas e secas da Austrália. São os maiores marsupiais vivos.' } },
-  { id: 'capybara', type: 'animal', key: 'animal:capybara', emoji: '🐾', names: { ru: 'Капибара', en: 'Capybara', pt: 'Capivara' }, region: 3, point: [-57, -16], facts: { ru: 'Обыкновенная капибара живёт в Южной Америке, рядом с водой. Это крупнейший современный грызун. Она хорошо плавает и ныряет.', en: 'Capybaras live in South America near water. They are the largest living rodents and swim and dive well.', pt: 'Capivaras vivem na América do Sul, perto da água. São os maiores roedores vivos e nadam e mergulham bem.' } },
+  { id: 'panda', type: 'animal', key: 'animal:panda', tier: 'easy', emoji: '🐼', names: { ru: 'Большая панда', en: 'Giant panda', pt: 'Panda-gigante' }, region: 0, point: [103, 31], facts: { ru: 'Дикие большие панды живут в горных лесах центрального Китая. Их главная еда — бамбук.', en: 'Wild giant pandas live in mountain forests of central China. Their main food is bamboo.', pt: 'Pandas-gigantes selvagens vivem nas florestas montanhosas da China central. O seu alimento principal é o bambu.' } },
+  { id: 'koala', type: 'animal', key: 'animal:koala', tier: 'easy', emoji: '🐨', names: { ru: 'Коала', en: 'Koala', pt: 'Coala' }, region: 1, point: [151, -28], facts: { ru: 'Коалы живут в восточной и юго-восточной Австралии и питаются главным образом листьями эвкалипта. Это сумчатые, а не медведи.', en: 'Koalas live in eastern and southeastern Australia and mostly eat eucalyptus leaves. They are marsupials, not bears.', pt: 'Coalas vivem no leste e sudeste da Austrália e comem principalmente folhas de eucalipto. São marsupiais, não ursos.' } },
+  { id: 'penguin', type: 'animal', key: 'animal:penguin', tier: 'easy', emoji: '🐧', names: { ru: 'Императорский пингвин', en: 'Emperor penguin', pt: 'Pinguim-imperador' }, region: 2, point: [40, -70], facts: { ru: 'Императорские пингвины живут у берегов Антарктиды. Они размножаются на морском льду во время антарктической зимы.', en: 'Emperor penguins live around Antarctica. They breed on sea ice during the Antarctic winter.', pt: 'Pinguins-imperadores vivem perto da costa da Antártida. Reproduzem-se no gelo marinho durante o inverno antártico.' } },
+  { id: 'kangaroo', type: 'animal', key: 'animal:kangaroo', tier: 'easy', emoji: '🦘', names: { ru: 'Рыжий кенгуру', en: 'Red kangaroo', pt: 'Canguru-vermelho' }, region: 1, point: [134, -25], facts: { ru: 'Рыжие кенгуру населяют открытые засушливые области Австралии. Это самые крупные современные сумчатые.', en: 'Red kangaroos live in open dry regions of Australia. They are the largest living marsupials.', pt: 'Cangurus-vermelhos vivem em regiões abertas e secas da Austrália. São os maiores marsupiais vivos.' } },
+  { id: 'capybara', type: 'animal', key: 'animal:capybara', tier: 'easy', emoji: '🐾', names: { ru: 'Капибара', en: 'Capybara', pt: 'Capivara' }, region: 3, point: [-57, -16], facts: { ru: 'Обыкновенная капибара живёт в Южной Америке рядом с водой. Это крупнейший современный грызун, он хорошо плавает и ныряет.', en: 'Capybaras live in South America near water. They are the largest living rodents and swim and dive well.', pt: 'Capivaras vivem na América do Sul perto da água. São os maiores roedores vivos e nadam e mergulham bem.' } },
+  { id: 'axolotl', type: 'animal', key: 'animal:axolotl', tier: 'medium', emoji: '🦎', names: { ru: 'Аксолотль', en: 'Axolotl', pt: 'Axolote' }, region: 5, point: [-99, 19], facts: { ru: 'Аксолотль — водная саламандра из озёр и каналов у Мехико. Он знаменит способностью отращивать утраченные части тела.', en: 'The axolotl is an aquatic salamander from lakes and canals near Mexico City. It is famous for regrowing lost body parts.', pt: 'O axolote é uma salamandra aquática de lagos e canais perto da Cidade do México. É famoso por regenerar partes do corpo.' } },
+  { id: 'okapi', type: 'animal', key: 'animal:okapi', tier: 'medium', emoji: '🦌', names: { ru: 'Окапи', en: 'Okapi', pt: 'Ocapi' }, region: 6, point: [28, 1], facts: { ru: 'Окапи живёт в густых лесах бассейна Конго. Полосатые ноги напоминают зебру, но его ближайшие родственники — жирафы.', en: 'Okapis live in dense forests of the Congo Basin. Their striped legs look zebra-like, but their closest relatives are giraffes.', pt: 'Ocapis vivem nas florestas densas da bacia do Congo. As pernas listradas lembram uma zebra, mas os parentes mais próximos são as girafas.' } },
+  { id: 'shoebill', type: 'animal', key: 'animal:shoebill', tier: 'medium', emoji: '🐦', names: { ru: 'Китоглав', en: 'Shoebill', pt: 'Bico-de-sapato' }, region: 7, point: [32, 1], facts: { ru: 'Китоглав живёт на болотах Восточной Африки. Его огромный клюв похож на башмак и помогает ловить крупную рыбу.', en: 'Shoebills live in East African wetlands. Their huge bill looks like a shoe and helps them catch large fish.', pt: 'Bicos-de-sapato vivem em zonas húmidas da África Oriental. O bico enorme parece um sapato e ajuda a apanhar peixes grandes.' } },
+  { id: 'pangolin', type: 'animal', key: 'animal:pangolin', tier: 'medium', emoji: '🐾', names: { ru: 'Панголин', en: 'Pangolin', pt: 'Pangolim' }, region: 8, point: [20, 0], facts: { ru: 'Панголины встречаются в Африке и Азии. Их тело покрыто чешуями из кератина, а при опасности они сворачиваются в шар.', en: 'Pangolins are found in Africa and Asia. Their bodies are covered with keratin scales, and they curl into a ball when threatened.', pt: 'Pangolins vivem na África e na Ásia. O corpo tem escamas de queratina e, em perigo, eles enrolam-se numa bola.' } },
+  { id: 'saiga', type: 'animal', key: 'animal:saiga', tier: 'medium', emoji: '🐐', names: { ru: 'Сайгак', en: 'Saiga antelope', pt: 'Saiga' }, region: 9, point: [65, 48], facts: { ru: 'Сайгак — степная антилопа Центральной Азии. Его необычный нос помогает фильтровать пыль и согревать холодный воздух.', en: 'The saiga is a steppe antelope of Central Asia. Its unusual nose helps filter dust and warm cold air.', pt: 'A saiga é um antílope das estepes da Ásia Central. O nariz incomum ajuda a filtrar poeira e aquecer o ar frio.' } },
+  { id: 'fennec', type: 'animal', key: 'animal:fennec', tier: 'medium', emoji: '🦊', names: { ru: 'Фенек', en: 'Fennec fox', pt: 'Feneco' }, region: 10, point: [10, 25], facts: { ru: 'Фенек живёт в пустынях Северной Африки. Огромные уши помогают слышать добычу под песком и отдавать лишнее тепло.', en: 'Fennec foxes live in North African deserts. Their enormous ears help them hear prey under sand and release extra heat.', pt: 'Fenekos vivem nos desertos do norte da África. As orelhas enormes ajudam a ouvir presas sob a areia e a perder calor.' } },
+  { id: 'narwhal', type: 'animal', key: 'animal:narwhal', tier: 'medium', emoji: '🐋', names: { ru: 'Нарвал', en: 'Narwhal', pt: 'Narval' }, region: 11, point: [-70, 75], facts: { ru: 'Нарвал — арктический кит. Его знаменитый бивень на самом деле длинный зуб, который может вырастать у самцов.', en: 'The narwhal is an Arctic whale. Its famous tusk is actually a long tooth that can grow from males.', pt: 'O narval é uma baleia do Ártico. A presa famosa é na verdade um dente comprido que pode crescer nos machos.' } },
+  { id: 'aye-aye', type: 'animal', key: 'animal:aye-aye', tier: 'medium', emoji: '🐒', names: { ru: 'Ай-ай', en: 'Aye-aye', pt: 'Aie-aie' }, region: 12, point: [47, -19], facts: { ru: 'Ай-ай — ночной лемур с Мадагаскара. Он простукивает дерево и длинным пальцем достаёт личинок из ходов.', en: 'The aye-aye is a nocturnal lemur from Madagascar. It taps wood and uses a long finger to pull larvae from tunnels.', pt: 'O aie-aie é um lêmure noturno de Madagascar. Ele bate na madeira e usa um dedo comprido para tirar larvas dos túneis.' } },
+  { id: 'secretary-bird', type: 'animal', key: 'animal:secretary-bird', tier: 'medium', emoji: '🐦', names: { ru: 'Птица-секретарь', en: 'Secretary bird', pt: 'Secretário' }, region: 13, point: [25, -20], facts: { ru: 'Птица-секретарь живёт в африканских саваннах. Это хищная птица на длинных ногах, которая часто охотится на земле.', en: 'Secretary birds live in African savannas. They are long-legged raptors that often hunt on the ground.', pt: 'Secretários vivem nas savanas africanas. São aves de rapina de pernas longas que caçam muitas vezes no chão.' } },
+  { id: 'kakapo', type: 'animal', key: 'animal:kakapo', tier: 'medium', emoji: '🦜', names: { ru: 'Какапо', en: 'Kakapo', pt: 'Kakapo' }, region: 14, point: [167, -46], facts: { ru: 'Какапо — ночной нелетающий попугай из Новой Зеландии. Это один из самых необычных и редких попугаев мира.', en: 'The kakapo is a nocturnal flightless parrot from New Zealand. It is one of the world’s strangest and rarest parrots.', pt: 'O kakapo é um papagaio noturno e incapaz de voar da Nova Zelândia. É um dos papagaios mais estranhos e raros do mundo.' } },
+  { id: 'olm', type: 'animal', key: 'animal:olm', tier: 'max', emoji: '🦎', names: { ru: 'Протей', en: 'Olm', pt: 'Proteu' }, region: 15, point: [15, 45], facts: { ru: 'Протей — слепая пещерная амфибия из карстовых пещер Балкан. Он может долго жить в темноте и обходиться без пищи.', en: 'The olm is a blind cave amphibian from Balkan karst caves. It can live in darkness and survive long periods without food.', pt: 'O proteu é um anfíbio cego das cavernas cársticas dos Balcãs. Vive no escuro e pode passar muito tempo sem comer.' } },
+  { id: 'tuatara', type: 'animal', key: 'animal:tuatara', tier: 'max', emoji: '🦎', names: { ru: 'Туатара', en: 'Tuatara', pt: 'Tuatara' }, region: 14, point: [174, -41], facts: { ru: 'Туатара живёт на островах Новой Зеландии. Она похожа на ящерицу, но относится к отдельной древней линии пресмыкающихся.', en: 'Tuataras live on New Zealand islands. They look like lizards but belong to a separate ancient reptile lineage.', pt: 'Tuataras vivem em ilhas da Nova Zelândia. Parecem lagartos, mas pertencem a uma linhagem antiga separada de répteis.' } },
+  { id: 'vaquita', type: 'animal', key: 'animal:vaquita', tier: 'max', emoji: '🐬', names: { ru: 'Вакита', en: 'Vaquita', pt: 'Vaquita' }, region: 16, point: [-114, 31], facts: { ru: 'Вакита — маленькая морская свинья, обитающая только в северной части Калифорнийского залива. Это один из самых редких морских млекопитающих.', en: 'The vaquita is a tiny porpoise found only in the northern Gulf of California. It is one of the rarest marine mammals.', pt: 'A vaquita é uma pequena toninha encontrada só no norte do Golfo da Califórnia. É um dos mamíferos marinhos mais raros.' } },
+  { id: 'quokka', type: 'animal', key: 'animal:quokka', tier: 'max', emoji: '🦘', names: { ru: 'Квокка', en: 'Quokka', pt: 'Quokka' }, region: 17, point: [115.5, -32], facts: { ru: 'Квокка — небольшой сумчатый зверёк Западной Австралии. Особенно известны популяции на островах Роттнест и Болд.', en: 'The quokka is a small marsupial from Western Australia. Populations on Rottnest and Bald islands are especially well known.', pt: 'O quokka é um pequeno marsupial da Austrália Ocidental. As populações das ilhas Rottnest e Bald são especialmente conhecidas.' } },
+  { id: 'cassowary', type: 'animal', key: 'animal:cassowary', tier: 'max', emoji: '🐦', names: { ru: 'Казуар', en: 'Cassowary', pt: 'Casuar' }, region: 18, point: [145, -17], facts: { ru: 'Казуары живут во влажных лесах Новой Гвинеи и северной Австралии. На голове у них шлемовидный гребень, а ноги очень мощные.', en: 'Cassowaries live in rainforests of New Guinea and northern Australia. They have a helmet-like casque and powerful legs.', pt: 'Casuares vivem nas florestas húmidas da Nova Guiné e do norte da Austrália. Têm um casco na cabeça e pernas poderosas.' } },
+  { id: 'markhor', type: 'animal', key: 'animal:markhor', tier: 'max', emoji: '🐐', names: { ru: 'Мархур', en: 'Markhor', pt: 'Markhor' }, region: 19, point: [70, 35], facts: { ru: 'Мархур — горный козёл с большими спиральными рогами. Он живёт в скалистых районах Гиндукуша и Гималаев.', en: 'The markhor is a wild goat with large spiral horns. It lives in rocky areas of the Hindu Kush and Himalayas.', pt: 'O markhor é uma cabra selvagem com grandes chifres em espiral. Vive em áreas rochosas do Hindu Kush e do Himalaia.' } },
+  { id: 'glass-frog', type: 'animal', key: 'animal:glass-frog', tier: 'max', emoji: '🐸', names: { ru: 'Стеклянная лягушка', en: 'Glass frog', pt: 'Rã-de-vidro' }, region: 20, point: [-84, 10], facts: { ru: 'Стеклянные лягушки живут у ручьёв влажных лесов Центральной Америки. У многих видов брюшко полупрозрачное.', en: 'Glass frogs live by rainforest streams in Central America. Many species have partly transparent bellies.', pt: 'Rãs-de-vidro vivem perto de riachos em florestas húmidas da América Central. Muitas espécies têm a barriga parcialmente transparente.' } },
+  { id: 'ring-tailed-lemur', type: 'animal', key: 'animal:ring-tailed-lemur', tier: 'max', emoji: '🐒', names: { ru: 'Кошачий лемур', en: 'Ring-tailed lemur', pt: 'Lêmure-de-cauda-anelada' }, region: 12, point: [46, -24], facts: { ru: 'Кошачьи лемуры живут на юге Мадагаскара. Они держатся группами и легко узнаются по длинному полосатому хвосту.', en: 'Ring-tailed lemurs live in southern Madagascar. They are social animals and are easy to spot by their long striped tails.', pt: 'Lêmures-de-cauda-anelada vivem no sul de Madagascar. Vivem em grupos e são reconhecidos pela cauda comprida e listrada.' } },
+  { id: 'platypus', type: 'animal', key: 'animal:platypus', tier: 'max', emoji: '🦫', names: { ru: 'Утконос', en: 'Platypus', pt: 'Ornitorrinco' }, region: 21, point: [148, -36], facts: { ru: 'Утконос живёт в восточной Австралии. Это млекопитающее откладывает яйца и находит добычу в воде с помощью чувствительного клюва.', en: 'Platypuses live in eastern Australia. This mammal lays eggs and finds prey underwater with a sensitive bill.', pt: 'Ornitorrincos vivem no leste da Austrália. Este mamífero põe ovos e encontra presas debaixo de água com um bico sensível.' } },
+  { id: 'giant-salamander', type: 'animal', key: 'animal:giant-salamander', tier: 'max', emoji: '🦎', names: { ru: 'Китайская исполинская саламандра', en: 'Chinese giant salamander', pt: 'Salamandra-gigante-chinesa' }, region: 0, point: [109, 30], facts: { ru: 'Китайская исполинская саламандра — одна из крупнейших амфибий мира. Она живёт в прохладных горных ручьях и реках Китая.', en: 'The Chinese giant salamander is one of the world’s largest amphibians. It lives in cool mountain streams and rivers in China.', pt: 'A salamandra-gigante-chinesa é um dos maiores anfíbios do mundo. Vive em riachos e rios frios das montanhas da China.' } },
+  { id: 'binturong', type: 'animal', key: 'animal:binturong', tier: 'max', emoji: '🐾', names: { ru: 'Бинтуронг', en: 'Binturong', pt: 'Binturong' }, region: 22, point: [102, 15], facts: { ru: 'Бинтуронг живёт в лесах Юго-Восточной Азии. Он лазает по деревьям и пользуется цепким хвостом почти как пятой лапой.', en: 'Binturongs live in Southeast Asian forests. They climb trees and use a prehensile tail almost like a fifth limb.', pt: 'Binturongs vivem nas florestas do Sudeste Asiático. Sobem em árvores e usam a cauda preênsil quase como uma quinta pata.' } },
+  { id: 'dhole', type: 'animal', key: 'animal:dhole', tier: 'max', emoji: '🐕', names: { ru: 'Красный волк', en: 'Dhole', pt: 'Cão-selvagem-asiático' }, region: 23, point: [78, 20], facts: { ru: 'Красный волк, или дхоль, живёт в Южной и Юго-Восточной Азии. Это социальный дикий пёс, который охотится стаями.', en: 'The dhole lives in South and Southeast Asia. It is a social wild dog that hunts in packs.', pt: 'O cão-selvagem-asiático vive no Sul e Sudeste Asiático. É um canídeo social que caça em grupos.' } },
+  { id: 'maned-wolf', type: 'animal', key: 'animal:maned-wolf', tier: 'max', emoji: '🐺', names: { ru: 'Гривистый волк', en: 'Maned wolf', pt: 'Lobo-guará' }, region: 24, point: [-48, -15], facts: { ru: 'Гривистый волк живёт на травянистых равнинах Южной Америки. Несмотря на название, это не настоящий волк, а отдельный длинноногий псовый.', en: 'Maned wolves live in South American grasslands. Despite the name, they are not true wolves but a distinct long-legged canid.', pt: 'Lobos-guará vivem nos campos da América do Sul. Apesar do nome, não são lobos verdadeiros, mas canídeos de pernas longas.' } },
+  { id: 'marine-iguana', type: 'animal', key: 'animal:marine-iguana', tier: 'max', emoji: '🦎', names: { ru: 'Морская игуана', en: 'Marine iguana', pt: 'Iguana-marinha' }, region: 25, point: [-90, -1], facts: { ru: 'Морская игуана живёт на Галапагосских островах. Это единственная современная ящерица, которая регулярно плавает в море и ест водоросли.', en: 'Marine iguanas live on the Galapagos Islands. They are the only living lizards that regularly swim in the sea and eat algae.', pt: 'Iguanas-marinhas vivem nas Ilhas Galápagos. São os únicos lagartos atuais que nadam regularmente no mar e comem algas.' } },
+  { id: 'snow-leopard', type: 'animal', key: 'animal:snow-leopard', tier: 'max', emoji: '🐆', names: { ru: 'Снежный барс', en: 'Snow leopard', pt: 'Leopardo-das-neves' }, region: 26, point: [78, 35], facts: { ru: 'Снежный барс живёт в высоких горах Центральной и Южной Азии. Длинный хвост помогает ему держать равновесие и согреваться.', en: 'Snow leopards live in high mountains of Central and South Asia. Their long tails help with balance and warmth.', pt: 'Leopardos-das-neves vivem nas altas montanhas da Ásia Central e do Sul. A cauda comprida ajuda no equilíbrio e no calor.' } },
 ];
 
 let lang = 'ru';
 let mode = 'mixed';
 let level = 'max';
+let lengthMode = 'fixed';
 let view = 'quiz';
 let exploreKind = 'all';
 let selectedKey = 'flag:pt';
@@ -267,19 +327,58 @@ function shuffle(items) {
   return copy;
 }
 
+const levelRank = { easy: 0, medium: 1, max: 2 };
+const fixedRoundSizes = { easy: 5, medium: 15, max: 30 };
 const easyIds = new Set(Object.keys(easyFlagFacts));
+const mediumFlagIds = new Set([
+  ...easyIds,
+  'at', 'be', 'nl', 'dk', 'is', 'cz', 'sk', 'hu', 'ro', 'bg', 'hr', 'si', 'rs', 'ba', 'me', 'mk', 'al', 'tr', 'cy', 'ru',
+  'ee', 'lv', 'lt', 'by', 'md', 'ge', 'am', 'az', 'kz', 'uz', 'kg', 'tj', 'tm',
+  'ir', 'iq', 'il', 'jo', 'sa', 'ae', 'qa', 'kw', 'om', 'ye',
+  'eg', 'ma', 'dz', 'tn', 'ly', 'et', 'ke', 'ug', 'tz', 'rw', 'gh', 'ng', 'sn', 'ci', 'cm', 'cd', 'mz', 'mg', 'zw', 'zm', 'bw', 'na',
+  'cl', 'pe', 'co', 've', 'uy', 'py', 'bo', 'ec', 'pa', 'cr', 'cu', 'jm', 'ht', 'do', 'bs',
+  'id', 'my', 'th', 'vn', 'kh', 'la', 'mm', 'ph', 'kr', 'kp', 'pk', 'bd', 'lk', 'np', 'bt', 'mn', 'nz', 'fj', 'pg',
+]);
 const flags = countries.map(([id, iso]) => ({
   id,
   iso,
   type: 'flag',
   key: `flag:${id}`,
-  tier: easyIds.has(id) ? 'easy' : 'max',
+  tier: easyIds.has(id) ? 'easy' : mediumFlagIds.has(id) ? 'medium' : 'max',
   facts: easyFlagFacts[id],
 }));
 const allItems = [...flags, ...animals];
 
+function tierAllowed(item) {
+  return levelRank[item.tier || 'easy'] <= levelRank[level];
+}
+
 function flagPool() {
-  return level === 'easy' ? flags.filter(flag => flag.tier === 'easy') : flags;
+  return flags.filter(tierAllowed);
+}
+
+function animalPool() {
+  return animals.filter(tierAllowed);
+}
+
+function targetCount() {
+  return lengthMode === 'endless' ? Infinity : fixedRoundSizes[level];
+}
+
+function takeSome(items, count) {
+  return shuffle(items).slice(0, Math.max(0, count));
+}
+
+function mixedPool(availableFlags, availableAnimals) {
+  if (lengthMode === 'endless') return shuffle([...availableFlags, ...availableAnimals]);
+  const total = fixedRoundSizes[level];
+  const desiredAnimals = Math.min(availableAnimals.length, Math.max(2, Math.round(total * 0.28)));
+  const desiredFlags = Math.min(availableFlags.length, total - desiredAnimals);
+  const firstPass = [...takeSome(availableFlags, desiredFlags), ...takeSome(availableAnimals, desiredAnimals)];
+  if (firstPass.length >= total) return shuffle(firstPass).slice(0, total);
+  const used = new Set(firstPass.map(item => item.key));
+  const rest = [...availableFlags, ...availableAnimals].filter(item => !used.has(item.key));
+  return shuffle([...firstPass, ...takeSome(rest, total - firstPass.length)]);
 }
 
 function visibleItems() {
@@ -302,13 +401,17 @@ function setStaticText() {
   document.querySelector('.view-modes').setAttribute('aria-label', tr('viewGroup'));
   document.querySelector('.topic-modes').setAttribute('aria-label', tr('topicGroup'));
   document.querySelector('.level-modes').setAttribute('aria-label', tr('levelGroup'));
+  document.querySelector('.length-modes').setAttribute('aria-label', tr('lengthGroup'));
   document.querySelector('[data-view="quiz"]').textContent = tr('viewQuiz');
   document.querySelector('[data-view="explore"]').textContent = tr('viewExplore');
   document.querySelector('[data-mode="mixed"]').textContent = tr('modeMixed');
   document.querySelector('[data-mode="flags"]').textContent = tr('modeFlags');
   document.querySelector('[data-mode="animals"]').textContent = tr('modeAnimals');
-  document.querySelector('[data-level="max"]').textContent = tr('levelMax');
   document.querySelector('[data-level="easy"]').textContent = tr('levelEasy');
+  document.querySelector('[data-level="medium"]').textContent = tr('levelMedium');
+  document.querySelector('[data-level="max"]').textContent = tr('levelMax');
+  document.querySelector('[data-length="fixed"]').textContent = tr('lengthFixed');
+  document.querySelector('[data-length="endless"]').textContent = tr('lengthEndless');
 }
 
 function setChrome() {
@@ -317,23 +420,27 @@ function setChrome() {
   $('#eyebrow').textContent = tr(quiz ? 'quizEyebrow' : 'exploreEyebrow');
   $('#title').textContent = tr(quiz ? 'quizTitle' : 'exploreTitle');
   document.querySelector('.topic-modes').hidden = !quiz;
-  document.querySelector('.level-modes').hidden = !quiz || mode === 'animals';
+  document.querySelector('.level-modes').hidden = !quiz;
+  document.querySelector('.length-modes').hidden = !quiz;
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
 }
 
 function start() {
   const availableFlags = flagPool();
+  const availableAnimals = animalPool();
+  const availableRegions = [...new Set(availableAnimals.map(animal => animal.region))];
   const pool = mode === 'flags'
     ? shuffle(availableFlags)
     : mode === 'animals'
-      ? shuffle(animals)
-      : shuffle([...shuffle(availableFlags).slice(0, 3), ...shuffle(animals).slice(0, 2)]);
+      ? shuffle(availableAnimals)
+      : mixedPool(availableFlags, availableAnimals);
+  const selected = pool.slice(0, Math.min(pool.length, targetCount()));
 
-  round = pool.slice(0, 5).map(question => ({
+  round = selected.map(question => ({
     ...question,
     options: question.type === 'flag'
       ? shuffle([question, ...shuffle(availableFlags.filter(flag => flag.id !== question.id)).slice(0, 3)]).map(flag => flag.id)
-      : shuffle([question.region, ...shuffle(regions.map((_, index) => index).filter(index => index !== question.region)).slice(0, 3)]),
+      : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
   pos = 0;
   reset();
@@ -356,7 +463,9 @@ function render() {
   const q = round[pos];
   $('#progress').hidden = false;
   $('#game').className = 'game';
-  $('#progress').innerHTML = round.map((_, index) => `<span class="step ${index < pos ? 'done' : index === pos ? 'current' : ''}"></span>`).join('');
+  const done = Math.min(pos, round.length);
+  const progressPercent = round.length ? Math.round((done / round.length) * 100) : 0;
+  $('#progress').innerHTML = `<div class="progress-meta"><span>${tr('clueTag', { current: Math.min(pos + 1, round.length), total: round.length })}</span><span>${done} / ${round.length}</span></div><div class="progress-track" aria-hidden="true"><span class="${done === round.length ? 'done' : ''}" style="width:${progressPercent}%"></span></div>`;
 
   if (!q) {
     $('#game').innerHTML = `<div class="finish"><p class="eyebrow">${tr('finishEyebrow')}</p><h2>${tr('finishTitle')}</h2><p>${tr('finishText')}</p><button class="primary" id="again">${tr('playAgain')}</button></div>`;
@@ -379,11 +488,11 @@ function render() {
   $('#game').innerHTML = `
     <div class="visual">${visual}${visualNote}</div>
     <div class="question">
-      <span class="tag">${tr('clueTag', { current: pos + 1, total: 5 })}</span>
+      <span class="tag">${tr('clueTag', { current: pos + 1, total: round.length })}</span>
       <h2>${q.type === 'flag' ? tr('flagQuestion') : tr('animalQuestion')}</h2>
       <div class="choices">${q.options.map(id => choiceButton(q, id)).join('')}</div>
       <p class="message" role="status">${message}</p>
-      <div class="actions">${solved ? `<button class="primary" id="next">${pos === 4 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
+      <div class="actions">${solved ? `<button class="primary" id="next">${pos === round.length - 1 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
     </div>`;
 
   document.querySelectorAll('[data-answer]').forEach(button => {
@@ -526,6 +635,14 @@ document.querySelectorAll('[data-level]').forEach(button => {
     start();
   };
 });
+document.querySelectorAll('[data-length]').forEach(button => {
+  button.onclick = () => {
+    lengthMode = button.dataset.length;
+    document.querySelectorAll('[data-length]').forEach(item => item.classList.toggle('active', item === button));
+    view = 'quiz';
+    start();
+  };
+});
 document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
     mode = button.dataset.mode;
@@ -545,12 +662,13 @@ if (document.modelContext?.registerTool) {
   try {
     Promise.resolve(document.modelContext.registerTool({
       name: 'start_geography_round',
-      description: 'Start a fresh five-question geography round and replace the current round.',
+      description: 'Start a fresh geography round and replace the current round.',
       inputSchema: {
         type: 'object',
         properties: {
           mode: { type: 'string', enum: ['mixed', 'flags', 'animals'] },
-          level: { type: 'string', enum: ['easy', 'max'] },
+          level: { type: 'string', enum: ['easy', 'medium', 'max'] },
+          lengthMode: { type: 'string', enum: ['fixed', 'endless'] },
         },
         required: ['mode'],
         additionalProperties: false,
@@ -558,10 +676,12 @@ if (document.modelContext?.registerTool) {
       annotations: { readOnlyHint: false },
       execute(input) {
         if (!input || !['mixed', 'flags', 'animals'].includes(input.mode)) throw Error('Invalid mode');
-        if (input.level && !['easy', 'max'].includes(input.level)) throw Error('Invalid level');
+        if (input.level && !['easy', 'medium', 'max'].includes(input.level)) throw Error('Invalid level');
+        if (input.lengthMode && !['fixed', 'endless'].includes(input.lengthMode)) throw Error('Invalid length mode');
         if (input.level) document.querySelector(`[data-level="${input.level}"]`).click();
+        if (input.lengthMode) document.querySelector(`[data-length="${input.lengthMode}"]`).click();
         document.querySelector(`[data-mode="${input.mode}"]`).click();
-        return { mode, level, questions: round.length };
+        return { mode, level, lengthMode, questions: round.length };
       },
     })).catch(() => {});
   } catch {}
