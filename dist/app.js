@@ -667,7 +667,7 @@ let lengthMode = 'fixed';
 let view = 'quiz';
 let exploreKind = 'all';
 let selectedKey = 'flag:pt';
-let exploreScrollBlock = null;
+let exploreScroll = null; // { block, behavior } — отложенная прокрутка списка после перерисовки
 let round = [];
 let pos = 0;
 let solved = false;
@@ -940,7 +940,19 @@ function loadJson(url, key, assign) {
     .then(value => {
       assign(value);
       dataPending.delete(key);
+      // Перерисовка по приходу данных пересобирает список атласа и сбрасывает
+      // его прокрутку. Пользователь в этот момент ничего не нажимал, поэтому
+      // позицию надо вернуть на место.
+      const list = document.querySelector('.item-list');
+      const keepTop = list && list.scrollHeight > list.clientHeight + 1 ? list.scrollTop : null;
       render();
+      const nextList = document.querySelector('.item-list');
+      if (nextList && keepTop !== null) {
+        const behavior = nextList.style.scrollBehavior;
+        nextList.style.scrollBehavior = 'auto';
+        nextList.scrollTop = keepTop;
+        nextList.style.scrollBehavior = behavior;
+      }
     });
 }
 
@@ -1115,11 +1127,24 @@ function mixedPool(availableFlags, availableAnimals) {
   return shuffle([...firstPass, ...takeSome(rest, total - firstPass.length)]);
 }
 
+// Порядок списка — по названию на текущем языке, а не по коду страны.
+// Ключ кэша включает язык, поэтому переключение языка пересортирует список само.
+const sortedCache = new Map();
+
+function sortedByName(items, kind) {
+  const key = `${kind}:${lang}`;
+  if (!sortedCache.has(key)) {
+    const collator = new Intl.Collator(lang);
+    sortedCache.set(key, [...items].sort((a, b) => collator.compare(name(a), name(b))));
+  }
+  return sortedCache.get(key);
+}
+
 function visibleItems() {
-  if (!featureFlags.animals) return flags;
-  if (exploreKind === 'flags') return flags;
-  if (exploreKind === 'animals') return animals;
-  return allItems;
+  if (!featureFlags.animals) return sortedByName(flags, 'flags');
+  if (exploreKind === 'flags') return sortedByName(flags, 'flags');
+  if (exploreKind === 'animals') return sortedByName(animals, 'animals');
+  return sortedByName(allItems, 'all');
 }
 
 function selectedItem() {
@@ -1328,13 +1353,14 @@ function renderExplore() {
     button.onclick = () => {
       exploreKind = button.dataset.kind;
       selectedKey = visibleItems()[0].key;
-      exploreScrollBlock = null;
+      exploreScroll = null;
       renderExplore();
     };
   });
   document.querySelectorAll('[data-item]').forEach(button => {
     button.onclick = () => {
-      selectExploreItem(button.dataset.item, 'nearest');
+      // без прокрутки: карточка просто раскрывается там, где на неё нажали
+      selectExploreItem(button.dataset.item);
     };
   });
   drawExplore(current);
@@ -1376,16 +1402,45 @@ function featureId(feature) {
 }
 
 function selectExploreItem(key, scrollBlock = null) {
+  // Перерисовка пересобирает список целиком и обнуляет прокрутку, а раскрытие
+  // строки ещё и сдвигает сетку. Поэтому запоминаем, где строка стояла
+  // относительно видимой области, и возвращаем её ровно туда же.
+  const list = document.querySelector('.item-list');
+  const row = document.getElementById(itemDomId(key));
+  const keepInPlace = !scrollBlock && list && row;
+  // На широком экране список — собственный скролл-контейнер, на узком у него
+  // снят max-height, и прокручивается вся страница. Якорь ставим на того, кто реально скроллит.
+  const innerScroll = keepInPlace && list.scrollHeight > list.clientHeight + 1;
+  const rowTop = keepInPlace ? row.getBoundingClientRect().top : 0;
+  const offsetBefore = keepInPlace ? rowTop - list.getBoundingClientRect().top : 0;
+  const scrollBefore = list ? list.scrollTop : 0;
+
   selectedKey = key;
-  exploreScrollBlock = scrollBlock;
+  exploreScroll = scrollBlock ? { block: scrollBlock, behavior: 'smooth' } : null;
   renderExplore();
+
+  if (!keepInPlace) return;
+  const nextList = document.querySelector('.item-list');
+  const nextRow = document.getElementById(itemDomId(key));
+  if (!nextList || !nextRow) return;
+  if (!innerScroll) {
+    window.scrollTo({ top: window.scrollY + (nextRow.getBoundingClientRect().top - rowTop), behavior: 'auto' });
+    return;
+  }
+  // у списка в CSS scroll-behavior: smooth, из-за чего присваивание scrollTop
+  // запускает анимацию вместо мгновенного прыжка и замер сразу после него врёт
+  const behavior = nextList.style.scrollBehavior;
+  nextList.style.scrollBehavior = 'auto';
+  nextList.scrollTop = scrollBefore;
+  nextList.scrollTop += (nextRow.getBoundingClientRect().top - nextList.getBoundingClientRect().top) - offsetBefore;
+  nextList.style.scrollBehavior = behavior;
 }
 
 function scrollSelectedExploreItem() {
-  if (!exploreScrollBlock) return;
-  const block = exploreScrollBlock;
-  exploreScrollBlock = null;
-  document.getElementById(itemDomId(selectedKey))?.scrollIntoView({ behavior: 'smooth', block });
+  if (!exploreScroll) return;
+  const { block, behavior } = exploreScroll;
+  exploreScroll = null;
+  document.getElementById(itemDomId(selectedKey))?.scrollIntoView({ behavior, block });
 }
 
 function baseMap(container, label) {
@@ -1419,7 +1474,7 @@ function drawExplore(current) {
     .on('click', (_, feature) => {
       const found = flags.find(flag => flag.iso === featureId(feature));
       if (found) {
-        selectExploreItem(found.key, 'center');
+        selectExploreItem(found.key, 'start');
       }
     });
   flags.filter(flag => flag.point).forEach(flag => {
@@ -1433,14 +1488,14 @@ function drawExplore(current) {
       .attr('stroke-width', 1.8)
       .attr('class', 'map-click')
       .on('click', () => {
-        selectExploreItem(flag.key, 'center');
+        selectExploreItem(flag.key, 'start');
       });
   });
   if (featureFlags.animals) {
     animals.forEach(animal => {
       const [x, y] = projection(animal.point);
       svg.append('circle').attr('cx', x).attr('cy', y).attr('r', current.key === animal.key ? 7 : 5).attr('fill', current.key === animal.key ? '#ca501b' : '#2f7f8a').attr('stroke', 'white').attr('stroke-width', 2).attr('class', 'map-click').on('click', () => {
-        selectExploreItem(animal.key, 'center');
+        selectExploreItem(animal.key, 'start');
       });
     });
   }
@@ -1450,6 +1505,9 @@ function drawExplore(current) {
 $('#lang').onchange = event => {
   lang = event.target.value;
   statusMessage = '';
+  // список пересортируется под новый язык, и выбранная страна оказывается далеко от прежнего места
+  // instant, а не auto: auto означает «взять из CSS», а там scroll-behavior: smooth
+  if (view === 'explore') exploreScroll = { block: 'start', behavior: 'instant' };
   render();
 };
 $('#clearScores').onclick = () => {
