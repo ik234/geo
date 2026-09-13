@@ -50,6 +50,20 @@
         <button data-length="endless">Бесконечно</button>
       </div>
 
+      <section class="player-board" aria-label="Игрок и результаты">
+        <article class="score-card">
+          <div class="score-head">
+            <div>
+              <h2 data-i18n="scoreboardTitle">Рекорды</h2>
+              <p id="scoreScope">Текущая категория</p>
+            </div>
+            <strong id="currentScore">0</strong>
+          </div>
+          <ol class="score-list" id="scoreList"></ol>
+          <button type="button" id="clearScores" data-i18n="clearScores">Очистить</button>
+        </article>
+      </section>
+
       <div class="progress" id="progress"></div>
       <section id="game" class="game" aria-live="polite"></section>
 

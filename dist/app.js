@@ -25,6 +25,23 @@ const ui = {
     lengthGroup: 'Длина',
     lengthFixed: 'Раунд',
     lengthEndless: 'Бесконечно',
+    playerBoard: 'Игрок и результаты',
+    playerName: 'Имя для рекорда',
+    playerPlaceholder: 'Илья',
+    savePlayer: 'Записать',
+    playerReady: '{name} в таблице.',
+    playerPrompt: 'Введи имя, чтобы попасть в таблицу рекордов.',
+    playerRejected: 'Такое имя не подойдёт. Выбери другое.',
+    scoreboardTitle: 'High score',
+    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardEmpty: 'В этой категории пока нет рекордов.',
+    scoreMeta: '{correct}/{total} · {date}',
+    currentScore: 'Счёт',
+    clearScores: 'Очистить категорию',
+    scoreTitle: 'Твой счёт',
+    scoreBreakdown: '{correct}/{total} правильных · ошибок: {mistakes} · подсказок: {hints}',
+    scoreSaved: 'Результат записан: {score}.',
+    scoreGuest: 'Раунд завершён. Введи имя, чтобы записать результат.',
     quizEyebrow: 'ЭКСПЕДИЦИЯ С ЗАГАДКАМИ',
     quizTitle: 'Куда отправимся?',
     exploreEyebrow: 'АТЛАС ДЛЯ ИССЛЕДОВАНИЯ',
@@ -83,6 +100,23 @@ const ui = {
     lengthGroup: 'Length',
     lengthFixed: 'Round',
     lengthEndless: 'Endless',
+    playerBoard: 'Player and scores',
+    playerName: 'Name for the record',
+    playerPlaceholder: 'Ilya',
+    savePlayer: 'Enter',
+    playerReady: '{name} is on the board.',
+    playerPrompt: 'Enter a name to join the high-score table.',
+    playerRejected: 'That name will not work. Choose another one.',
+    scoreboardTitle: 'High score',
+    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardEmpty: 'No records in this category yet.',
+    scoreMeta: '{correct}/{total} · {date}',
+    currentScore: 'Score',
+    clearScores: 'Clear category',
+    scoreTitle: 'Your score',
+    scoreBreakdown: '{correct}/{total} correct · mistakes: {mistakes} · hints: {hints}',
+    scoreSaved: 'Score saved: {score}.',
+    scoreGuest: 'Round complete. Enter a name to save the score.',
     quizEyebrow: 'GEOGRAPHY EXPEDITION',
     quizTitle: 'Where shall we go?',
     exploreEyebrow: 'EXPLORATION ATLAS',
@@ -141,6 +175,23 @@ const ui = {
     lengthGroup: 'Duração',
     lengthFixed: 'Rodada',
     lengthEndless: 'Sem fim',
+    playerBoard: 'Jogador e pontuações',
+    playerName: 'Nome para o recorde',
+    playerPlaceholder: 'Ilya',
+    savePlayer: 'Registar',
+    playerReady: '{name} entrou na tabela.',
+    playerPrompt: 'Escreve um nome para entrar na tabela de recordes.',
+    playerRejected: 'Esse nome não serve. Escolhe outro.',
+    scoreboardTitle: 'High score',
+    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardEmpty: 'Ainda não há recordes nesta categoria.',
+    scoreMeta: '{correct}/{total} · {date}',
+    currentScore: 'Pontos',
+    clearScores: 'Limpar categoria',
+    scoreTitle: 'A tua pontuação',
+    scoreBreakdown: '{correct}/{total} certas · erros: {mistakes} · dicas: {hints}',
+    scoreSaved: 'Pontuação guardada: {score}.',
+    scoreGuest: 'Rodada concluída. Escreve um nome para guardar a pontuação.',
     quizEyebrow: 'EXPEDIÇÃO GEOGRÁFICA',
     quizTitle: 'Para onde vamos?',
     exploreEyebrow: 'ATLAS PARA EXPLORAR',
@@ -293,12 +344,255 @@ let solved = false;
 let hinted = false;
 let wrong = new Set();
 
+const storageKeys = {
+  player: 'geoDetectivePlayer',
+  scores: 'geoDetectiveScores',
+};
+
+let player = loadPlayer();
+let scores = loadScores();
+let stats = freshStats();
+let questionAwarded = false;
+let statusMessage = '';
+
+const blockedNameRoots = [
+  'fuck', 'fuk', 'fuq', 'shit', 'bitch', 'cunt', 'dick', 'cock', 'asshole', 'nigg',
+  'puta', 'puto', 'putain', 'putana', 'caralho', 'porra', 'merda', 'buceta', 'piroca',
+  'cabron', 'joder', 'mierda', 'cono', 'coño', 'pendejo',
+  'хуй', 'хуя', 'хуе', 'хуё', 'пизд', 'бляд', 'блять', 'бля', 'еба', 'ебо', 'ебу', 'еби', 'ёба', 'ёбу', 'ёби', 'сука', 'муд', 'гандон', 'пидор', 'пида',
+  'huy', 'hui', 'huya', 'hue', 'xui', 'xuy', 'xyi', 'pizd', 'blya', 'ebat', 'yebat', 'yob', 'suka', 'mudak', 'gandon', 'pidor',
+];
+
+const confusables = {
+  а: 'a', в: 'b', е: 'e', ё: 'e', з: 'z', к: 'k', м: 'm', н: 'h', о: 'o', р: 'p', с: 'c', т: 't', у: 'y', х: 'x',
+  Α: 'a', А: 'a', Β: 'b', В: 'b', Ε: 'e', Е: 'e', Κ: 'k', К: 'k', Μ: 'm', М: 'm', Ν: 'n', Ο: 'o', О: 'o', Ρ: 'p', Р: 'p', С: 'c', Τ: 't', Т: 't', Υ: 'y', У: 'y', Χ: 'x', Х: 'x',
+  0: 'o', 1: 'i', 3: 'e', 4: 'a', 5: 's', 6: 'b', 7: 't', 8: 'b', 9: 'g',
+  '@': 'a', '$': 's', '!': 'i', '+': 't',
+};
+
+const cyrillicLatin = {
+  а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'yo', ж: 'zh', з: 'z', и: 'i', й: 'i', к: 'k', л: 'l', м: 'm', н: 'n',
+  о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sh', ы: 'y', э: 'e', ю: 'yu', я: 'ya',
+};
+
 function tr(key, vars = {}) {
   return (ui[lang][key] || ui.ru[key] || key).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
 }
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+}
+
+function safeParse(value, fallback) {
+  try {
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function loadPlayer() {
+  const saved = safeParse(localStorage.getItem(storageKeys.player), null);
+  return saved?.name ? { name: String(saved.name).slice(0, 18) } : { name: '' };
+}
+
+function loadScores() {
+  const saved = safeParse(localStorage.getItem(storageKeys.scores), []);
+  return Array.isArray(saved) ? pruneScores(saved.filter(score => score?.name && Number.isFinite(score?.score)).map(score => ({
+    ...score,
+    mode: score.mode || 'mixed',
+    level: score.level || 'easy',
+    lengthMode: score.lengthMode || 'fixed',
+    total: score.total || score.correct || 0,
+    date: score.date || new Date(0).toISOString(),
+  }))) : [];
+}
+
+function savePlayer() {
+  localStorage.setItem(storageKeys.player, JSON.stringify(player));
+}
+
+function saveScores() {
+  localStorage.setItem(storageKeys.scores, JSON.stringify(pruneScores(scores)));
+}
+
+function freshStats() {
+  return { score: 0, correct: 0, mistakes: 0, hints: 0, reveals: 0, startedAt: Date.now(), saved: false };
+}
+
+function simplifyLetters(value) {
+  return [...value].map(char => confusables[char] || confusables[char.toLowerCase()] || char.toLowerCase()).join('');
+}
+
+function normalizeNameForFilter(value) {
+  const folded = simplifyLetters(value.normalize('NFKD').replace(/[\u0300-\u036f]/g, ''));
+  return folded.replace(/(.)\1{2,}/g, '$1$1').replace(/[^a-zа-яё0-9]/gi, '');
+}
+
+function transliterateForFilter(value) {
+  const folded = value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  return [...folded].map(char => cyrillicLatin[char] || confusables[char] || char).join('').replace(/(.)\1{2,}/g, '$1$1').replace(/[^a-z0-9]/g, '');
+}
+
+function sanitizePlayerName(value) {
+  return value.replace(/[^\p{L}\p{N} _-]/gu, '').replace(/\s+/g, ' ').trim().slice(0, 18);
+}
+
+function isBlockedName(value) {
+  const clean = normalizeNameForFilter(value);
+  const direct = value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zа-яё0-9]/gi, '');
+  const latin = transliterateForFilter(value);
+  return blockedNameRoots.some(root => clean.includes(root) || direct.includes(root) || latin.includes(root));
+}
+
+function validatePlayerName(value) {
+  const name = sanitizePlayerName(value);
+  if (name.length < 2 || isBlockedName(name)) return null;
+  return name;
+}
+
+function modeLabel(value = mode) {
+  return tr(value === 'flags' ? 'modeFlags' : value === 'animals' ? 'modeAnimals' : 'modeMixed');
+}
+
+function levelLabel(value = level) {
+  return tr(value === 'easy' ? 'levelEasy' : value === 'medium' ? 'levelMedium' : 'levelMax');
+}
+
+function lengthLabel(value = lengthMode) {
+  return tr(value === 'endless' ? 'lengthEndless' : 'lengthFixed');
+}
+
+function categoryKey(entry = { mode, level, lengthMode }) {
+  return `${entry.mode}|${entry.level}|${entry.lengthMode || 'fixed'}`;
+}
+
+function categoryScores() {
+  const key = categoryKey();
+  return scores.filter(entry => categoryKey(entry) === key);
+}
+
+function compareScores(a, b) {
+  return b.score - a.score || b.correct - a.correct || new Date(b.date) - new Date(a.date);
+}
+
+function pruneScores(entries) {
+  const keptByCategory = new Map();
+  return [...entries].sort(compareScores).filter(entry => {
+    const key = categoryKey(entry);
+    const count = keptByCategory.get(key) || 0;
+    if (count >= 10) return false;
+    keptByCategory.set(key, count + 1);
+    return true;
+  }).slice(0, 120);
+}
+
+function formatScoreDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? '' : new Intl.DateTimeFormat(lang, { day: '2-digit', month: '2-digit' }).format(date);
+}
+
+function roundScoreMeta(entry) {
+  return tr('scoreMeta', { correct: entry.correct, total: entry.total, date: formatScoreDate(entry.date) });
+}
+
+function awardQuestion(revealed = false) {
+  if (questionAwarded) return;
+  questionAwarded = true;
+  if (revealed) {
+    stats.reveals++;
+    return;
+  }
+  const levelBonus = level === 'max' ? 40 : level === 'medium' ? 20 : 0;
+  const lengthBonus = lengthMode === 'endless' ? 10 : 0;
+  const penalty = wrong.size * 15 + (hinted ? 25 : 0);
+  stats.correct++;
+  stats.score += Math.max(20, 100 + levelBonus + lengthBonus - penalty);
+}
+
+function saveFinishedScore(value) {
+  if (stats.saved) return true;
+  const name = validatePlayerName(value);
+  if (!name) {
+    statusMessage = tr('playerRejected');
+    return false;
+  }
+  player = { name };
+  savePlayer();
+  const entry = {
+    name,
+    score: stats.score,
+    correct: stats.correct,
+    total: round.length,
+    mode,
+    level,
+    lengthMode,
+    mistakes: stats.mistakes,
+    hints: stats.hints,
+    reveals: stats.reveals,
+    date: new Date().toISOString(),
+  };
+  stats.saved = true;
+  scores = pruneScores([entry, ...scores]);
+  saveScores();
+  statusMessage = tr('scoreSaved', { score: stats.score });
+  return true;
+}
+
+function renderPlayerBoard() {
+  const board = document.querySelector('.player-board');
+  if (!board) return;
+  board.setAttribute('aria-label', tr('playerBoard'));
+  $('#scoreScope').textContent = tr('scoreboardScope', { mode: modeLabel(), level: levelLabel(), length: lengthLabel() });
+  $('#currentScore').textContent = String(stats.score);
+  $('#currentScore').setAttribute('aria-label', `${tr('currentScore')}: ${stats.score}`);
+  const topScores = categoryScores().slice(0, 8);
+  $('#scoreList').innerHTML = topScores.length
+    ? topScores.map((entry, index) => `<li><b>${index + 1}</b><strong>${escapeHtml(entry.name)}</strong><span>${entry.score}</span><small>${escapeHtml(roundScoreMeta(entry))}</small></li>`).join('')
+    : `<li class="empty">${tr('scoreboardEmpty')}</li>`;
+}
+
+function renderFinish() {
+  const savedText = stats.saved ? `<p class="message" role="status">${statusMessage || tr('playerReady', { name: player.name })}</p>` : '';
+  const entryForm = stats.saved ? '' : `
+    <form class="score-entry" id="scoreForm" novalidate>
+      <label>
+        <span>${tr('playerName')}</span>
+        <input id="scoreName" name="scoreName" autocomplete="nickname" maxlength="18" placeholder="${escapeHtml(tr('playerPlaceholder'))}" value="${escapeHtml(player.name)}">
+      </label>
+      <button class="primary" type="submit">${tr('savePlayer')}</button>
+      <p class="player-status" id="scoreStatus" role="status">${statusMessage || tr('playerPrompt')}</p>
+    </form>`;
+  $('#game').innerHTML = `
+    <div class="finish">
+      <p class="eyebrow">${tr('finishEyebrow')}</p>
+      <h2>${tr('finishTitle')}</h2>
+      <article class="final-score">
+        <span>${tr('scoreTitle')}</span>
+        <strong>${stats.score}</strong>
+        <p>${tr('scoreBreakdown', { correct: stats.correct, total: round.length, mistakes: stats.mistakes, hints: stats.hints })}</p>
+        <small>${tr('scoreboardScope', { mode: modeLabel(), level: levelLabel(), length: lengthLabel() })}</small>
+      </article>
+      ${entryForm}
+      ${savedText}
+      <button class="primary" id="again">${tr('playAgain')}</button>
+    </div>`;
+  $('#again').onclick = start;
+  const form = $('#scoreForm');
+  if (form) {
+    form.onsubmit = event => {
+      event.preventDefault();
+      const ok = saveFinishedScore($('#scoreName').value);
+      if (!ok) {
+        $('#scoreStatus').textContent = statusMessage;
+        $('#scoreName').focus();
+        $('#scoreName').select();
+        return;
+      }
+      renderPlayerBoard();
+      renderFinish();
+    };
+  }
 }
 
 function countryName(id, locale = lang) {
@@ -412,6 +706,7 @@ function setStaticText() {
   document.querySelector('[data-level="max"]').textContent = tr('levelMax');
   document.querySelector('[data-length="fixed"]').textContent = tr('lengthFixed');
   document.querySelector('[data-length="endless"]').textContent = tr('lengthEndless');
+  document.querySelector('.player-board').setAttribute('aria-label', tr('playerBoard'));
 }
 
 function setChrome() {
@@ -422,6 +717,7 @@ function setChrome() {
   document.querySelector('.topic-modes').hidden = !quiz;
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.length-modes').hidden = !quiz;
+  document.querySelector('.player-board').hidden = !quiz;
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
 }
 
@@ -443,6 +739,8 @@ function start() {
       : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
   pos = 0;
+  stats = freshStats();
+  statusMessage = '';
   reset();
   render();
 }
@@ -450,11 +748,13 @@ function start() {
 function reset() {
   solved = false;
   hinted = false;
+  questionAwarded = false;
   wrong.clear();
 }
 
 function render() {
   setChrome();
+  renderPlayerBoard();
   if (view === 'explore') {
     renderExplore();
     return;
@@ -468,8 +768,7 @@ function render() {
   $('#progress').innerHTML = `<div class="progress-meta"><span>${tr('clueTag', { current: Math.min(pos + 1, round.length), total: round.length })}</span><span>${done} / ${round.length}</span></div><div class="progress-track" aria-hidden="true"><span class="${done === round.length ? 'done' : ''}" style="width:${progressPercent}%"></span></div>`;
 
   if (!q) {
-    $('#game').innerHTML = `<div class="finish"><p class="eyebrow">${tr('finishEyebrow')}</p><h2>${tr('finishTitle')}</h2><p>${tr('finishText')}</p><button class="primary" id="again">${tr('playAgain')}</button></div>`;
-    $('#again').onclick = start;
+    renderFinish();
     return;
   }
 
@@ -498,8 +797,13 @@ function render() {
   document.querySelectorAll('[data-answer]').forEach(button => {
     button.onclick = () => {
       const answer = q.type === 'flag' ? button.dataset.answer : Number(button.dataset.answer);
-      if (answer === (q.type === 'flag' ? q.id : q.region)) solved = true;
-      else wrong.add(answer);
+      if (answer === (q.type === 'flag' ? q.id : q.region)) {
+        awardQuestion(false);
+        solved = true;
+      } else if (!wrong.has(answer)) {
+        wrong.add(answer);
+        stats.mistakes++;
+      }
       render();
     };
   });
@@ -513,10 +817,12 @@ function render() {
     drawResult(q);
   } else {
     $('#hint').onclick = () => {
+      if (!hinted) stats.hints++;
       hinted = true;
       render();
     };
     $('#reveal').onclick = () => {
+      awardQuestion(true);
       solved = true;
       render();
     };
@@ -619,7 +925,15 @@ function drawExplore(current) {
 
 $('#lang').onchange = event => {
   lang = event.target.value;
+  statusMessage = '';
   render();
+};
+$('#clearScores').onclick = () => {
+  const key = categoryKey();
+  scores = scores.filter(entry => categoryKey(entry) !== key);
+  saveScores();
+  statusMessage = '';
+  renderPlayerBoard();
 };
 document.querySelectorAll('[data-view]').forEach(button => {
   button.onclick = () => {
