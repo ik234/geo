@@ -1,5 +1,5 @@
 // Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
-const VERSION = '458a732aaa18';
+const VERSION = '0098d1662e44';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   "./",
@@ -230,6 +230,7 @@ const ASSETS = [
   "manifest.webmanifest",
   "months.html",
   "style.css",
+  "summer.html",
   "weekdays.html"
 ];
 

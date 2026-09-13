@@ -9,6 +9,7 @@ const ui = {
 
     weekdays: 'Дни недели ↗',
     months: 'Все 12 месяцев ↗',
+    summer: 'Начало лета ↗',
     siteTitle: 'Географический детектив',
     brand: 'ГЕО / ДЕТЕКТИВ',
     navMaps: 'Карты',
@@ -92,6 +93,7 @@ const ui = {
 
     weekdays: 'Weekdays ↗',
     months: 'All 12 months ↗',
+    summer: 'Summer start ↗',
     siteTitle: 'Geography Detective',
     brand: 'GEO / DETECTIVE',
     navMaps: 'Maps',
@@ -175,6 +177,7 @@ const ui = {
 
     weekdays: 'Dias da semana ↗',
     months: 'Todos os 12 meses ↗',
+    summer: 'Início do verão ↗',
     siteTitle: 'Detetive de Geografia',
     brand: 'GEO / DETETIVE',
     navMaps: 'Mapas',
@@ -258,6 +261,7 @@ const ui = {
 
     weekdays: 'Días de la semana ↗',
     months: 'Los 12 meses ↗',
+    summer: 'Inicio del verano ↗',
     siteTitle: 'Detective de Geografía',
     brand: 'GEO / DETECTIVE',
     navMaps: 'Mapas',
@@ -341,6 +345,7 @@ const ui = {
 
     weekdays: 'Wochentage ↗',
     months: 'Alle 12 Monate ↗',
+    summer: 'Sommerbeginn ↗',
     siteTitle: 'Geografie-Detektiv',
     brand: 'GEO / DETEKTIV',
     navMaps: 'Karten',
@@ -424,6 +429,7 @@ const ui = {
 
     weekdays: 'Dni tygodnia ↗',
     months: 'Wszystkie 12 miesięcy ↗',
+    summer: 'Początek lata ↗',
     siteTitle: 'Detektyw Geograficzny',
     brand: 'GEO / DETEKTYW',
     navMaps: 'Mapy',
