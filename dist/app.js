@@ -1299,7 +1299,7 @@ function render() {
     : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   const visualNote = solved ? '<div class="result-map" id="map"></div>' : `<small>${q.type === 'flag' ? tr('flagPartial') : tr('animalPrompt')}</small>`;
   const message = solved
-    ? `<strong>${tr('solved')}</strong>${hasLore(q) ? '' : ` ${escapeHtml(fact(q))}`}`
+    ? `<strong>${tr('solved')}</strong> ${escapeHtml(fact(q))}`
     : wrong.size
       ? tr('wrong')
       : hinted
@@ -1313,7 +1313,6 @@ function render() {
       <h2>${q.type === 'flag' ? tr('flagQuestion') : tr('animalQuestion')}</h2>
       <div class="choices">${q.options.map(id => choiceButton(q, id)).join('')}</div>
       <p class="message" role="status">${message}</p>
-      ${solved ? countryPanel(q) : ''}
       <div class="actions">${solved ? `<button class="primary" id="next">${pos === round.length - 1 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
     </div>`;
 
