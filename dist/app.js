@@ -498,6 +498,7 @@ const easyFlagFacts = {
 
 const countries = [
   ['af', 'AFG'], ['ao', 'AGO'], ['al', 'ALB'], ['ae', 'ARE'], ['ar', 'ARG'], ['am', 'ARM'], ['aq', 'ATA'], ['tf', 'ATF'], ['au', 'AUS'], ['at', 'AUT'], ['az', 'AZE'], ['bi', 'BDI'], ['be', 'BEL'], ['bj', 'BEN'], ['bf', 'BFA'], ['bd', 'BGD'], ['bg', 'BGR'], ['bs', 'BHS'], ['ba', 'BIH'], ['by', 'BLR'], ['bz', 'BLZ'], ['bo', 'BOL'], ['br', 'BRA'], ['bn', 'BRN'], ['bt', 'BTN'], ['bw', 'BWA'], ['cf', 'CAF'], ['ca', 'CAN'], ['ch', 'CHE'], ['cl', 'CHL'], ['cn', 'CHN'], ['ci', 'CIV'], ['cm', 'CMR'], ['cd', 'COD'], ['cg', 'COG'], ['co', 'COL'], ['cr', 'CRI'], ['cu', 'CUB'], ['cy', 'CYP'], ['cz', 'CZE'], ['de', 'DEU'], ['dj', 'DJI'], ['dk', 'DNK'], ['do', 'DOM'], ['dz', 'DZA'], ['ec', 'ECU'], ['eg', 'EGY'], ['er', 'ERI'], ['es', 'ESP'], ['ee', 'EST'], ['et', 'ETH'], ['fi', 'FIN'], ['fj', 'FJI'], ['fk', 'FLK'], ['fr', 'FRA'], ['ga', 'GAB'], ['gb', 'GBR'], ['ge', 'GEO'], ['gh', 'GHA'], ['gn', 'GIN'], ['gm', 'GMB'], ['gw', 'GNB'], ['gq', 'GNQ'], ['gr', 'GRC'], ['gl', 'GRL'], ['gt', 'GTM'], ['gy', 'GUY'], ['hn', 'HND'], ['hr', 'HRV'], ['ht', 'HTI'], ['hu', 'HUN'], ['id', 'IDN'], ['in', 'IND'], ['ie', 'IRL'], ['ir', 'IRN'], ['iq', 'IRQ'], ['is', 'ISL'], ['il', 'ISR'], ['it', 'ITA'], ['jm', 'JAM'], ['jo', 'JOR'], ['jp', 'JPN'], ['kz', 'KAZ'], ['ke', 'KEN'], ['kg', 'KGZ'], ['kh', 'KHM'], ['kr', 'KOR'], ['xk', 'KOS'], ['kw', 'KWT'], ['la', 'LAO'], ['lb', 'LBN'], ['lr', 'LBR'], ['ly', 'LBY'], ['lk', 'LKA'], ['ls', 'LSO'], ['lt', 'LTU'], ['lu', 'LUX'], ['lv', 'LVA'], ['ma', 'MAR'], ['mc', 'MCO'], ['md', 'MDA'], ['mg', 'MDG'], ['mx', 'MEX'], ['mk', 'MKD'], ['ml', 'MLI'], ['mm', 'MMR'], ['me', 'MNE'], ['mn', 'MNG'], ['mz', 'MOZ'], ['mr', 'MRT'], ['mw', 'MWI'], ['my', 'MYS'], ['na', 'NAM'], ['nc', 'NCL'], ['ne', 'NER'], ['ng', 'NGA'], ['ni', 'NIC'], ['nl', 'NLD'], ['no', 'NOR'], ['np', 'NPL'], ['nz', 'NZL'], ['om', 'OMN'], ['pk', 'PAK'], ['pa', 'PAN'], ['pe', 'PER'], ['ph', 'PHL'], ['pg', 'PNG'], ['pl', 'POL'], ['pr', 'PRI'], ['kp', 'PRK'], ['pt', 'PRT'], ['py', 'PRY'], ['ps', 'PSX'], ['qa', 'QAT'], ['ro', 'ROU'], ['ru', 'RUS'], ['rw', 'RWA'], ['eh', 'SAH'], ['sa', 'SAU'], ['sd', 'SDN'], ['ss', 'SDS'], ['sn', 'SEN'], ['sb', 'SLB'], ['sl', 'SLE'], ['sv', 'SLV'], ['so', 'SOM'], ['rs', 'SRB'], ['sr', 'SUR'], ['sk', 'SVK'], ['si', 'SVN'], ['se', 'SWE'], ['sz', 'SWZ'], ['sy', 'SYR'], ['td', 'TCD'], ['tg', 'TGO'], ['th', 'THA'], ['tj', 'TJK'], ['tm', 'TKM'], ['tl', 'TLS'], ['tt', 'TTO'], ['tn', 'TUN'], ['tr', 'TUR'], ['tw', 'TWN'], ['tz', 'TZA'], ['ug', 'UGA'], ['ua', 'UKR'], ['uy', 'URY'], ['us', 'USA'], ['uz', 'UZB'], ['ve', 'VEN'], ['vn', 'VNM'], ['vu', 'VUT'], ['ye', 'YEM'], ['za', 'ZAF'], ['zm', 'ZMB'], ['zw', 'ZWE'],
+  ['va', 'VAT'], ['sm', 'SMR'], ['li', 'LIE'], ['ad', 'AND'], ['mt', 'MLT'], ['nr', 'NRU'], ['tv', 'TUV'], ['pw', 'PLW'], ['mh', 'MHL'], ['fm', 'FSM'], ['ws', 'WSM'], ['to', 'TON'], ['ki', 'KIR'], ['kn', 'KNA'], ['gd', 'GRD'], ['vc', 'VCT'], ['bb', 'BRB'], ['ag', 'ATG'], ['lc', 'LCA'], ['mv', 'MDV'], ['sc', 'SYC'], ['sg', 'SGP'], ['bh', 'BHR'],
 ];
 
 const similarFlagGroups = [
@@ -508,10 +509,38 @@ const similarFlagGroups = [
   ['ie', 'ci'],
   ['au', 'nz'],
   ['co', 'ec', 've'],
+  ['va', 'sm', 'li', 'ad', 'mt'],
+  ['nr', 'tv', 'pw', 'mh', 'fm', 'ws', 'to', 'vu', 'ki'],
+  ['kn', 'gd', 'vc', 'bb', 'ag', 'lc'],
+  ['mv', 'sc', 'sg', 'bh'],
 ];
 
 const flagPoints = {
   mc: [7.42, 43.73],
+  va: [12.45, 41.9],
+  sm: [12.46, 43.94],
+  li: [9.55, 47.14],
+  ad: [1.6, 42.55],
+  mt: [14.38, 35.94],
+  nr: [166.93, -0.52],
+  tv: [179.2, -8.52],
+  pw: [134.58, 7.51],
+  mh: [171.18, 7.13],
+  fm: [158.16, 6.92],
+  ws: [-172.1, -13.76],
+  to: [-175.2, -21.18],
+  vu: [167.7, -15.4],
+  ki: [-157.36, 1.87],
+  kn: [-62.78, 17.36],
+  gd: [-61.68, 12.12],
+  vc: [-61.2, 13.25],
+  bb: [-59.54, 13.19],
+  ag: [-61.8, 17.06],
+  lc: [-60.98, 13.91],
+  mv: [73.51, 4.18],
+  sc: [55.45, -4.62],
+  sg: [103.82, 1.35],
+  bh: [50.56, 26.07],
 };
 
 const regions = [
@@ -1199,6 +1228,21 @@ function drawExplore(current) {
         renderExplore();
       }
     });
+  flags.filter(flag => flag.point).forEach(flag => {
+    const [x, y] = projection(flag.point);
+    svg.append('circle')
+      .attr('cx', x)
+      .attr('cy', y)
+      .attr('r', current.key === flag.key ? 5.5 : 4)
+      .attr('fill', current.key === flag.key ? '#ca501b' : '#2f7f8a')
+      .attr('stroke', 'white')
+      .attr('stroke-width', 1.8)
+      .attr('class', 'map-click')
+      .on('click', () => {
+        selectedKey = flag.key;
+        renderExplore();
+      });
+  });
   if (featureFlags.animals) {
     animals.forEach(animal => {
       const [x, y] = projection(animal.point);
