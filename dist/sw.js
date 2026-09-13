@@ -1,5 +1,5 @@
 // Файл собирается tools/gen-sw.py — править руками бессмысленно.
-const VERSION = '5efdf10b7b82';
+const VERSION = '064976aacc37';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   "./",
