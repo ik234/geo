@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Собирает dist/sw.js: список файлов для офлайна и версию кэша.
+"""Собирает detective/dist/sw.js: список файлов для офлайна и версию кэша.
 
 Версия — хэш содержимого всех файлов, а не число, которое надо не забыть
 поднять. Поменялся любой байт — поменялась версия — браузер перекачает кэш.
-Запускается из корня репозитория; workflow вызывает его перед публикацией.
+Workflow вызывает его перед публикацией; пути считаются от расположения файла.
 """
 import hashlib, pathlib, sys
 
@@ -30,7 +30,7 @@ urls = ['./'] + [p.relative_to(DIST).as_posix() for p in files]
 listing = ',\n  '.join(f'"{u}"' for u in urls)
 total = sum(p.stat().st_size for p in files)
 
-(DIST / 'sw.js').write_text(f'''// Файл собирается tools/gen-sw.py — править руками бессмысленно.
+(DIST / 'sw.js').write_text(f'''// Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
 const VERSION = '{version}';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [

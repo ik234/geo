@@ -5,7 +5,7 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Pages умеет отдавать только корень репозитория или /docs, а сайт лежит в dist/.
+# Pages умеет отдавать только корень репозитория или /docs, а сайт лежит в detective/dist/.
 # Публикация артефактом снимает это ограничение: каталог остаётся на месте.
 permissions:
   contents: read
@@ -25,11 +25,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # Список офлайн-кэша и его версию считаем из фактического содержимого
-      # dist/, чтобы выложенный sw.js не мог разойтись с выложенными файлами.
-      - run: python3 tools/gen-sw.py
+      # detective/dist/, чтобы выложенный sw.js не мог разойтись с выложенными файлами.
+      - run: python3 detective/tools/gen-sw.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: detective/dist
       - id: deployment
         uses: actions/deploy-pages@v4
