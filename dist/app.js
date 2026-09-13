@@ -613,6 +613,7 @@ let lengthMode = 'fixed';
 let view = 'quiz';
 let exploreKind = 'all';
 let selectedKey = 'flag:pt';
+let exploreScrollBlock = null;
 let round = [];
 let pos = 0;
 let solved = false;
@@ -1166,10 +1167,6 @@ function renderExplore() {
         <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
         ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
       </div>
-      <article class="fact-card">
-        ${current.type === 'flag' ? `<img src="assets/flags/${current.id}.svg" alt="${escapeHtml(name(current))}">` : `<span class="animal-mini" aria-hidden="true">${current.emoji}</span>`}
-        <div><span class="tag">${current.type === 'flag' ? tr('country') : tr('animal')}</span><h2>${escapeHtml(name(current))}</h2><p>${current.type === 'animal' ? `${escapeHtml(regionName(current.region))}. ` : ''}${escapeHtml(fact(current))}</p></div>
-      </article>
       <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
     </div>`;
 
@@ -1177,20 +1174,63 @@ function renderExplore() {
     button.onclick = () => {
       exploreKind = button.dataset.kind;
       selectedKey = visibleItems()[0].key;
+      exploreScrollBlock = null;
       renderExplore();
     };
   });
   document.querySelectorAll('[data-item]').forEach(button => {
     button.onclick = () => {
-      selectedKey = button.dataset.item;
-      renderExplore();
+      selectExploreItem(button.dataset.item, 'nearest');
     };
   });
   drawExplore(current);
+  scrollSelectedExploreItem();
 }
 
 function listItem(item) {
-  return `<button data-item="${item.key}" class="${item.key === selectedKey ? 'active' : ''}">${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}<span>${escapeHtml(name(item))}</span></button>`;
+  const active = item.key === selectedKey;
+  const rowId = itemDomId(item.key);
+  return `
+    <article class="item-row ${active ? 'active' : ''}" id="${rowId}">
+      <button type="button" data-item="${escapeHtml(item.key)}" class="${active ? 'active' : ''}" aria-expanded="${active}" ${active ? `aria-controls="${rowId}-detail"` : ''}>
+        ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
+        <span>${escapeHtml(name(item))}</span>
+      </button>
+      ${active ? itemDetail(item, rowId) : ''}
+    </article>`;
+}
+
+function itemDetail(item, rowId) {
+  return `
+    <div class="item-detail" id="${rowId}-detail">
+      ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
+      <div>
+        <span class="tag">${item.type === 'flag' ? tr('country') : tr('animal')}</span>
+        <h2>${escapeHtml(name(item))}</h2>
+        <p>${item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : ''}${escapeHtml(fact(item))}</p>
+      </div>
+    </div>`;
+}
+
+function itemDomId(key) {
+  return `atlas-${String(key).replace(/[^a-z0-9_-]/gi, '-')}`;
+}
+
+function featureId(feature) {
+  return feature?.properties?.id || feature?.id;
+}
+
+function selectExploreItem(key, scrollBlock = null) {
+  selectedKey = key;
+  exploreScrollBlock = scrollBlock;
+  renderExplore();
+}
+
+function scrollSelectedExploreItem() {
+  if (!exploreScrollBlock) return;
+  const block = exploreScrollBlock;
+  exploreScrollBlock = null;
+  document.getElementById(itemDomId(selectedKey))?.scrollIntoView({ behavior: 'smooth', block });
 }
 
 function baseMap(container, label) {
@@ -1204,7 +1244,7 @@ function baseMap(container, label) {
 
 function drawResult(q) {
   const { features, projection, path, svg } = baseMap('#map', q.type === 'flag' ? tr('resultMapLabel', { name: name(q) }) : tr('animalPointNote'));
-  svg.selectAll('.land').data(features).join('path').attr('d', path).attr('fill', feature => q.iso && feature.properties.id === q.iso ? '#f4b333' : '#f6faf6').attr('stroke', '#86a5af').attr('stroke-width', 0.4);
+  svg.selectAll('.land').data(features).join('path').attr('d', path).attr('fill', feature => q.iso && featureId(feature) === q.iso ? '#f4b333' : '#f6faf6').attr('stroke', '#86a5af').attr('stroke-width', 0.4);
   if (q.point) {
     const [x, y] = projection(q.point);
     svg.append('circle').attr('cx', x).attr('cy', y).attr('r', 6).attr('fill', '#ca501b').attr('stroke', 'white').attr('stroke-width', 2);
@@ -1217,15 +1257,14 @@ function drawExplore(current) {
   const { features, projection, path, svg } = baseMap('#exploreMap', tr('mapLabel'));
   svg.selectAll('.land').data(features).join('path')
     .attr('d', path)
-    .attr('fill', feature => current.iso === feature.properties.id ? '#f4b333' : flagIsos.has(feature.properties.id) ? '#dff0df' : '#f6faf6')
+    .attr('fill', feature => current.iso === featureId(feature) ? '#f4b333' : flagIsos.has(featureId(feature)) ? '#dff0df' : '#f6faf6')
     .attr('stroke', '#86a5af')
     .attr('stroke-width', 0.4)
-    .attr('class', feature => flagIsos.has(feature.properties.id) ? 'map-click land' : 'land')
+    .attr('class', feature => flagIsos.has(featureId(feature)) ? 'map-click land' : 'land')
     .on('click', (_, feature) => {
-      const found = flags.find(flag => flag.iso === feature.properties.id);
+      const found = flags.find(flag => flag.iso === featureId(feature));
       if (found) {
-        selectedKey = found.key;
-        renderExplore();
+        selectExploreItem(found.key, 'center');
       }
     });
   flags.filter(flag => flag.point).forEach(flag => {
@@ -1239,16 +1278,14 @@ function drawExplore(current) {
       .attr('stroke-width', 1.8)
       .attr('class', 'map-click')
       .on('click', () => {
-        selectedKey = flag.key;
-        renderExplore();
+        selectExploreItem(flag.key, 'center');
       });
   });
   if (featureFlags.animals) {
     animals.forEach(animal => {
       const [x, y] = projection(animal.point);
       svg.append('circle').attr('cx', x).attr('cy', y).attr('r', current.key === animal.key ? 7 : 5).attr('fill', current.key === animal.key ? '#ca501b' : '#2f7f8a').attr('stroke', 'white').attr('stroke-width', 2).attr('class', 'map-click').on('click', () => {
-        selectedKey = animal.key;
-        renderExplore();
+        selectExploreItem(animal.key, 'center');
       });
     });
   }

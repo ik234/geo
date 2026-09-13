@@ -497,32 +497,6 @@ svg {
   font-size: 15px;
 }
 
-.fact-card {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  border: 1px solid #c7d9dd;
-  border-radius: 18px;
-  padding: 16px;
-  background: #f7fbfb;
-}
-
-.fact-card img {
-  width: 82px;
-  border-radius: 8px;
-  box-shadow: 0 5px 14px #14344018;
-}
-
-.fact-card h2 {
-  font-size: 24px;
-  margin: 6px 0;
-}
-
-.fact-card p {
-  line-height: 1.45;
-  margin: 0;
-}
-
 .animal-mini {
   font-size: 54px;
 }
@@ -533,30 +507,73 @@ svg {
   gap: 8px;
   overflow: auto;
   padding-right: 3px;
+  scroll-behavior: smooth;
+  align-content: start;
 }
 
-.item-list button {
+.item-row {
+  border: 1px solid #c7d9dd;
+  border-radius: 14px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.item-row.active {
+  grid-column: 1 / -1;
+  border-color: #b7d85a;
+  background: #f7fbfb;
+}
+
+.item-row button {
+  width: 100%;
   min-height: 58px;
   padding: 10px 12px;
   text-align: left;
   display: flex;
   align-items: center;
   gap: 10px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
-.item-list .active {
+.item-row button.active {
   background: #d8f47b;
-  border-color: #b7d85a;
 }
 
-.item-list img {
+.item-row button img {
   width: 30px;
   border-radius: 4px;
   box-shadow: 0 2px 6px #14344018;
 }
 
-.item-list span {
+.item-row button span {
   overflow-wrap: anywhere;
+}
+
+.item-detail {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  border-top: 1px solid #c7d9dd;
+  padding: 14px;
+}
+
+.item-detail img {
+  width: 96px;
+  border-radius: 8px;
+  box-shadow: 0 5px 14px #14344018;
+}
+
+.item-detail h2 {
+  font-size: 23px;
+  margin: 6px 0;
+}
+
+.item-detail p {
+  line-height: 1.45;
+  margin: 0;
 }
 
 footer {
@@ -652,12 +669,16 @@ button:hover:not(:disabled) {
     padding: 20px;
   }
 
-  .fact-card {
-    align-items: flex-start;
-  }
-
   .item-list {
     grid-template-columns: 1fr;
+  }
+
+  .item-detail {
+    grid-template-columns: 78px minmax(0, 1fr);
+  }
+
+  .item-detail img {
+    width: 78px;
   }
 
   .score-entry {
