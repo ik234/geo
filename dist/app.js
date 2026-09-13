@@ -1296,11 +1296,11 @@ function renderExplore() {
   $('#game').innerHTML = `
     <div class="explore-map" id="exploreMap"></div>
     <div class="atlas">
-      <div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
-        ${featureFlags.animals ? `<button data-kind="all" class="${exploreKind === 'all' ? 'active' : ''}">${tr('all')}</button>` : ''}
+      ${featureFlags.animals ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
+        <button data-kind="all" class="${exploreKind === 'all' ? 'active' : ''}">${tr('all')}</button>
         <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
-        ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
-      </div>
+        <button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>
+      </div>` : ''}
       <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
     </div>`;
 

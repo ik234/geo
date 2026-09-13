@@ -646,6 +646,11 @@ summary {
   cursor: pointer;
 }
 
+footer details p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 button:hover:not(:disabled) {
   filter: brightness(.96);
 }
