@@ -949,7 +949,7 @@ function renderFinish() {
   }
 }
 
-const dataCache = { countries: null, lore: {} };
+const dataCache = { countries: null, flagText: {}, facts: {} };
 const dataPending = new Set();
 
 function loadJson(url, key, assign) {
@@ -989,13 +989,43 @@ function countryInfo(id) {
   return dataCache.countries.countries?.[id] || null;
 }
 
-function countryLore(id) {
+// Описание флага нужно и раунду, и атласу, а факты — только атласу. Поэтому они
+// лежат в разных файлах: иначе раунд тянул бы сотни килобайт фактов ради одной строки.
+function countryFlagText(id) {
   const key = loreLang();
-  if (!dataCache.lore[key]) {
-    loadJson(`data/lore.${key}.json`, `lore:${key}`, value => { dataCache.lore[key] = value; });
-    return null;
+  if (!dataCache.flagText[key]) {
+    loadJson(`data/flags.${key}.json`, `flags:${key}`, value => { dataCache.flagText[key] = value; });
+    return '';
   }
-  return dataCache.lore[key][id] || null;
+  return dataCache.flagText[key][id] || '';
+}
+
+function countryFacts(id) {
+  const key = loreLang();
+  if (!dataCache.facts[key]) {
+    loadJson(`data/facts.${key}.json`, `facts:${key}`, value => { dataCache.facts[key] = value; });
+    return [];
+  }
+  return dataCache.facts[key][id] || [];
+}
+
+// Факт выбирается один раз на открытие карточки: перерисовка — пришли данные,
+// сменился язык — не должна подменять текст под рукой у читающего. Индекс переживает
+// смену языка, поэтому там показывается тот же факт, только переведённый.
+// При повторном открытии той же страны выпадает другой факт, иначе «случайный»
+// слишком часто повторяется.
+const lastFactIndex = new Map();
+let factChoice = { key: null, index: 0 };
+
+function chosenFact(item, facts) {
+  if (!facts.length) return '';
+  if (factChoice.key !== item.key) {
+    let index = Math.floor(Math.random() * facts.length);
+    if (facts.length > 1 && index === lastFactIndex.get(item.id)) index = (index + 1) % facts.length;
+    lastFactIndex.set(item.id, index);
+    factChoice = { key: item.key, index };
+  }
+  return facts[factChoice.index] || facts[0];
 }
 
 // Intl возвращает сам код, если названия нет в наборе CLDR движка; набор в Safari
@@ -1017,21 +1047,23 @@ function languageNames(codes) {
 }
 
 function hasLore(item) {
-  return item.type === 'flag' && Boolean(countryLore(item.id)?.flag);
+  return item.type === 'flag' && Boolean(countryFlagText(item.id));
 }
 
 function countryPanel(item) {
   if (item.type !== 'flag') return '';
   const info = countryInfo(item.id);
-  const lore = countryLore(item.id);
-  if (!info && !lore) return `<p class="country-loading">${tr('infoLoading')}</p>`;
+  const flagText = countryFlagText(item.id);
+  const facts = countryFacts(item.id);
+  if (!info && !flagText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
   const rows = [];
   if (info?.capital) rows.push([tr('capital'), info.capital[lang] || info.capital.en]);
   if (info?.currency) rows.push([tr('currency'), currencyName(info.currency)]);
   if (info?.languages?.length) rows.push([tr('officialLanguages'), languageNames(info.languages)]);
   const notes = [];
-  if (lore?.flag) notes.push([tr('flagStory'), lore.flag]);
-  if (lore?.fun) notes.push([tr('funFact'), lore.fun]);
+  if (flagText) notes.push([tr('flagStory'), flagText]);
+  const pick = chosenFact(item, facts);
+  if (pick) notes.push([tr('funFact'), pick]);
   if (!rows.length && !notes.length) return '';
   return `<div class="country-panel">${rows.length ? `<dl class="country-facts">${rows
     .map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`)
@@ -1292,7 +1324,7 @@ function render() {
     ? `<div class="flag-window"><img class="${hinted || solved ? 'revealed' : ''}" src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></div>`
     : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   const visualNote = solved ? '<div class="result-map" id="map"></div>' : `<small>${q.type === 'flag' ? tr('flagPartial') : tr('animalPrompt')}</small>`;
-  const solvedNote = q.type === 'flag' ? countryLore(q.id)?.flag || '' : fact(q);
+  const solvedNote = q.type === 'flag' ? countryFlagText(q.id) : fact(q);
   const message = solved
     ? `<strong>${tr('solved')}</strong>${solvedNote ? ` ${escapeHtml(solvedNote)}` : ''}`
     : wrong.size
