@@ -497,8 +497,22 @@ const easyFlagFacts = {
 };
 
 const countries = [
-  ['af', 'AFG'], ['ao', 'AGO'], ['al', 'ALB'], ['ae', 'ARE'], ['ar', 'ARG'], ['am', 'ARM'], ['aq', 'ATA'], ['tf', 'ATF'], ['au', 'AUS'], ['at', 'AUT'], ['az', 'AZE'], ['bi', 'BDI'], ['be', 'BEL'], ['bj', 'BEN'], ['bf', 'BFA'], ['bd', 'BGD'], ['bg', 'BGR'], ['bs', 'BHS'], ['ba', 'BIH'], ['by', 'BLR'], ['bz', 'BLZ'], ['bo', 'BOL'], ['br', 'BRA'], ['bn', 'BRN'], ['bt', 'BTN'], ['bw', 'BWA'], ['cf', 'CAF'], ['ca', 'CAN'], ['ch', 'CHE'], ['cl', 'CHL'], ['cn', 'CHN'], ['ci', 'CIV'], ['cm', 'CMR'], ['cd', 'COD'], ['cg', 'COG'], ['co', 'COL'], ['cr', 'CRI'], ['cu', 'CUB'], ['cy', 'CYP'], ['cz', 'CZE'], ['de', 'DEU'], ['dj', 'DJI'], ['dk', 'DNK'], ['do', 'DOM'], ['dz', 'DZA'], ['ec', 'ECU'], ['eg', 'EGY'], ['er', 'ERI'], ['es', 'ESP'], ['ee', 'EST'], ['et', 'ETH'], ['fi', 'FIN'], ['fj', 'FJI'], ['fk', 'FLK'], ['fr', 'FRA'], ['ga', 'GAB'], ['gb', 'GBR'], ['ge', 'GEO'], ['gh', 'GHA'], ['gn', 'GIN'], ['gm', 'GMB'], ['gw', 'GNB'], ['gq', 'GNQ'], ['gr', 'GRC'], ['gl', 'GRL'], ['gt', 'GTM'], ['gy', 'GUY'], ['hn', 'HND'], ['hr', 'HRV'], ['ht', 'HTI'], ['hu', 'HUN'], ['id', 'IDN'], ['in', 'IND'], ['ie', 'IRL'], ['ir', 'IRN'], ['iq', 'IRQ'], ['is', 'ISL'], ['il', 'ISR'], ['it', 'ITA'], ['jm', 'JAM'], ['jo', 'JOR'], ['jp', 'JPN'], ['kz', 'KAZ'], ['ke', 'KEN'], ['kg', 'KGZ'], ['kh', 'KHM'], ['kr', 'KOR'], ['xk', 'KOS'], ['kw', 'KWT'], ['la', 'LAO'], ['lb', 'LBN'], ['lr', 'LBR'], ['ly', 'LBY'], ['lk', 'LKA'], ['ls', 'LSO'], ['lt', 'LTU'], ['lu', 'LUX'], ['lv', 'LVA'], ['ma', 'MAR'], ['md', 'MDA'], ['mg', 'MDG'], ['mx', 'MEX'], ['mk', 'MKD'], ['ml', 'MLI'], ['mm', 'MMR'], ['me', 'MNE'], ['mn', 'MNG'], ['mz', 'MOZ'], ['mr', 'MRT'], ['mw', 'MWI'], ['my', 'MYS'], ['na', 'NAM'], ['nc', 'NCL'], ['ne', 'NER'], ['ng', 'NGA'], ['ni', 'NIC'], ['nl', 'NLD'], ['no', 'NOR'], ['np', 'NPL'], ['nz', 'NZL'], ['om', 'OMN'], ['pk', 'PAK'], ['pa', 'PAN'], ['pe', 'PER'], ['ph', 'PHL'], ['pg', 'PNG'], ['pl', 'POL'], ['pr', 'PRI'], ['kp', 'PRK'], ['pt', 'PRT'], ['py', 'PRY'], ['ps', 'PSX'], ['qa', 'QAT'], ['ro', 'ROU'], ['ru', 'RUS'], ['rw', 'RWA'], ['eh', 'SAH'], ['sa', 'SAU'], ['sd', 'SDN'], ['ss', 'SDS'], ['sn', 'SEN'], ['sb', 'SLB'], ['sl', 'SLE'], ['sv', 'SLV'], ['so', 'SOM'], ['rs', 'SRB'], ['sr', 'SUR'], ['sk', 'SVK'], ['si', 'SVN'], ['se', 'SWE'], ['sz', 'SWZ'], ['sy', 'SYR'], ['td', 'TCD'], ['tg', 'TGO'], ['th', 'THA'], ['tj', 'TJK'], ['tm', 'TKM'], ['tl', 'TLS'], ['tt', 'TTO'], ['tn', 'TUN'], ['tr', 'TUR'], ['tw', 'TWN'], ['tz', 'TZA'], ['ug', 'UGA'], ['ua', 'UKR'], ['uy', 'URY'], ['us', 'USA'], ['uz', 'UZB'], ['ve', 'VEN'], ['vn', 'VNM'], ['vu', 'VUT'], ['ye', 'YEM'], ['za', 'ZAF'], ['zm', 'ZMB'], ['zw', 'ZWE'],
+  ['af', 'AFG'], ['ao', 'AGO'], ['al', 'ALB'], ['ae', 'ARE'], ['ar', 'ARG'], ['am', 'ARM'], ['aq', 'ATA'], ['tf', 'ATF'], ['au', 'AUS'], ['at', 'AUT'], ['az', 'AZE'], ['bi', 'BDI'], ['be', 'BEL'], ['bj', 'BEN'], ['bf', 'BFA'], ['bd', 'BGD'], ['bg', 'BGR'], ['bs', 'BHS'], ['ba', 'BIH'], ['by', 'BLR'], ['bz', 'BLZ'], ['bo', 'BOL'], ['br', 'BRA'], ['bn', 'BRN'], ['bt', 'BTN'], ['bw', 'BWA'], ['cf', 'CAF'], ['ca', 'CAN'], ['ch', 'CHE'], ['cl', 'CHL'], ['cn', 'CHN'], ['ci', 'CIV'], ['cm', 'CMR'], ['cd', 'COD'], ['cg', 'COG'], ['co', 'COL'], ['cr', 'CRI'], ['cu', 'CUB'], ['cy', 'CYP'], ['cz', 'CZE'], ['de', 'DEU'], ['dj', 'DJI'], ['dk', 'DNK'], ['do', 'DOM'], ['dz', 'DZA'], ['ec', 'ECU'], ['eg', 'EGY'], ['er', 'ERI'], ['es', 'ESP'], ['ee', 'EST'], ['et', 'ETH'], ['fi', 'FIN'], ['fj', 'FJI'], ['fk', 'FLK'], ['fr', 'FRA'], ['ga', 'GAB'], ['gb', 'GBR'], ['ge', 'GEO'], ['gh', 'GHA'], ['gn', 'GIN'], ['gm', 'GMB'], ['gw', 'GNB'], ['gq', 'GNQ'], ['gr', 'GRC'], ['gl', 'GRL'], ['gt', 'GTM'], ['gy', 'GUY'], ['hn', 'HND'], ['hr', 'HRV'], ['ht', 'HTI'], ['hu', 'HUN'], ['id', 'IDN'], ['in', 'IND'], ['ie', 'IRL'], ['ir', 'IRN'], ['iq', 'IRQ'], ['is', 'ISL'], ['il', 'ISR'], ['it', 'ITA'], ['jm', 'JAM'], ['jo', 'JOR'], ['jp', 'JPN'], ['kz', 'KAZ'], ['ke', 'KEN'], ['kg', 'KGZ'], ['kh', 'KHM'], ['kr', 'KOR'], ['xk', 'KOS'], ['kw', 'KWT'], ['la', 'LAO'], ['lb', 'LBN'], ['lr', 'LBR'], ['ly', 'LBY'], ['lk', 'LKA'], ['ls', 'LSO'], ['lt', 'LTU'], ['lu', 'LUX'], ['lv', 'LVA'], ['ma', 'MAR'], ['mc', 'MCO'], ['md', 'MDA'], ['mg', 'MDG'], ['mx', 'MEX'], ['mk', 'MKD'], ['ml', 'MLI'], ['mm', 'MMR'], ['me', 'MNE'], ['mn', 'MNG'], ['mz', 'MOZ'], ['mr', 'MRT'], ['mw', 'MWI'], ['my', 'MYS'], ['na', 'NAM'], ['nc', 'NCL'], ['ne', 'NER'], ['ng', 'NGA'], ['ni', 'NIC'], ['nl', 'NLD'], ['no', 'NOR'], ['np', 'NPL'], ['nz', 'NZL'], ['om', 'OMN'], ['pk', 'PAK'], ['pa', 'PAN'], ['pe', 'PER'], ['ph', 'PHL'], ['pg', 'PNG'], ['pl', 'POL'], ['pr', 'PRI'], ['kp', 'PRK'], ['pt', 'PRT'], ['py', 'PRY'], ['ps', 'PSX'], ['qa', 'QAT'], ['ro', 'ROU'], ['ru', 'RUS'], ['rw', 'RWA'], ['eh', 'SAH'], ['sa', 'SAU'], ['sd', 'SDN'], ['ss', 'SDS'], ['sn', 'SEN'], ['sb', 'SLB'], ['sl', 'SLE'], ['sv', 'SLV'], ['so', 'SOM'], ['rs', 'SRB'], ['sr', 'SUR'], ['sk', 'SVK'], ['si', 'SVN'], ['se', 'SWE'], ['sz', 'SWZ'], ['sy', 'SYR'], ['td', 'TCD'], ['tg', 'TGO'], ['th', 'THA'], ['tj', 'TJK'], ['tm', 'TKM'], ['tl', 'TLS'], ['tt', 'TTO'], ['tn', 'TUN'], ['tr', 'TUR'], ['tw', 'TWN'], ['tz', 'TZA'], ['ug', 'UGA'], ['ua', 'UKR'], ['uy', 'URY'], ['us', 'USA'], ['uz', 'UZB'], ['ve', 'VEN'], ['vn', 'VNM'], ['vu', 'VUT'], ['ye', 'YEM'], ['za', 'ZAF'], ['zm', 'ZMB'], ['zw', 'ZWE'],
 ];
+
+const similarFlagGroups = [
+  ['id', 'mc'],
+  ['ro', 'td'],
+  ['nl', 'lu'],
+  ['ru', 'sk', 'si'],
+  ['ie', 'ci'],
+  ['au', 'nz'],
+  ['co', 'ec', 've'],
+];
+
+const flagPoints = {
+  mc: [7.42, 43.73],
+};
 
 const regions = [
   { ru: 'Китай', en: 'China', pt: 'China' },
@@ -874,6 +888,7 @@ const flags = countries.map(([id, iso]) => ({
   type: 'flag',
   key: `flag:${id}`,
   tier: easyIds.has(id) ? 'easy' : mediumFlagIds.has(id) ? 'medium' : 'max',
+  point: flagPoints[id],
   facts: easyFlagFacts[id],
 }));
 const allItems = [...flags, ...animals];
@@ -896,6 +911,33 @@ function targetCount() {
 
 function takeSome(items, count) {
   return shuffle(items).slice(0, Math.max(0, count));
+}
+
+function pushUniqueFlags(target, source, used, limit) {
+  for (const flag of source) {
+    if (target.length >= limit) break;
+    if (used.has(flag.id)) continue;
+    target.push(flag);
+    used.add(flag.id);
+  }
+}
+
+function similarFlagOptions(question, availableFlags) {
+  const byId = new Map(availableFlags.map(flag => [flag.id, flag]));
+  const used = new Set([question.id]);
+  const distractors = [];
+  const relatedIds = similarFlagGroups.find(group => group.includes(question.id)) || [];
+  const related = relatedIds.filter(id => id !== question.id).map(id => byId.get(id)).filter(Boolean);
+  const hardFallback = availableFlags.filter(flag => flag.tier === 'max');
+  pushUniqueFlags(distractors, shuffle(related), used, 3);
+  pushUniqueFlags(distractors, shuffle(hardFallback), used, 3);
+  pushUniqueFlags(distractors, shuffle(availableFlags), used, 3);
+  return shuffle([question, ...distractors]).map(flag => flag.id);
+}
+
+function flagOptions(question, availableFlags) {
+  if (level === 'max') return similarFlagOptions(question, availableFlags);
+  return shuffle([question, ...shuffle(availableFlags.filter(flag => flag.id !== question.id)).slice(0, 3)]).map(flag => flag.id);
 }
 
 function mixedPool(availableFlags, availableAnimals) {
@@ -979,7 +1021,7 @@ function start() {
   round = selected.map(question => ({
     ...question,
     options: question.type === 'flag'
-      ? shuffle([question, ...shuffle(availableFlags.filter(flag => flag.id !== question.id)).slice(0, 3)]).map(flag => flag.id)
+      ? flagOptions(question, availableFlags)
       : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
   pos = 0;
