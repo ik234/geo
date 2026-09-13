@@ -660,7 +660,18 @@ const animals = [
   { id: 'snow-leopard', type: 'animal', key: 'animal:snow-leopard', tier: 'max', emoji: '🐆', names: { ru: 'Снежный барс', en: 'Snow leopard', pt: 'Leopardo-das-neves' }, region: 26, point: [78, 35], facts: { ru: 'Снежный барс живёт в высоких горах Центральной и Южной Азии. Длинный хвост помогает ему держать равновесие и согреваться.', en: 'Snow leopards live in high mountains of Central and South Asia. Their long tails help with balance and warmth.', pt: 'Leopardos-das-neves vivem nas altas montanhas da Ásia Central e do Sul. A cauda comprida ajuda no equilíbrio e no calor.' } },
 ];
 
-let lang = 'ru';
+// Язык берём из настроек браузера. Если ни один из поддерживаемых не подошёл —
+// английский, а не русский: чужому человеку по ссылке он понятнее.
+function detectLang() {
+  const wanted = navigator.languages?.length ? navigator.languages : [navigator.language];
+  for (const tag of wanted) {
+    const base = String(tag || '').toLowerCase().split('-')[0];
+    if (langs.includes(base)) return base;
+  }
+  return 'en';
+}
+
+let lang = detectLang();
 let mode = 'flags';
 let level = 'max';
 let lengthMode = 'fixed';
@@ -1153,6 +1164,7 @@ function selectedItem() {
 
 function setStaticText() {
   document.documentElement.lang = lang;
+  $('#lang').value = lang;
   document.title = tr('siteTitle');
   document.querySelectorAll('[data-i18n]').forEach(node => {
     node.textContent = tr(node.dataset.i18n);
