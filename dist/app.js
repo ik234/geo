@@ -977,8 +977,10 @@ function loadJson(url, key, assign) {
     });
 }
 
+// Тексты есть на всех шести языках, но факты переведены не для всех стран.
+// Английский держим наготове как запасной: лучше английская строка, чем пустая.
 function loreLang() {
-  return lang === 'ru' ? 'ru' : 'en';
+  return lang;
 }
 
 function countryInfo(id) {
@@ -992,21 +994,28 @@ function countryInfo(id) {
 // Описание флага нужно и раунду, и атласу, а факты — только атласу. Поэтому они
 // лежат в разных файлах: иначе раунд тянул бы сотни килобайт фактов ради одной строки.
 function countryFlagText(id) {
+  return loreText(dataCache.flagText, 'flags', id) || '';
+}
+
+// Один и тот же разбор для обоих файлов: берём язык интерфейса, а если нужной
+// страны там нет — тянем английский и отвечаем из него.
+function loreText(cache, file, id) {
   const key = loreLang();
-  if (!dataCache.flagText[key]) {
-    loadJson(`data/flags.${key}.json`, `flags:${key}`, value => { dataCache.flagText[key] = value; });
-    return '';
+  if (!cache[key]) {
+    loadJson(`data/${file}.${key}.json`, `${file}:${key}`, value => { cache[key] = value; });
+    return null;
   }
-  return dataCache.flagText[key][id] || '';
+  if (cache[key][id]) return cache[key][id];
+  if (key === 'en') return null;
+  if (!cache.en) {
+    loadJson(`data/${file}.en.json`, `${file}:en`, value => { cache.en = value; });
+    return null;
+  }
+  return cache.en[id] || null;
 }
 
 function countryFacts(id) {
-  const key = loreLang();
-  if (!dataCache.facts[key]) {
-    loadJson(`data/facts.${key}.json`, `facts:${key}`, value => { dataCache.facts[key] = value; });
-    return [];
-  }
-  return dataCache.facts[key][id] || [];
+  return loreText(dataCache.facts, 'facts', id) || [];
 }
 
 // Факт выбирается один раз на открытие карточки: перерисовка — пришли данные,

@@ -8,6 +8,11 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="icon" href="favicon-32.png" sizes="32x32">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ГЕО">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
@@ -91,5 +96,13 @@
     <script src="assets/d3.min.js"></script>
     <script src="assets/topojson.min.js"></script>
     <script type="module" src="app.js"></script>
+    <script>
+      // Весь сайт складывается в кэш при первом заходе, чтобы в дороге без
+      // связи игра открывалась целиком. Регистрируем после load, чтобы закачка
+      // трёх мегабайт не конкурировала с первой отрисовкой.
+      if ('serviceWorker' in navigator) {
+        addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+      }
+    </script>
   </body>
 </html>

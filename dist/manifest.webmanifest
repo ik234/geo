@@ -1,0 +1,16 @@
+{
+  "name": "Географический детектив",
+  "short_name": "ГЕО",
+  "description": "Флаги, страны и карта мира — игра для чтения в дороге.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#102d38",
+  "theme_color": "#102d38",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
