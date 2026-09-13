@@ -5,6 +5,7 @@ const langs = ['ru', 'en', 'pt', 'es', 'de', 'pl'];
 
 const ui = {
   ru: {
+
     weekdays: 'Дни недели ↗',
     months: 'Все 12 месяцев ↗',
     siteTitle: 'Географический детектив',
@@ -68,6 +69,12 @@ const ui = {
     animals: 'Животные',
     country: 'СТРАНА / ТЕРРИТОРИЯ',
     animal: 'ЖИВОТНОЕ',
+    capital: 'Столица',
+    currency: 'Валюта',
+    officialLanguages: 'Официальные языки',
+    flagStory: 'Что на флаге',
+    funFact: 'Любопытный факт',
+    infoLoading: 'Загружаем сведения…',
     countryFact: 'Это флаг страны или территории: {name}. После ответа она подсвечивается на карте.',
     animalPointNote: 'Точка — пример места, не весь ареал',
     mapLabel: 'Карта стран и флагов',
@@ -80,6 +87,7 @@ const ui = {
     sourceFacts: 'Животные временно отключены; каталог сохранён как задел для отдельного режима с хорошими изображениями.',
   },
   en: {
+
     weekdays: 'Weekdays ↗',
     months: 'All 12 months ↗',
     siteTitle: 'Geography Detective',
@@ -143,6 +151,12 @@ const ui = {
     animals: 'Animals',
     country: 'COUNTRY / TERRITORY',
     animal: 'ANIMAL',
+    capital: 'Capital',
+    currency: 'Currency',
+    officialLanguages: 'Official languages',
+    flagStory: 'On the flag',
+    funFact: 'Fun fact',
+    infoLoading: 'Loading details…',
     countryFact: 'This is the flag of {name}. After the answer, it is highlighted on the map.',
     animalPointNote: 'The point is one example place, not the whole range',
     mapLabel: 'Map of countries and flags',
@@ -155,6 +169,7 @@ const ui = {
     sourceFacts: 'Animals are temporarily disabled; the catalog remains as groundwork for a later image-led mode.',
   },
   pt: {
+
     weekdays: 'Dias da semana ↗',
     months: 'Todos os 12 meses ↗',
     siteTitle: 'Detetive de Geografia',
@@ -218,6 +233,12 @@ const ui = {
     animals: 'Animais',
     country: 'PAÍS / TERRITÓRIO',
     animal: 'ANIMAL',
+    capital: 'Capital',
+    currency: 'Moeda',
+    officialLanguages: 'Línguas oficiais',
+    flagStory: 'Na bandeira',
+    funFact: 'Facto curioso',
+    infoLoading: 'A carregar detalhes…',
     countryFact: 'Esta é a bandeira de {name}. Depois da resposta, o lugar aparece destacado no mapa.',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
     mapLabel: 'Mapa de países e bandeiras',
@@ -230,6 +251,7 @@ const ui = {
     sourceFacts: 'Os animais estão temporariamente desligados; o catálogo fica como base para um modo futuro com boas imagens.',
   },
   es: {
+
     weekdays: 'Días de la semana ↗',
     months: 'Los 12 meses ↗',
     siteTitle: 'Detective de Geografía',
@@ -293,6 +315,12 @@ const ui = {
     animals: 'Animales',
     country: 'PAÍS / TERRITORIO',
     animal: 'ANIMAL',
+    capital: 'Capital',
+    currency: 'Moneda',
+    officialLanguages: 'Lenguas oficiales',
+    flagStory: 'En la bandera',
+    funFact: 'Dato curioso',
+    infoLoading: 'Cargando detalles…',
     countryFact: 'Esta es la bandera de {name}. Después de responder, el lugar se marca en el mapa.',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
     mapLabel: 'Mapa de países y banderas',
@@ -305,6 +333,7 @@ const ui = {
     sourceFacts: 'Los animales están desactivados temporalmente; el catálogo queda como base para un futuro modo con buenas imágenes.',
   },
   de: {
+
     weekdays: 'Wochentage ↗',
     months: 'Alle 12 Monate ↗',
     siteTitle: 'Geografie-Detektiv',
@@ -368,6 +397,12 @@ const ui = {
     animals: 'Tiere',
     country: 'LAND / GEBIET',
     animal: 'TIER',
+    capital: 'Hauptstadt',
+    currency: 'Währung',
+    officialLanguages: 'Amtssprachen',
+    flagStory: 'Auf der Flagge',
+    funFact: 'Kurioses',
+    infoLoading: 'Details werden geladen…',
     countryFact: 'Das ist die Flagge von {name}. Nach der Antwort wird der Ort auf der Karte markiert.',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
     mapLabel: 'Karte der Länder und Flaggen',
@@ -380,6 +415,7 @@ const ui = {
     sourceFacts: 'Tiere sind vorübergehend deaktiviert; der Katalog bleibt als Grundlage für einen späteren Modus mit guten Bildern erhalten.',
   },
   pl: {
+
     weekdays: 'Dni tygodnia ↗',
     months: 'Wszystkie 12 miesięcy ↗',
     siteTitle: 'Detektyw Geograficzny',
@@ -443,6 +479,12 @@ const ui = {
     animals: 'Zwierzęta',
     country: 'KRAJ / TERYTORIUM',
     animal: 'ZWIERZĘ',
+    capital: 'Stolica',
+    currency: 'Waluta',
+    officialLanguages: 'Języki urzędowe',
+    flagStory: 'Na fladze',
+    funFact: 'Ciekawostka',
+    infoLoading: 'Wczytywanie szczegółów…',
     countryFact: 'To flaga kraju lub terytorium: {name}. Po odpowiedzi miejsce zostaje zaznaczone na mapie.',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
     mapLabel: 'Mapa krajów i flag',
@@ -874,6 +916,85 @@ function renderFinish() {
   }
 }
 
+const dataCache = { countries: null, lore: {} };
+const dataPending = new Set();
+
+function loadJson(url, key, assign) {
+  if (dataPending.has(key)) return;
+  dataPending.add(key);
+  fetch(url)
+    .then(response => (response.ok ? response.json() : {}))
+    .catch(() => ({}))
+    .then(value => {
+      assign(value);
+      dataPending.delete(key);
+      render();
+    });
+}
+
+function loreLang() {
+  return lang === 'ru' ? 'ru' : 'en';
+}
+
+function countryInfo(id) {
+  if (!dataCache.countries) {
+    loadJson('data/countries.json', 'countries', value => { dataCache.countries = value; });
+    return null;
+  }
+  return dataCache.countries.countries?.[id] || null;
+}
+
+function countryLore(id) {
+  const key = loreLang();
+  if (!dataCache.lore[key]) {
+    loadJson(`data/lore.${key}.json`, `lore:${key}`, value => { dataCache.lore[key] = value; });
+    return null;
+  }
+  return dataCache.lore[key][id] || null;
+}
+
+// Intl возвращает сам код, если названия нет в наборе CLDR движка; набор в Safari
+// отличается от Chrome, поэтому запасная таблица проверяется всегда.
+function intlName(type, code, table) {
+  try {
+    const value = new Intl.DisplayNames([lang], { type }).of(code);
+    if (value && value !== code) return value;
+  } catch {}
+  return table?.[code]?.[lang] || table?.[code]?.en || code;
+}
+
+function currencyName(code) {
+  return intlName('currency', code, dataCache.countries?.fallback?.currency);
+}
+
+function languageNames(codes) {
+  return codes.map(code => intlName('language', code, dataCache.countries?.fallback?.language)).join(', ');
+}
+
+function hasLore(item) {
+  return item.type === 'flag' && Boolean(countryLore(item.id)?.flag);
+}
+
+function countryPanel(item) {
+  if (item.type !== 'flag') return '';
+  const info = countryInfo(item.id);
+  const lore = countryLore(item.id);
+  if (!info && !lore) return `<p class="country-loading">${tr('infoLoading')}</p>`;
+  const rows = [];
+  if (info?.capital) rows.push([tr('capital'), info.capital[lang] || info.capital.en]);
+  if (info?.currency) rows.push([tr('currency'), currencyName(info.currency)]);
+  if (info?.languages?.length) rows.push([tr('officialLanguages'), languageNames(info.languages)]);
+  const notes = [];
+  if (lore?.flag) notes.push([tr('flagStory'), lore.flag]);
+  if (lore?.fun) notes.push([tr('funFact'), lore.fun]);
+  if (!rows.length && !notes.length) return '';
+  return `<div class="country-panel">${rows.length ? `<dl class="country-facts">${rows
+    .map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`)
+    .join('')}</dl>` : ''}${notes
+    .map(([term, value]) => `<p class="country-note"><b>${escapeHtml(term)}</b> ${escapeHtml(value)}</p>`)
+    .join('')}</div>`;
+}
+
 function countryName(id, locale = lang) {
   return countryNameOverrides[locale]?.[id] || new Intl.DisplayNames([locale], { type: 'region' }).of(id.toUpperCase()) || id.toUpperCase();
 }
@@ -1093,7 +1214,7 @@ function render() {
     : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   const visualNote = solved ? '<div class="result-map" id="map"></div>' : `<small>${q.type === 'flag' ? tr('flagPartial') : tr('animalPrompt')}</small>`;
   const message = solved
-    ? `<strong>${tr('solved')}</strong> ${escapeHtml(fact(q))}`
+    ? `<strong>${tr('solved')}</strong>${hasLore(q) ? '' : ` ${escapeHtml(fact(q))}`}`
     : wrong.size
       ? tr('wrong')
       : hinted
@@ -1107,6 +1228,7 @@ function render() {
       <h2>${q.type === 'flag' ? tr('flagQuestion') : tr('animalQuestion')}</h2>
       <div class="choices">${q.options.map(id => choiceButton(q, id)).join('')}</div>
       <p class="message" role="status">${message}</p>
+      ${solved ? countryPanel(q) : ''}
       <div class="actions">${solved ? `<button class="primary" id="next">${pos === round.length - 1 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
     </div>`;
 
@@ -1207,7 +1329,8 @@ function itemDetail(item, rowId) {
       <div>
         <span class="tag">${item.type === 'flag' ? tr('country') : tr('animal')}</span>
         <h2>${escapeHtml(name(item))}</h2>
-        <p>${item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : ''}${escapeHtml(fact(item))}</p>
+        ${hasLore(item) ? '' : `<p>${item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : ''}${escapeHtml(fact(item))}</p>`}
+        ${countryPanel(item)}
       </div>
     </div>`;
 }
