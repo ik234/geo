@@ -76,7 +76,6 @@ const ui = {
     flagStory: 'Что на флаге',
     funFact: 'Любопытный факт',
     infoLoading: 'Загружаем сведения…',
-    countryFact: 'Это флаг страны или территории: {name}. После ответа она подсвечивается на карте.',
     animalPointNote: 'Точка — пример места, не весь ареал',
     mapLabel: 'Карта стран и флагов',
     exploreHelp: 'Нажми на выделенную страну',
@@ -160,7 +159,6 @@ const ui = {
     flagStory: 'On the flag',
     funFact: 'Fun fact',
     infoLoading: 'Loading details…',
-    countryFact: 'This is the flag of {name}. After the answer, it is highlighted on the map.',
     animalPointNote: 'The point is one example place, not the whole range',
     mapLabel: 'Map of countries and flags',
     exploreHelp: 'Tap a highlighted country',
@@ -244,7 +242,6 @@ const ui = {
     flagStory: 'Na bandeira',
     funFact: 'Facto curioso',
     infoLoading: 'A carregar detalhes…',
-    countryFact: 'Esta é a bandeira de {name}. Depois da resposta, o lugar aparece destacado no mapa.',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
     mapLabel: 'Mapa de países e bandeiras',
     exploreHelp: 'Toca num país marcado',
@@ -328,7 +325,6 @@ const ui = {
     flagStory: 'En la bandera',
     funFact: 'Dato curioso',
     infoLoading: 'Cargando detalles…',
-    countryFact: 'Esta es la bandera de {name}. Después de responder, el lugar se marca en el mapa.',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
     mapLabel: 'Mapa de países y banderas',
     exploreHelp: 'Toca un país marcado',
@@ -412,7 +408,6 @@ const ui = {
     flagStory: 'Auf der Flagge',
     funFact: 'Kurioses',
     infoLoading: 'Details werden geladen…',
-    countryFact: 'Das ist die Flagge von {name}. Nach der Antwort wird der Ort auf der Karte markiert.',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
     mapLabel: 'Karte der Länder und Flaggen',
     exploreHelp: 'Tippe auf ein markiertes Land',
@@ -496,7 +491,6 @@ const ui = {
     flagStory: 'Na fladze',
     funFact: 'Ciekawostka',
     infoLoading: 'Wczytywanie szczegółów…',
-    countryFact: 'To flaga kraju lub terytorium: {name}. Po odpowiedzi miejsce zostaje zaznaczone na mapie.',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
     mapLabel: 'Mapa krajów i flag',
     exploreHelp: 'Dotknij zaznaczonego kraju',
@@ -1056,7 +1050,7 @@ function name(item) {
 
 function fact(item) {
   if (item.type === 'animal') return item.facts[lang] || item.facts.en || item.facts.ru;
-  return item.facts?.[lang] || tr('countryFact', { name: name(item) });
+  return item.facts?.[lang] || '';
 }
 
 function regionName(index) {
@@ -1298,8 +1292,9 @@ function render() {
     ? `<div class="flag-window"><img class="${hinted || solved ? 'revealed' : ''}" src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></div>`
     : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   const visualNote = solved ? '<div class="result-map" id="map"></div>' : `<small>${q.type === 'flag' ? tr('flagPartial') : tr('animalPrompt')}</small>`;
+  const solvedNote = q.type === 'flag' ? countryLore(q.id)?.flag || '' : fact(q);
   const message = solved
-    ? `<strong>${tr('solved')}</strong> ${escapeHtml(fact(q))}`
+    ? `<strong>${tr('solved')}</strong>${solvedNote ? ` ${escapeHtml(solvedNote)}` : ''}`
     : wrong.size
       ? tr('wrong')
       : hinted
@@ -1408,13 +1403,15 @@ function listItem(item) {
 }
 
 function itemDetail(item, rowId) {
+  const plain = hasLore(item) ? '' : fact(item);
+  const region = item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : '';
   return `
     <div class="item-detail" id="${rowId}-detail">
       ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
       <div>
         <span class="tag">${item.type === 'flag' ? tr('country') : tr('animal')}</span>
         <h2>${escapeHtml(name(item))}</h2>
-        ${hasLore(item) ? '' : `<p>${item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : ''}${escapeHtml(fact(item))}</p>`}
+        ${plain ? `<p>${region}${escapeHtml(plain)}</p>` : ''}
         ${countryPanel(item)}
       </div>
     </div>`;
