@@ -716,6 +716,10 @@ function setStaticText() {
   document.querySelector('.player-board').setAttribute('aria-label', tr('playerBoard'));
 }
 
+function isRoundFinished() {
+  return view === 'quiz' && round.length > 0 && pos >= round.length;
+}
+
 function setChrome() {
   const quiz = view === 'quiz';
   setStaticText();
@@ -724,7 +728,7 @@ function setChrome() {
   document.querySelector('.topic-modes').hidden = !quiz || !featureFlags.animals;
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.length-modes').hidden = !quiz;
-  document.querySelector('.player-board').hidden = !quiz;
+  document.querySelector('.player-board').hidden = !isRoundFinished();
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
 }
 
