@@ -1,5 +1,5 @@
 // Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
-const VERSION = '7fbb5019be18';
+const VERSION = '565fc90c5557';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   "./",
