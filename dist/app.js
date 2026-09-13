@@ -6,6 +6,7 @@ const langs = ['ru', 'en', 'pt', 'es', 'de', 'pl'];
 const ui = {
   ru: {
 
+
     weekdays: 'Дни недели ↗',
     months: 'Все 12 месяцев ↗',
     siteTitle: 'Географический детектив',
@@ -78,15 +79,17 @@ const ui = {
     countryFact: 'Это флаг страны или территории: {name}. После ответа она подсвечивается на карте.',
     animalPointNote: 'Точка — пример места, не весь ареал',
     mapLabel: 'Карта стран и флагов',
-    exploreHelp: 'Нажми на выделенную страну или точку животного',
+    exploreHelp: 'Нажми на выделенную страну',
+    exploreHelpAnimals: 'Нажми на выделенную страну или точку животного',
     resultMapLabel: '{name} на карте',
     footerLead: 'Без спешки. Подсказки разрешены — играйте вместе.',
     sourcesTitle: 'Об игре и источниках',
     sourceFlags: 'Флаги:',
     sourceMap: 'Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны.',
-    sourceFacts: 'Животные временно отключены; каталог сохранён как задел для отдельного режима с хорошими изображениями.',
+    sourceFacts: 'Сведения о странах: столица, валюта и официальные языки — по международным кодам, названия валют и языков подставляет браузер. Рассказы о флагах и факты написаны для этой игры.',
   },
   en: {
+
 
     weekdays: 'Weekdays ↗',
     months: 'All 12 months ↗',
@@ -160,15 +163,17 @@ const ui = {
     countryFact: 'This is the flag of {name}. After the answer, it is highlighted on the map.',
     animalPointNote: 'The point is one example place, not the whole range',
     mapLabel: 'Map of countries and flags',
-    exploreHelp: 'Tap a highlighted country or animal point',
+    exploreHelp: 'Tap a highlighted country',
+    exploreHelpAnimals: 'Tap a highlighted country or animal point',
     resultMapLabel: '{name} on the map',
     footerLead: 'Take your time. Hints are allowed; play together.',
     sourcesTitle: 'About the game and sources',
     sourceFlags: 'Flags:',
     sourceMap: 'Outlines: Natural Earth / D3 Maps. The world map is schematic; small countries may be hard to see.',
-    sourceFacts: 'Animals are temporarily disabled; the catalog remains as groundwork for a later image-led mode.',
+    sourceFacts: 'Country details: capital, currency and official languages come from international codes, and the browser supplies the currency and language names. The flag stories and fun facts were written for this game.',
   },
   pt: {
+
 
     weekdays: 'Dias da semana ↗',
     months: 'Todos os 12 meses ↗',
@@ -242,15 +247,17 @@ const ui = {
     countryFact: 'Esta é a bandeira de {name}. Depois da resposta, o lugar aparece destacado no mapa.',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
     mapLabel: 'Mapa de países e bandeiras',
-    exploreHelp: 'Toca num país marcado ou num ponto de animal',
+    exploreHelp: 'Toca num país marcado',
+    exploreHelpAnimals: 'Toca num país marcado ou num ponto de animal',
     resultMapLabel: '{name} no mapa',
     footerLead: 'Sem pressa. As dicas são permitidas; joguem juntos.',
     sourcesTitle: 'Sobre o jogo e as fontes',
     sourceFlags: 'Bandeiras:',
     sourceMap: 'Contornos: Natural Earth / D3 Maps. O mapa-múndi é esquemático; países pequenos podem ficar difíceis de ver.',
-    sourceFacts: 'Os animais estão temporariamente desligados; o catálogo fica como base para um modo futuro com boas imagens.',
+    sourceFacts: 'Dados dos países: capital, moeda e línguas oficiais vêm de códigos internacionais, e o navegador fornece os nomes das moedas e das línguas. Os textos sobre as bandeiras e os factos foram escritos para este jogo.',
   },
   es: {
+
 
     weekdays: 'Días de la semana ↗',
     months: 'Los 12 meses ↗',
@@ -324,15 +331,17 @@ const ui = {
     countryFact: 'Esta es la bandera de {name}. Después de responder, el lugar se marca en el mapa.',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
     mapLabel: 'Mapa de países y banderas',
-    exploreHelp: 'Toca un país marcado o un punto de animal',
+    exploreHelp: 'Toca un país marcado',
+    exploreHelpAnimals: 'Toca un país marcado o un punto de animal',
     resultMapLabel: '{name} en el mapa',
     footerLead: 'Sin prisa. Las pistas valen; jugad juntos.',
     sourcesTitle: 'Sobre el juego y las fuentes',
     sourceFlags: 'Banderas:',
     sourceMap: 'Contornos: Natural Earth / D3 Maps. El mapa mundial es esquemático; los países pequeños pueden ser difíciles de ver.',
-    sourceFacts: 'Los animales están desactivados temporalmente; el catálogo queda como base para un futuro modo con buenas imágenes.',
+    sourceFacts: 'Datos de los países: capital, moneda y lenguas oficiales provienen de códigos internacionales, y el navegador aporta los nombres de monedas e idiomas. Los textos sobre las banderas y los datos curiosos se escribieron para este juego.',
   },
   de: {
+
 
     weekdays: 'Wochentage ↗',
     months: 'Alle 12 Monate ↗',
@@ -406,15 +415,17 @@ const ui = {
     countryFact: 'Das ist die Flagge von {name}. Nach der Antwort wird der Ort auf der Karte markiert.',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
     mapLabel: 'Karte der Länder und Flaggen',
-    exploreHelp: 'Tippe auf ein markiertes Land oder einen Tierpunkt',
+    exploreHelp: 'Tippe auf ein markiertes Land',
+    exploreHelpAnimals: 'Tippe auf ein markiertes Land oder einen Tierpunkt',
     resultMapLabel: '{name} auf der Karte',
     footerLead: 'Ganz ohne Eile. Hinweise sind erlaubt; spielt zusammen.',
     sourcesTitle: 'Über das Spiel und die Quellen',
     sourceFlags: 'Flaggen:',
     sourceMap: 'Umrisse: Natural Earth / D3 Maps. Die Weltkarte ist schematisch; kleine Länder können schwer zu sehen sein.',
-    sourceFacts: 'Tiere sind vorübergehend deaktiviert; der Katalog bleibt als Grundlage für einen späteren Modus mit guten Bildern erhalten.',
+    sourceFacts: 'Länderdaten: Hauptstadt, Währung und Amtssprachen stammen aus internationalen Codes, die Namen von Währungen und Sprachen liefert der Browser. Die Flaggentexte und Kuriositäten wurden für dieses Spiel geschrieben.',
   },
   pl: {
+
 
     weekdays: 'Dni tygodnia ↗',
     months: 'Wszystkie 12 miesięcy ↗',
@@ -488,13 +499,14 @@ const ui = {
     countryFact: 'To flaga kraju lub terytorium: {name}. Po odpowiedzi miejsce zostaje zaznaczone na mapie.',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
     mapLabel: 'Mapa krajów i flag',
-    exploreHelp: 'Dotknij zaznaczonego kraju albo punktu zwierzęcia',
+    exploreHelp: 'Dotknij zaznaczonego kraju',
+    exploreHelpAnimals: 'Dotknij zaznaczonego kraju albo punktu zwierzęcia',
     resultMapLabel: '{name} na mapie',
     footerLead: 'Bez pośpiechu. Podpowiedzi są dozwolone; grajcie razem.',
     sourcesTitle: 'O grze i źródłach',
     sourceFlags: 'Flagi:',
     sourceMap: 'Kontury: Natural Earth / D3 Maps. Mapa świata jest schematyczna; małe kraje mogą być słabo widoczne.',
-    sourceFacts: 'Zwierzęta są tymczasowo wyłączone; katalog zostaje jako podstawa dla późniejszego trybu z dobrymi obrazami.',
+    sourceFacts: 'Dane o krajach: stolica, waluta i języki urzędowe pochodzą z kodów międzynarodowych, a nazwy walut i języków podaje przeglądarka. Teksty o flagach i ciekawostki napisano na potrzeby tej gry.',
   },
 };
 
@@ -1412,7 +1424,7 @@ function drawExplore(current) {
       });
     });
   }
-  $('#exploreMap').insertAdjacentHTML('beforeend', `<small>${tr('exploreHelp')}</small>`);
+  $('#exploreMap').insertAdjacentHTML('beforeend', `<small>${tr(featureFlags.animals ? 'exploreHelpAnimals' : 'exploreHelp')}</small>`);
 }
 
 $('#lang').onchange = event => {
