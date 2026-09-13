@@ -590,7 +590,9 @@ let statusMessage = '';
 const blockedNameRoots = [
   'fuck', 'fuk', 'fuq', 'shit', 'bitch', 'cunt', 'dick', 'cock', 'asshole', 'nigg',
   'puta', 'puto', 'putain', 'putana', 'caralho', 'porra', 'merda', 'buceta', 'piroca',
-  'cabron', 'joder', 'mierda', 'cono', 'coño', 'pendejo',
+  'cabron', 'cabrone', 'joder', 'mierda', 'cono', 'coño', 'pendejo', 'gilipoll', 'maricon', 'cojones', 'culero', 'verga', 'pvta', 'pvto',
+  'arsch', 'scheiss', 'scheisse', 'fotze', 'wichs', 'schwanz', 'hurensohn', 'hure', 'miststueck',
+  'kurw', 'kvrw', 'chuj', 'chvj', 'huj', 'hvj', 'pierdol', 'jebac', 'jebal', 'jebie', 'jeba', 'dupek', 'pizda', 'cipa', 'suka',
   'хуй', 'хуя', 'хуе', 'хуё', 'пизд', 'бляд', 'блять', 'бля', 'еба', 'ебо', 'ебу', 'еби', 'ёба', 'ёбу', 'ёби', 'сука', 'муд', 'гандон', 'пидор', 'пида',
   'huy', 'hui', 'huya', 'hue', 'xui', 'xuy', 'xyi', 'pizd', 'blya', 'ebat', 'yebat', 'yob', 'suka', 'mudak', 'gandon', 'pidor',
 ];
@@ -598,6 +600,7 @@ const blockedNameRoots = [
 const confusables = {
   а: 'a', в: 'b', е: 'e', ё: 'e', з: 'z', к: 'k', м: 'm', н: 'h', о: 'o', р: 'p', с: 'c', т: 't', у: 'y', х: 'x',
   Α: 'a', А: 'a', Β: 'b', В: 'b', Ε: 'e', Е: 'e', Κ: 'k', К: 'k', Μ: 'm', М: 'm', Ν: 'n', Ο: 'o', О: 'o', Ρ: 'p', Р: 'p', С: 'c', Τ: 't', Т: 't', Υ: 'y', У: 'y', Χ: 'x', Х: 'x',
+  ł: 'l', Ł: 'l', ß: 'ss', æ: 'ae', Æ: 'ae', œ: 'oe', Œ: 'oe',
   0: 'o', 1: 'i', 3: 'e', 4: 'a', 5: 's', 6: 'b', 7: 't', 8: 'b', 9: 'g',
   '@': 'a', '$': 's', '!': 'i', '+': 't',
 };
@@ -679,7 +682,7 @@ function isBlockedName(value) {
 
 function validatePlayerName(value) {
   const name = sanitizePlayerName(value);
-  if (name.length < 2 || isBlockedName(name)) return null;
+  if (name.length < 2 || isBlockedName(value) || isBlockedName(name)) return null;
   return name;
 }
 
