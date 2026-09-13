@@ -26,4 +26,4 @@ python3 build-full-months.py
 
 Иконка вкладки встроена в каждую страницу как `data:`-URI: политика безопасности в шапке (`img-src` без `'self'`) заблокировала бы ссылку на отдельный файл, да и страницы намеренно не делают внешних запросов.
 
-Опубликованные копии страниц лежат в `../detective/dist/weekdays.html`, `../detective/dist/months.html` и `../detective/dist/summer.html` и должны совпадать с этими файлами побайтово.
+Опубликованные копии страниц лежат в `../detective/dist/weekdays.html`, `../detective/dist/months.html`, `../detective/dist/summer.html` и `../detective/dist/school.html` и должны совпадать с этими файлами побайтово.

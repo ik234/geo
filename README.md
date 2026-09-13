@@ -5,7 +5,7 @@
 ## Структура
 
 - `detective/` — опубликованный сайт «Географический детектив»: статический `dist/`, PWA, redirect для старого chatgpt.site и инструменты публикации.
-- `interactive-maps/` — исходники самостоятельных HTML-карт дней недели, месяцев и начала лета. Опубликованные копии лежат в `detective/dist/weekdays.html`, `detective/dist/months.html` и `detective/dist/summer.html`.
+- `interactive-maps/` — исходники самостоятельных HTML-карт дней недели, месяцев, начала лета и начала учебного года. Опубликованные копии лежат в `detective/dist/weekdays.html`, `detective/dist/months.html`, `detective/dist/summer.html` и `detective/dist/school.html`.
 
 ## Публикация
 
