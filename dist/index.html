@@ -35,10 +35,10 @@
         <button data-view="quiz" class="active">Загадки</button>
         <button data-view="explore">Карта</button>
       </div>
-      <div class="modes topic-modes" aria-label="Тема">
-        <button data-mode="mixed" class="active">Всё вперемешку</button>
-        <button data-mode="flags">Флаги</button>
-        <button data-mode="animals">Животные</button>
+      <div class="modes topic-modes" aria-label="Тема" hidden>
+        <button data-mode="mixed">Всё вперемешку</button>
+        <button data-mode="flags" class="active">Флаги</button>
+        <button data-mode="animals" hidden>Животные</button>
       </div>
       <div class="modes level-modes" aria-label="Сложность">
         <button data-level="easy">Простой</button>
@@ -74,9 +74,9 @@
           <p>
             <span data-i18n="sourceFlags">Флаги:</span>
             <a href="https://flagicons.lipis.dev/">flag-icons</a>, MIT.
-            <span data-i18n="sourceMap">Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны. У животных отмечен пример места в регионе обитания, а не весь ареал. Значки животных условные.</span>
+            <span data-i18n="sourceMap">Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны.</span>
           </p>
-          <p data-i18n="sourceFacts">Факты о животных — краткие учебные справки для игры; подробные источники по карточкам добавим отдельным инкрементом.</p>
+          <p data-i18n="sourceFacts">Животные временно отключены; каталог сохранён как задел для отдельного режима с хорошими изображениями.</p>
         </details>
       </footer>
     </main>

@@ -70,14 +70,14 @@ const ui = {
     animal: 'ЖИВОТНОЕ',
     countryFact: 'Это флаг страны или территории: {name}. После ответа она подсвечивается на карте.',
     animalPointNote: 'Точка — пример места, не весь ареал',
-    mapLabel: 'Карта стран и животных',
+    mapLabel: 'Карта стран и флагов',
     exploreHelp: 'Нажми на выделенную страну или точку животного',
     resultMapLabel: '{name} на карте',
     footerLead: 'Без спешки. Подсказки разрешены — играйте вместе.',
     sourcesTitle: 'Об игре и источниках',
     sourceFlags: 'Флаги:',
-    sourceMap: 'Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны. У животных отмечен пример места в регионе обитания, а не весь ареал. Значки животных условные.',
-    sourceFacts: 'Факты о животных — краткие учебные справки для игры; подробные источники по карточкам добавим отдельным инкрементом.',
+    sourceMap: 'Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны.',
+    sourceFacts: 'Животные временно отключены; каталог сохранён как задел для отдельного режима с хорошими изображениями.',
   },
   en: {
     weekdays: 'Weekdays ↗',
@@ -145,14 +145,14 @@ const ui = {
     animal: 'ANIMAL',
     countryFact: 'This is the flag of {name}. After the answer, it is highlighted on the map.',
     animalPointNote: 'The point is one example place, not the whole range',
-    mapLabel: 'Map of countries and animals',
+    mapLabel: 'Map of countries and flags',
     exploreHelp: 'Tap a highlighted country or animal point',
     resultMapLabel: '{name} on the map',
     footerLead: 'Take your time. Hints are allowed; play together.',
     sourcesTitle: 'About the game and sources',
     sourceFlags: 'Flags:',
-    sourceMap: 'Outlines: Natural Earth / D3 Maps. The world map is schematic; small countries may be hard to see. Animal points mark one example place in the habitat region, not the whole range. Animal icons are symbolic.',
-    sourceFacts: 'Animal facts are short study notes for the game; detailed card sources can come in a later increment.',
+    sourceMap: 'Outlines: Natural Earth / D3 Maps. The world map is schematic; small countries may be hard to see.',
+    sourceFacts: 'Animals are temporarily disabled; the catalog remains as groundwork for a later image-led mode.',
   },
   pt: {
     weekdays: 'Dias da semana ↗',
@@ -220,15 +220,19 @@ const ui = {
     animal: 'ANIMAL',
     countryFact: 'Esta é a bandeira de {name}. Depois da resposta, o lugar aparece destacado no mapa.',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
-    mapLabel: 'Mapa de países e animais',
+    mapLabel: 'Mapa de países e bandeiras',
     exploreHelp: 'Toca num país marcado ou num ponto de animal',
     resultMapLabel: '{name} no mapa',
     footerLead: 'Sem pressa. As dicas são permitidas; joguem juntos.',
     sourcesTitle: 'Sobre o jogo e as fontes',
     sourceFlags: 'Bandeiras:',
-    sourceMap: 'Contornos: Natural Earth / D3 Maps. O mapa-múndi é esquemático; países pequenos podem ficar difíceis de ver. Os pontos dos animais mostram um exemplo de lugar na região de habitat, não toda a área. Os ícones de animais são simbólicos.',
-    sourceFacts: 'Os fatos sobre animais são notas curtas para o jogo; fontes detalhadas por carta podem vir num próximo incremento.',
+    sourceMap: 'Contornos: Natural Earth / D3 Maps. O mapa-múndi é esquemático; países pequenos podem ficar difíceis de ver.',
+    sourceFacts: 'Os animais estão temporariamente desligados; o catálogo fica como base para um modo futuro com boas imagens.',
   },
+};
+
+const featureFlags = {
+  animals: false,
 };
 
 const countryNameOverrides = {
@@ -332,7 +336,7 @@ const animals = [
 ];
 
 let lang = 'ru';
-let mode = 'mixed';
+let mode = 'flags';
 let level = 'max';
 let lengthMode = 'fixed';
 let view = 'quiz';
@@ -676,6 +680,7 @@ function mixedPool(availableFlags, availableAnimals) {
 }
 
 function visibleItems() {
+  if (!featureFlags.animals) return flags;
   if (exploreKind === 'flags') return flags;
   if (exploreKind === 'animals') return animals;
   return allItems;
@@ -701,6 +706,8 @@ function setStaticText() {
   document.querySelector('[data-mode="mixed"]').textContent = tr('modeMixed');
   document.querySelector('[data-mode="flags"]').textContent = tr('modeFlags');
   document.querySelector('[data-mode="animals"]').textContent = tr('modeAnimals');
+  document.querySelector('[data-mode="mixed"]').hidden = !featureFlags.animals;
+  document.querySelector('[data-mode="animals"]').hidden = !featureFlags.animals;
   document.querySelector('[data-level="easy"]').textContent = tr('levelEasy');
   document.querySelector('[data-level="medium"]').textContent = tr('levelMedium');
   document.querySelector('[data-level="max"]').textContent = tr('levelMax');
@@ -714,7 +721,7 @@ function setChrome() {
   setStaticText();
   $('#eyebrow').textContent = tr(quiz ? 'quizEyebrow' : 'exploreEyebrow');
   $('#title').textContent = tr(quiz ? 'quizTitle' : 'exploreTitle');
-  document.querySelector('.topic-modes').hidden = !quiz;
+  document.querySelector('.topic-modes').hidden = !quiz || !featureFlags.animals;
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.length-modes').hidden = !quiz;
   document.querySelector('.player-board').hidden = !quiz;
@@ -725,9 +732,11 @@ function start() {
   const availableFlags = flagPool();
   const availableAnimals = animalPool();
   const availableRegions = [...new Set(availableAnimals.map(animal => animal.region))];
-  const pool = mode === 'flags'
+  const activeMode = featureFlags.animals ? mode : 'flags';
+  mode = activeMode;
+  const pool = activeMode === 'flags'
     ? shuffle(availableFlags)
-    : mode === 'animals'
+    : activeMode === 'animals'
       ? shuffle(availableAnimals)
       : mixedPool(availableFlags, availableAnimals);
   const selected = pool.slice(0, Math.min(pool.length, targetCount()));
@@ -847,9 +856,9 @@ function renderExplore() {
     <div class="explore-map" id="exploreMap"></div>
     <div class="atlas">
       <div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
-        <button data-kind="all" class="${exploreKind === 'all' ? 'active' : ''}">${tr('all')}</button>
+        ${featureFlags.animals ? `<button data-kind="all" class="${exploreKind === 'all' ? 'active' : ''}">${tr('all')}</button>` : ''}
         <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
-        <button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>
+        ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
       </div>
       <article class="fact-card">
         ${current.type === 'flag' ? `<img src="assets/flags/${current.id}.svg" alt="${escapeHtml(name(current))}">` : `<span class="animal-mini" aria-hidden="true">${current.emoji}</span>`}
@@ -913,13 +922,15 @@ function drawExplore(current) {
         renderExplore();
       }
     });
-  animals.forEach(animal => {
-    const [x, y] = projection(animal.point);
-    svg.append('circle').attr('cx', x).attr('cy', y).attr('r', current.key === animal.key ? 7 : 5).attr('fill', current.key === animal.key ? '#ca501b' : '#2f7f8a').attr('stroke', 'white').attr('stroke-width', 2).attr('class', 'map-click').on('click', () => {
-      selectedKey = animal.key;
-      renderExplore();
+  if (featureFlags.animals) {
+    animals.forEach(animal => {
+      const [x, y] = projection(animal.point);
+      svg.append('circle').attr('cx', x).attr('cy', y).attr('r', current.key === animal.key ? 7 : 5).attr('fill', current.key === animal.key ? '#ca501b' : '#2f7f8a').attr('stroke', 'white').attr('stroke-width', 2).attr('class', 'map-click').on('click', () => {
+        selectedKey = animal.key;
+        renderExplore();
+      });
     });
-  });
+  }
   $('#exploreMap').insertAdjacentHTML('beforeend', `<small>${tr('exploreHelp')}</small>`);
 }
 
@@ -959,6 +970,7 @@ document.querySelectorAll('[data-length]').forEach(button => {
 });
 document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
+    if (!featureFlags.animals && button.dataset.mode !== 'flags') return;
     mode = button.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(item => item.classList.toggle('active', item === button));
     view = 'quiz';
@@ -980,7 +992,7 @@ if (document.modelContext?.registerTool) {
       inputSchema: {
         type: 'object',
         properties: {
-          mode: { type: 'string', enum: ['mixed', 'flags', 'animals'] },
+          mode: { type: 'string', enum: featureFlags.animals ? ['mixed', 'flags', 'animals'] : ['flags'] },
           level: { type: 'string', enum: ['easy', 'medium', 'max'] },
           lengthMode: { type: 'string', enum: ['fixed', 'endless'] },
         },
@@ -989,7 +1001,8 @@ if (document.modelContext?.registerTool) {
       },
       annotations: { readOnlyHint: false },
       execute(input) {
-        if (!input || !['mixed', 'flags', 'animals'].includes(input.mode)) throw Error('Invalid mode');
+        const availableModes = featureFlags.animals ? ['mixed', 'flags', 'animals'] : ['flags'];
+        if (!input || !availableModes.includes(input.mode)) throw Error('Invalid mode');
         if (input.level && !['easy', 'medium', 'max'].includes(input.level)) throw Error('Invalid level');
         if (input.lengthMode && !['fixed', 'endless'].includes(input.lengthMode)) throw Error('Invalid length mode');
         if (input.level) document.querySelector(`[data-level="${input.level}"]`).click();
