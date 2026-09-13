@@ -30,16 +30,15 @@ const ui = {
     lengthEndless: 'Бесконечно',
     playerBoard: 'Игрок и результаты',
     playerName: 'Имя для рекорда',
-    playerPlaceholder: 'Илья',
+    playerPlaceholder: 'Игрок1',
     savePlayer: 'Записать',
     playerReady: '{name} в таблице.',
     playerPrompt: 'Введи имя, чтобы попасть в таблицу рекордов.',
     playerRejected: 'Такое имя не подойдёт. Выбери другое.',
-    scoreboardTitle: 'High score',
+    scoreboardTitle: 'Рекорды',
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'В этой категории пока нет рекордов.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Счёт',
     clearScores: 'Очистить категорию',
     scoreTitle: 'Твой счёт',
     scoreBreakdown: '{correct}/{total} правильных · ошибок: {mistakes} · подсказок: {hints}',
@@ -114,7 +113,7 @@ const ui = {
     lengthEndless: 'Endless',
     playerBoard: 'Player and scores',
     playerName: 'Name for the record',
-    playerPlaceholder: 'Ilya',
+    playerPlaceholder: 'Player1',
     savePlayer: 'Enter',
     playerReady: '{name} is on the board.',
     playerPrompt: 'Enter a name to join the high-score table.',
@@ -123,7 +122,6 @@ const ui = {
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'No records in this category yet.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Score',
     clearScores: 'Clear category',
     scoreTitle: 'Your score',
     scoreBreakdown: '{correct}/{total} correct · mistakes: {mistakes} · hints: {hints}',
@@ -198,16 +196,15 @@ const ui = {
     lengthEndless: 'Sem fim',
     playerBoard: 'Jogador e pontuações',
     playerName: 'Nome para o recorde',
-    playerPlaceholder: 'Ilya',
+    playerPlaceholder: 'Jogador1',
     savePlayer: 'Registar',
     playerReady: '{name} entrou na tabela.',
     playerPrompt: 'Escreve um nome para entrar na tabela de recordes.',
     playerRejected: 'Esse nome não serve. Escolhe outro.',
-    scoreboardTitle: 'High score',
+    scoreboardTitle: 'Recordes',
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'Ainda não há recordes nesta categoria.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Pontos',
     clearScores: 'Limpar categoria',
     scoreTitle: 'A tua pontuação',
     scoreBreakdown: '{correct}/{total} certas · erros: {mistakes} · dicas: {hints}',
@@ -282,16 +279,15 @@ const ui = {
     lengthEndless: 'Sin fin',
     playerBoard: 'Jugador y puntuaciones',
     playerName: 'Nombre para el récord',
-    playerPlaceholder: 'Ilya',
+    playerPlaceholder: 'Jugador1',
     savePlayer: 'Guardar',
     playerReady: '{name} está en la tabla.',
     playerPrompt: 'Escribe un nombre para entrar en la tabla de récords.',
     playerRejected: 'Ese nombre no sirve. Elige otro.',
-    scoreboardTitle: 'High score',
+    scoreboardTitle: 'Récords',
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'Todavía no hay récords en esta categoría.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Puntos',
     clearScores: 'Borrar categoría',
     scoreTitle: 'Tu puntuación',
     scoreBreakdown: '{correct}/{total} correctas · errores: {mistakes} · pistas: {hints}',
@@ -366,16 +362,15 @@ const ui = {
     lengthEndless: 'Endlos',
     playerBoard: 'Spieler und Punkte',
     playerName: 'Name für den Rekord',
-    playerPlaceholder: 'Ilya',
+    playerPlaceholder: 'Spieler1',
     savePlayer: 'Speichern',
     playerReady: '{name} steht in der Tabelle.',
     playerPrompt: 'Gib einen Namen ein, um in die Bestenliste zu kommen.',
     playerRejected: 'Dieser Name passt nicht. Wähle einen anderen.',
-    scoreboardTitle: 'High score',
+    scoreboardTitle: 'Bestenliste',
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'In dieser Kategorie gibt es noch keine Rekorde.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Punkte',
     clearScores: 'Kategorie löschen',
     scoreTitle: 'Deine Punkte',
     scoreBreakdown: '{correct}/{total} richtig · Fehler: {mistakes} · Hinweise: {hints}',
@@ -450,16 +445,15 @@ const ui = {
     lengthEndless: 'Bez końca',
     playerBoard: 'Gracz i wyniki',
     playerName: 'Imię do rekordu',
-    playerPlaceholder: 'Ilya',
+    playerPlaceholder: 'Gracz1',
     savePlayer: 'Zapisz',
     playerReady: '{name} jest w tabeli.',
     playerPrompt: 'Wpisz imię, aby trafić do tabeli rekordów.',
     playerRejected: 'To imię nie pasuje. Wybierz inne.',
-    scoreboardTitle: 'High score',
+    scoreboardTitle: 'Rekordy',
     scoreboardScope: '{mode} · {level} · {length}',
     scoreboardEmpty: 'W tej kategorii nie ma jeszcze rekordów.',
     scoreMeta: '{correct}/{total} · {date}',
-    currentScore: 'Wynik',
     clearScores: 'Wyczyść kategorię',
     scoreTitle: 'Twój wynik',
     scoreBreakdown: '{correct}/{total} poprawnych · błędy: {mistakes} · podpowiedzi: {hints}',
@@ -904,9 +898,14 @@ function renderPlayerBoard() {
   if (!board) return;
   board.setAttribute('aria-label', tr('playerBoard'));
   $('#scoreScope').textContent = tr('scoreboardScope', { mode: modeLabel(), level: levelLabel(), length: lengthLabel() });
-  $('#currentScore').textContent = String(stats.score);
-  $('#currentScore').setAttribute('aria-label', `${tr('currentScore')}: ${stats.score}`);
+  // Карточка показывается только на финальном экране, где счёт раунда уже
+  // написан крупно ниже. Дублировать его здесь незачем, да и рядом с «рекордов
+  // пока нет» число выглядело прямым враньём. Показываем лучший в категории.
   const topScores = categoryScores().slice(0, 8);
+  const best = topScores[0];
+  $('#currentScore').textContent = best ? String(best.score) : '';
+  $('#currentScore').hidden = !best;
+  if (best) $('#currentScore').setAttribute('aria-label', `${tr('scoreboardTitle')}: ${best.score}`);
   $('#scoreList').innerHTML = topScores.length
     ? topScores.map((entry, index) => `<li><b>${index + 1}</b><strong>${escapeHtml(entry.name)}</strong><span>${entry.score}</span><small>${escapeHtml(roundScoreMeta(entry))}</small></li>`).join('')
     : `<li class="empty">${tr('scoreboardEmpty')}</li>`;
@@ -988,12 +987,22 @@ function loadJson(url, key, assign) {
 // Тот же порог, что и у мобильной вёрстки в style.css: ниже него карта
 // результата не рисуется вовсе, а не прячется стилями, — считать её впустую
 // незачем, да и d3 нечего рисовать в блок нулевой ширины.
-function revealActions() {
-  const actions = document.querySelector('.actions');
-  if (!actions) return;
-  const box = actions.getBoundingClientRect();
-  if (box.bottom <= window.innerHeight) return;
-  actions.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+// Кнопка «Далее» на телефоне закреплена внизу и в прокрутке не нуждается,
+// а вот рассказ о флаге после ответа может оказаться за нижним краем. Если он
+// не поместился — подводим его ровно настолько, насколько надо.
+//
+// scrollIntoView здесь не годится: про закреплённую панель он не знает и текст,
+// заехавший под неё, считает видимым. Поэтому нижнюю границу берём по самой
+// панели, когда та закреплена, и докручиваем ровно на нехватку.
+function revealSolvedNote() {
+  const note = document.querySelector('.question .message');
+  if (!note) return;
+  const actions = document.querySelector('.question .actions');
+  const floor = actions && getComputedStyle(actions).position === 'fixed'
+    ? actions.getBoundingClientRect().top
+    : window.innerHeight;
+  const hidden = Math.round(note.getBoundingClientRect().bottom + 8 - floor);
+  if (hidden > 0) window.scrollBy({ top: hidden, behavior: 'smooth' });
 }
 
 function wideScreen() {
@@ -1400,13 +1409,12 @@ function render() {
       pos++;
       reset();
       render();
+      // Прокрутку намеренно не сбрасываем: панель кнопок закреплена внизу, так
+      // что к следующей загадке переходят не сходя с места. Съехавшая шапка
+      // здесь дешевле прыжка страницы под пальцем.
     };
     if (wideScreen()) drawResult(q);
-    // Вёрстка подогнана так, что на телефоне кнопка «Далее» помещается в экран,
-    // но длинный рассказ о флаге или квадратный флаг вроде швейцарского могут
-    // её вытолкнуть. Тогда подкручиваем сами и ровно настолько, насколько надо:
-    // 'nearest' оставляет разгаданный флаг на виду, а ребёнок не ищет кнопку.
-    revealActions();
+    revealSolvedNote();
   } else {
     $('#hint').onclick = () => {
       if (!hinted) stats.hints++;

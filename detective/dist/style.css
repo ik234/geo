@@ -42,17 +42,32 @@ nav {
   letter-spacing: 0;
 }
 
+/* Выбор языка переехал из основной колонки в шапку: на телефоне строка
+   заголовка со списком языков съедала 63px, а сам список рядом с названием
+   сайта стоит не хуже. */
+.lang-pick {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.lang-pick select {
+  margin-top: 0;
+  padding: 7px 10px;
+  border-color: #3d6470;
+  background: #1b3f4c;
+  color: white;
+}
+
+.toolbar {
+  display: block;
+}
+
 main {
   max-width: 1120px;
   margin: auto;
   padding: 24px;
-}
-
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 20px;
 }
 
 .eyebrow {
@@ -382,8 +397,8 @@ a:focus-visible {
 
 h2 {
   font-size: 27px;
-  line-height: 1.25;
-  margin: 12px 0 22px;
+  line-height: 1.2;
+  margin: 12px 0 20px;
 }
 
 .choices {
@@ -425,7 +440,7 @@ h2 {
 }
 
 .message {
-  line-height: 1.5;
+  line-height: 1.4;
   margin: 18px 0 0;
 }
 
@@ -699,23 +714,35 @@ button:hover:not(:disabled) {
 
 @media (max-width: 700px) {
   header {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-    padding: 11px 16px;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    font-size: 17px;
   }
 
   nav {
-    gap: 18px;
-    font-size: 14px;
+    order: 3;
+    width: 100%;
   }
 
+  .lang-pick select {
+    padding: 5px 8px;
+    font-size: 15px;
+  }
+
+  nav {
+    gap: 14px;
+    font-size: 13px;
+  }
+
+  /* Заголовок и надзаголовок декоративны: номер загадки есть в строке
+     прогресса, название сайта — в шапке. На телефоне строка целиком дороже. */
   .toolbar {
-    align-items: flex-start;
-  }
-
-  .toolbar label {
-    max-width: 140px;
+    display: none;
   }
 
   /* Надзаголовок декоративный, на узком экране место дороже */
@@ -725,7 +752,7 @@ button:hover:not(:disabled) {
 
   /* Подпись «Язык» убираем с глаз, но оставляем скринридеру:
      выбранный язык и так написан в самом поле. */
-  .toolbar label span {
+  .lang-pick span {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -739,7 +766,13 @@ button:hover:not(:disabled) {
   }
 
   main {
-    padding: 16px 14px;
+    padding: 10px 14px;
+  }
+
+  /* Отступы между блоками на телефоне дороже, чем воздух: без них четыре
+     варианта ответа не помещаются над закреплённой панелью. */
+  .progress {
+    margin: 10px 0;
   }
 
   /* Заголовок декоративный: номер загадки и так написан в строке прогресса. */
@@ -755,12 +788,19 @@ button:hover:not(:disabled) {
 
   .visual {
     min-height: 0;
-    padding: 14px;
-    gap: 10px;
+    padding: 12px;
+    gap: 8px;
+  }
+
+  /* Подпись «часть флага скрыта» на телефоне убрана: серая плашка поверх флага
+     говорит то же самое без слов, а 25px высоты здесь решают, поместятся ли
+     все четыре варианта ответа над закреплённой панелью. */
+  .visual small {
+    display: none;
   }
 
   .flag-window {
-    max-width: 190px;
+    max-width: 160px;
   }
 
   /* Карту результата на телефоне не рисуем (см. wideScreen в app.js);
@@ -774,19 +814,53 @@ button:hover:not(:disabled) {
   }
 
   .question {
-    padding: 18px 18px 16px;
+    /* Снизу оставлено место под закреплённую панель кнопок. */
+    padding: 14px 18px 84px;
+  }
+
+  /* Кнопки действия прибиты к низу экрана. Рассчитывать, что карточка целиком
+     поместится в экран, нельзя: панели Safari съедают около 180px высоты
+     (на iPhone 13 остаётся ~660 вместо 844), рассказ о флаге гуляет от 30 до
+     173 символов, а размер шрифта читатель может увеличить сам. Закреплённая
+     панель снимает все три переменные разом. */
+  .question .actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    margin: 0;
+    gap: 8px;
+    padding: 8px 14px calc(8px + env(safe-area-inset-bottom, 0px));
+    background: #fff;
+    border-top: 1px solid #d6e4e7;
+    box-shadow: 0 -6px 18px rgba(16, 45, 56, .1);
+  }
+
+  .question .actions button {
+    flex: 1;
+    min-height: 44px;
   }
 
   h2 {
-    font-size: 21px;
-    margin: 0 0 14px;
+    font-size: 19px;
+    line-height: 1.15;
+    margin: 0 0 10px;
   }
 
   .message {
-    margin-top: 10px;
+    line-height: 1.35;
   }
 
-  .actions {
+  .choices button {
+    line-height: 1.2;
+  }
+
+  .progress-meta {
+    font-size: 13px;
+  }
+
+  .message {
     margin-top: 10px;
   }
 
@@ -799,8 +873,14 @@ button:hover:not(:disabled) {
   }
 
   .modes button {
-    font-size: 15px;
-    padding: 6px 10px;
+    font-size: 14px;
+    padding: 4px 9px;
+    min-height: 32px;
+  }
+
+  .modes {
+    padding: 2px;
+    gap: 2px;
   }
 
   /* Номер загадки уже написан строкой выше, в полосе прогресса. */
@@ -810,8 +890,8 @@ button:hover:not(:disabled) {
 
   .choices button {
     font-size: 16px;
-    padding: 11px;
-    min-height: 56px;
+    padding: 10px;
+    min-height: 52px;
   }
 
   .result-map {
