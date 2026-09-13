@@ -334,14 +334,36 @@ a:focus-visible {
   justify-content: center;
 }
 
-.flag-window img {
+.flag-shot {
+  display: block;
   width: 100%;
-  clip-path: inset(0 33%);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Закрытая часть — сплошная плашка, а не прозрачность: сквозь неё не должно
+   просвечивать ничего, иначе загадки нет. */
+.flag-shot.masked {
+  background: #b9d2d7;
+}
+
+.flag-shot img {
+  display: block;
+  width: 100%;
   transition: clip-path .3s;
 }
 
-.flag-window img.revealed {
-  clip-path: inset(0);
+/* Окно открыто от нижнего левого угла и режет флаг сразу по обеим осям.
+   Прежняя вертикальная полоса посередине у горизонтального триколора
+   оставляла все три цвета на виду и не загадывала ничего. Верхний левый
+   угол не годится: у доброй полусотни флагов там крыж, самая узнаваемая
+   часть. */
+.flag-shot.masked-medium img {
+  clip-path: inset(30% 30% 0 0);
+}
+
+.flag-shot.masked-max img {
+  clip-path: inset(45% 45% 0 0);
 }
 
 .animal {
@@ -679,8 +701,8 @@ button:hover:not(:disabled) {
   header {
     align-items: flex-start;
     flex-direction: column;
-    gap: 10px;
-    padding: 14px 16px;
+    gap: 8px;
+    padding: 11px 16px;
   }
 
   nav {
@@ -717,7 +739,13 @@ button:hover:not(:disabled) {
   }
 
   main {
-    padding: 22px 16px;
+    padding: 16px 14px;
+  }
+
+  /* Заголовок декоративный: номер загадки и так написан в строке прогресса. */
+  h1 {
+    font-size: 21px;
+    margin: 2px 0 8px;
   }
 
   .game,
@@ -726,12 +754,19 @@ button:hover:not(:disabled) {
   }
 
   .visual {
-    min-height: 230px;
-    padding: 24px;
+    min-height: 0;
+    padding: 14px;
+    gap: 10px;
   }
 
   .flag-window {
-    max-width: 220px;
+    max-width: 190px;
+  }
+
+  /* Карту результата на телефоне не рисуем (см. wideScreen в app.js);
+     правило оставлено на случай, если разметка всё же появится. */
+  .result-map {
+    display: none;
   }
 
   .animal {
@@ -739,11 +774,24 @@ button:hover:not(:disabled) {
   }
 
   .question {
-    padding: 24px;
+    padding: 18px 18px 16px;
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 21px;
+    margin: 0 0 14px;
+  }
+
+  .message {
+    margin-top: 10px;
+  }
+
+  .actions {
+    margin-top: 10px;
+  }
+
+  .choices {
+    gap: 8px;
   }
 
   .controls {
@@ -752,12 +800,18 @@ button:hover:not(:disabled) {
 
   .modes button {
     font-size: 15px;
-    padding: 8px 10px;
+    padding: 6px 10px;
+  }
+
+  /* Номер загадки уже написан строкой выше, в полосе прогресса. */
+  .question .tag {
+    display: none;
   }
 
   .choices button {
-    font-size: 17px;
-    padding: 13px;
+    font-size: 16px;
+    padding: 11px;
+    min-height: 56px;
   }
 
   .result-map {

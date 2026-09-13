@@ -985,6 +985,21 @@ function loadJson(url, key, assign) {
 
 // Тексты есть на всех шести языках, но факты переведены не для всех стран.
 // Английский держим наготове как запасной: лучше английская строка, чем пустая.
+// Тот же порог, что и у мобильной вёрстки в style.css: ниже него карта
+// результата не рисуется вовсе, а не прячется стилями, — считать её впустую
+// незачем, да и d3 нечего рисовать в блок нулевой ширины.
+function revealActions() {
+  const actions = document.querySelector('.actions');
+  if (!actions) return;
+  const box = actions.getBoundingClientRect();
+  if (box.bottom <= window.innerHeight) return;
+  actions.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+}
+
+function wideScreen() {
+  return window.matchMedia('(min-width: 701px)').matches;
+}
+
 function loreLang() {
   return lang;
 }
@@ -1335,10 +1350,18 @@ function render() {
     return;
   }
 
+  // На простом уровне флаг показывается целиком: там задача — узнать флаг,
+  // а не разгадать его по обрывку.
+  const masked = q.type === 'flag' && !hinted && !solved && level !== 'easy';
   const visual = q.type === 'flag'
-    ? `<div class="flag-window"><img class="${hinted || solved ? 'revealed' : ''}" src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></div>`
+    ? `<div class="flag-window"><span class="flag-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></span></div>`
     : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
-  const visualNote = solved ? '<div class="result-map" id="map"></div>' : `<small>${q.type === 'flag' ? tr('flagPartial') : tr('animalPrompt')}</small>`;
+  // Карта результата на телефоне не помещается и всё равно не читается:
+  // половину стран на ней не разглядеть даже на десктопе.
+  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : tr('animalPrompt');
+  const visualNote = solved
+    ? (wideScreen() ? '<div class="result-map" id="map"></div>' : '')
+    : (prompt ? `<small>${prompt}</small>` : '');
   const solvedNote = q.type === 'flag' ? countryFlagText(q.id) : fact(q);
   const message = solved
     ? `<strong>${tr('solved')}</strong>${solvedNote ? ` ${escapeHtml(solvedNote)}` : ''}`
@@ -1378,7 +1401,12 @@ function render() {
       reset();
       render();
     };
-    drawResult(q);
+    if (wideScreen()) drawResult(q);
+    // Вёрстка подогнана так, что на телефоне кнопка «Далее» помещается в экран,
+    // но длинный рассказ о флаге или квадратный флаг вроде швейцарского могут
+    // её вытолкнуть. Тогда подкручиваем сами и ровно настолько, насколько надо:
+    // 'nearest' оставляет разгаданный флаг на виду, а ребёнок не ищет кнопку.
+    revealActions();
   } else {
     $('#hint').onclick = () => {
       if (!hinted) stats.hints++;
