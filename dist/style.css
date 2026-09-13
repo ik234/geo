@@ -45,7 +45,7 @@ nav {
 main {
   max-width: 1120px;
   margin: auto;
-  padding: 32px 24px;
+  padding: 24px;
 }
 
 .toolbar {
@@ -63,8 +63,8 @@ main {
 }
 
 h1 {
-  font-size: clamp(28px, 4vw, 42px);
-  margin: 8px 0 24px;
+  font-size: clamp(24px, 3vw, 32px);
+  margin: 6px 0 16px;
 }
 
 label {
@@ -112,22 +112,36 @@ a:focus-visible {
   outline-offset: 4px;
 }
 
-.modes {
+.controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 9px;
+  gap: 10px;
+  align-items: center;
 }
 
-.view-modes,
-.topic-modes,
-.level-modes {
-  margin-bottom: 12px;
+.modes {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 3px;
+  background: #dbe8eb;
+  /* контур нужен, чтобы соседние группы в одной строке не читались как одна */
+  border: 1px solid #c3d7db;
+  border-radius: 13px;
 }
 
-.topic-modes[hidden],
-.level-modes[hidden],
-.length-modes[hidden] {
+/* display на .modes перебил бы browser-правило для [hidden] */
+.modes[hidden] {
   display: none;
+}
+
+.modes button {
+  border: 0;
+  background: transparent;
+  min-height: 40px;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-size: 16px;
 }
 
 .modes .active,
@@ -138,7 +152,7 @@ a:focus-visible {
 }
 
 .progress {
-  margin: 24px 0;
+  margin: 16px 0;
 }
 
 .player-board {
@@ -665,7 +679,8 @@ button:hover:not(:disabled) {
   header {
     align-items: flex-start;
     flex-direction: column;
-    padding: 18px 24px;
+    gap: 10px;
+    padding: 14px 16px;
   }
 
   nav {
@@ -679,6 +694,26 @@ button:hover:not(:disabled) {
 
   .toolbar label {
     max-width: 140px;
+  }
+
+  /* Надзаголовок декоративный, на узком экране место дороже */
+  .eyebrow {
+    display: none;
+  }
+
+  /* Подпись «Язык» убираем с глаз, но оставляем скринридеру:
+     выбранный язык и так написан в самом поле. */
+  .toolbar label span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Сложность уходит в конец, чтобы режим и длина встали в одну строку */
+  .level-modes {
+    order: 1;
   }
 
   main {
@@ -711,9 +746,13 @@ button:hover:not(:disabled) {
     font-size: 24px;
   }
 
+  .controls {
+    gap: 6px;
+  }
+
   .modes button {
-    font-size: 16px;
-    padding: 12px;
+    font-size: 15px;
+    padding: 8px 10px;
   }
 
   .choices button {
