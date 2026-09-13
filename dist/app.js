@@ -662,6 +662,12 @@ const animals = [
 
 // Язык берём из настроек браузера. Если ни один из поддерживаемых не подошёл —
 // английский, а не русский: чужому человеку по ссылке он понятнее.
+const storageKeys = {
+  player: 'geoDetectivePlayer',
+  scores: 'geoDetectiveScores',
+  lang: 'geoDetectiveLang',
+};
+
 function detectLang() {
   const wanted = navigator.languages?.length ? navigator.languages : [navigator.language];
   for (const tag of wanted) {
@@ -671,7 +677,22 @@ function detectLang() {
   return 'en';
 }
 
-let lang = detectLang();
+// Выбранный язык переживает перезагрузку; до первого выбора берём язык браузера.
+function loadLang() {
+  try {
+    const saved = localStorage.getItem(storageKeys.lang);
+    if (saved && langs.includes(saved)) return saved;
+  } catch {}
+  return detectLang();
+}
+
+function saveLang() {
+  try {
+    localStorage.setItem(storageKeys.lang, lang);
+  } catch {}
+}
+
+let lang = loadLang();
 let mode = 'flags';
 let level = 'max';
 let lengthMode = 'fixed';
@@ -684,11 +705,6 @@ let pos = 0;
 let solved = false;
 let hinted = false;
 let wrong = new Set();
-
-const storageKeys = {
-  player: 'geoDetectivePlayer',
-  scores: 'geoDetectiveScores',
-};
 
 let player = loadPlayer();
 let scores = loadScores();
@@ -1516,6 +1532,7 @@ function drawExplore(current) {
 
 $('#lang').onchange = event => {
   lang = event.target.value;
+  saveLang();
   statusMessage = '';
   // список пересортируется под новый язык, и выбранная страна оказывается далеко от прежнего места
   // instant, а не auto: auto означает «взять из CSS», а там scroll-behavior: smooth
