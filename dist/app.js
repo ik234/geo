@@ -1068,7 +1068,7 @@ function animalPool() {
   return animals.filter(tierAllowed);
 }
 
-function targetCount() {
+function roundLength() {
   return lengthMode === 'endless' ? Infinity : fixedRoundSizes[level];
 }
 
@@ -1168,7 +1168,8 @@ function setChrome() {
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
 }
 
-function start() {
+// Собирает до count вопросов из текущих пулов, пропуская уже сыгранные.
+function buildQuestions(count, usedKeys = new Set()) {
   const availableFlags = flagPool();
   const availableAnimals = animalPool();
   const availableRegions = [...new Set(availableAnimals.map(animal => animal.region))];
@@ -1179,18 +1180,37 @@ function start() {
     : activeMode === 'animals'
       ? shuffle(availableAnimals)
       : mixedPool(availableFlags, availableAnimals);
-  const selected = pool.slice(0, Math.min(pool.length, targetCount()));
-
-  round = selected.map(question => ({
+  const fresh = pool.filter(item => !usedKeys.has(item.key));
+  return fresh.slice(0, Math.min(fresh.length, count)).map(question => ({
     ...question,
     options: question.type === 'flag'
       ? flagOptions(question, availableFlags)
       : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
+}
+
+function start() {
+  round = buildQuestions(roundLength());
   pos = 0;
   stats = freshStats();
   statusMessage = '';
   reset();
+  render();
+}
+
+// Смена сложности, темы или длины посреди раунда не должна стирать набранное:
+// сыгранные вопросы и очки остаются, заново собирается только остаток.
+function retuneRound() {
+  const keep = solved ? pos + 1 : pos;
+  if (!keep) {
+    start();
+    return;
+  }
+  const kept = round.slice(0, keep);
+  round = [...kept, ...buildQuestions(roundLength(), new Set(kept.map(question => question.key)))];
+  // текущий вопрос заменён на новый, прежние ошибки и подсказка к нему не относятся
+  if (!solved) reset();
+  statusMessage = '';
   render();
 }
 
@@ -1447,27 +1467,30 @@ document.querySelectorAll('[data-view]').forEach(button => {
 });
 document.querySelectorAll('[data-level]').forEach(button => {
   button.onclick = () => {
+    const changed = level !== button.dataset.level;
     level = button.dataset.level;
     document.querySelectorAll('[data-level]').forEach(item => item.classList.toggle('active', item === button));
     view = 'quiz';
-    start();
+    if (changed) retuneRound(); else render();
   };
 });
 document.querySelectorAll('[data-length]').forEach(button => {
   button.onclick = () => {
+    const changed = lengthMode !== button.dataset.length;
     lengthMode = button.dataset.length;
     document.querySelectorAll('[data-length]').forEach(item => item.classList.toggle('active', item === button));
     view = 'quiz';
-    start();
+    if (changed) retuneRound(); else render();
   };
 });
 document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
     if (!featureFlags.animals && button.dataset.mode !== 'flags') return;
+    const changed = mode !== button.dataset.mode;
     mode = button.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(item => item.classList.toggle('active', item === button));
     view = 'quiz';
-    start();
+    if (changed) retuneRound(); else render();
   };
 });
 
@@ -1501,6 +1524,7 @@ if (document.modelContext?.registerTool) {
         if (input.level) document.querySelector(`[data-level="${input.level}"]`).click();
         if (input.lengthMode) document.querySelector(`[data-length="${input.lengthMode}"]`).click();
         document.querySelector(`[data-mode="${input.mode}"]`).click();
+        start();
         return { mode, level, lengthMode, questions: round.length };
       },
     })).catch(() => {});
