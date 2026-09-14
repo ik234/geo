@@ -360,14 +360,27 @@ a:focus-visible {
   overflow: hidden;
 }
 
+/* Герб в загадке — кнопка: по нажатию он открывается крупно, как в атласе. */
 .coat-shot {
+  position: relative;
   display: flex;
   width: 100%;
   height: 100%;
+  min-height: 0;
+  padding: 0;
   align-items: center;
   justify-content: center;
+  border: 0;
   border-radius: 8px;
+  background: transparent;
   overflow: hidden;
+  cursor: zoom-in;
+}
+
+/* Внутри окна загадки: снаружи значок срезало бы overflow. */
+.coat-shot .zoom-badge {
+  right: 6px;
+  bottom: 6px;
 }
 
 /* Закрытая часть — сплошная плашка, а не прозрачность: сквозь неё не должно
@@ -789,6 +802,19 @@ svg {
   width: var(--side);
   height: calc(var(--side) / var(--ratio, 1));
   object-fit: contain;
+}
+
+/* Увеличенный герб из нерешённой загадки на сложном уровне: та же маска и та же
+   плашка под закрытой частью, что и в самой загадке. */
+.zoom-card .zoom-plate {
+  display: block;
+  border-radius: 8px;
+  background: #b9d2d7;
+  overflow: hidden;
+}
+
+.zoom-card .zoom-clip-max {
+  clip-path: inset(42% 42% 0 0);
 }
 
 /* Рамка, чтобы белое поле флага (Япония, Канада) не сливалось с карточкой. */

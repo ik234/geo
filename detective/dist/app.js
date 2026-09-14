@@ -1782,7 +1782,7 @@ function render() {
   const visual = q.type === 'flag'
     ? `<div class="flag-window">${flagShot(q, masked)}</div>`
     : q.type === 'coat'
-      ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
+      ? `<div class="coat-window"><button type="button" class="coat-shot${masked ? ` masked masked-${level}` : ''}" data-quiz-zoom aria-label="${escapeHtml(tr('zoomCoat'))}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"><span class="zoom-badge" aria-hidden="true">${magnifierIcon}</span></button></div>`
     : q.type === 'capital'
       ? `<div class="capital-card"><img src="assets/flags/${q.id}.svg" alt=""><span class="tag">${tr('country')}</span><strong>${escapeHtml(name(q))}</strong></div>`
       : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
@@ -1834,6 +1834,17 @@ function render() {
       render();
     };
   });
+
+  // Герб в загадке увеличивается так же, как в атласе, но не выдаёт ответ:
+  // пока загадка не решена, в окне нет названия страны, а на сложном уровне
+  // остаётся та же маска, что и здесь.
+  const coatZoom = document.querySelector('[data-quiz-zoom]');
+  if (coatZoom) {
+    coatZoom.onclick = () => {
+      const img = coatZoom.querySelector('img');
+      openSymbolZoom('coat', q.id, img.naturalWidth / img.naturalHeight || 1, { named: solved, clip: masked ? level : null });
+    };
+  }
 
   if (solved) {
     $('#next').onclick = () => {
@@ -2050,19 +2061,22 @@ function symbolButton(kind, item) {
 // ребёнку понятнее, чем искать крестик.
 let zoomOpener = null;
 
-function openSymbolZoom(kind, id, ratio) {
+// named: подписывать ли страну (в нерешённой загадке нельзя); clip: уровень
+// маски, если окно должно показывать ту же часть, что и загадка.
+function openSymbolZoom(kind, id, ratio, { named = true, clip = null } = {}) {
   closeZoom();
   zoomOpener = document.activeElement;
-  const label = `${tr(kind)}: ${countryName(id)}`;
+  const label = named ? `${tr(kind)}: ${countryName(id)}` : tr(kind);
   const overlay = document.createElement('div');
   overlay.className = 'zoom';
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', label);
+  const image = `<img class="zoom-${kind}${clip ? ` zoom-clip-${clip}` : ''}" src="${symbolSrc(kind, id)}" alt="${escapeHtml(label)}" style="--ratio: ${Number(ratio).toFixed(4)}">`;
   overlay.innerHTML = `
     <figure class="zoom-card">
-      <img class="zoom-${kind}" src="${symbolSrc(kind, id)}" alt="${escapeHtml(label)}" style="--ratio: ${Number(ratio).toFixed(4)}">
-      <figcaption><span class="tag">${escapeHtml(tr(kind))}</span><strong>${escapeHtml(countryName(id))}</strong></figcaption>
+      ${clip ? `<span class="zoom-plate">${image}</span>` : image}
+      <figcaption><span class="tag">${escapeHtml(tr(kind))}</span>${named ? `<strong>${escapeHtml(countryName(id))}</strong>` : ''}</figcaption>
       <button type="button" class="zoom-close" aria-label="${escapeHtml(tr('close'))}">×</button>
     </figure>`;
   overlay.onclick = closeZoom;
