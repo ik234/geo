@@ -78,6 +78,9 @@ const ui = {
     animal: 'ЖИВОТНОЕ',
     flag: 'Флаг',
     coat: 'Герб',
+    zoomFlag: 'Рассмотреть флаг',
+    zoomCoat: 'Рассмотреть герб',
+    close: 'Закрыть',
     capital: 'Столица',
     currency: 'Валюта',
     officialLanguages: 'Официальные языки',
@@ -170,6 +173,9 @@ const ui = {
     animal: 'ANIMAL',
     flag: 'Flag',
     coat: 'Coat of arms',
+    zoomFlag: 'Zoom in on the flag',
+    zoomCoat: 'Zoom in on the coat of arms',
+    close: 'Close',
     capital: 'Capital',
     currency: 'Currency',
     officialLanguages: 'Official languages',
@@ -262,6 +268,9 @@ const ui = {
     animal: 'ANIMAL',
     flag: 'Bandeira',
     coat: 'Brasão',
+    zoomFlag: 'Ampliar a bandeira',
+    zoomCoat: 'Ampliar o brasão',
+    close: 'Fechar',
     capital: 'Capital',
     currency: 'Moeda',
     officialLanguages: 'Línguas oficiais',
@@ -354,6 +363,9 @@ const ui = {
     animal: 'ANIMAL',
     flag: 'Bandera',
     coat: 'Escudo',
+    zoomFlag: 'Ampliar la bandera',
+    zoomCoat: 'Ampliar el escudo',
+    close: 'Cerrar',
     capital: 'Capital',
     currency: 'Moneda',
     officialLanguages: 'Lenguas oficiales',
@@ -446,6 +458,9 @@ const ui = {
     animal: 'TIER',
     flag: 'Flagge',
     coat: 'Wappen',
+    zoomFlag: 'Flagge vergrößern',
+    zoomCoat: 'Wappen vergrößern',
+    close: 'Schließen',
     capital: 'Hauptstadt',
     currency: 'Währung',
     officialLanguages: 'Amtssprachen',
@@ -538,6 +553,9 @@ const ui = {
     animal: 'ZWIERZĘ',
     flag: 'Flaga',
     coat: 'Herb',
+    zoomFlag: 'Powiększ flagę',
+    zoomCoat: 'Powiększ herb',
+    close: 'Zamknij',
     capital: 'Stolica',
     currency: 'Waluta',
     officialLanguages: 'Języki urzędowe',
@@ -1840,6 +1858,15 @@ function renderExplore() {
       selectExploreItem(button.dataset.item);
     };
   });
+  document.querySelectorAll('[data-zoom]').forEach(button => {
+    const [kind, id] = button.dataset.zoom.split(':');
+    button.onclick = () => {
+      // Пропорции берём у миниатюры: она уже загружена, а окно должно
+      // облегать картинку, а не стоять квадратом с пустотой у широких гербов.
+      const thumb = button.querySelector('img');
+      openSymbolZoom(kind, id, thumb.naturalWidth / thumb.naturalHeight || (kind === 'flag' ? 4 / 3 : 1));
+    };
+  });
   drawExplore(current);
   scrollSelectedExploreItem();
 }
@@ -1878,12 +1905,72 @@ function itemDetail(item, rowId) {
         <h2>${escapeHtml(name(item))}</h2>
       </div>
       <div class="country-symbols">
-        <figure><img class="symbol-flag" src="assets/flags/${item.id}.svg" alt=""><figcaption>${tr('flag')}</figcaption></figure>
-        ${coatById.has(item.id) ? `<figure><img src="assets/coats/${item.id}.webp" alt=""><figcaption>${tr('coat')}</figcaption></figure>` : ''}
+        <figure>${symbolButton('flag', item)}<figcaption>${tr('flag')}</figcaption></figure>
+        ${coatById.has(item.id) ? `<figure>${symbolButton('coat', item)}<figcaption>${tr('coat')}</figcaption></figure>` : ''}
       </div>
       ${countryPanel(item)}
     </div>`;
 }
+
+const magnifierIcon = '<svg viewBox="0 0 24 24" width="14" height="14"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+
+function symbolSrc(kind, id) {
+  return kind === 'flag' ? `assets/flags/${id}.svg` : `assets/coats/${id}.webp`;
+}
+
+function symbolButton(kind, item) {
+  const label = `${tr(kind === 'flag' ? 'zoomFlag' : 'zoomCoat')}: ${name(item)}`;
+  return `<button type="button" class="symbol-zoom" data-zoom="${kind}:${item.id}" aria-label="${escapeHtml(label)}"><img class="symbol-${kind}" src="${symbolSrc(kind, item.id)}" alt=""><span class="zoom-badge" aria-hidden="true">${magnifierIcon}</span></button>`;
+}
+
+// В карточке атласа флаг и герб высотой 72–88px, а разглядывать в них есть
+// что: мелкие детали гербов, надпись на флаге Бразилии. Окно живёт вне #game:
+// перерисовка атласа (пришли данные, сменился язык) его не сносит.
+// Закрывается нажатием в любом месте — «нажал, открылось; нажал, закрылось»
+// ребёнку понятнее, чем искать крестик.
+let zoomOpener = null;
+
+function openSymbolZoom(kind, id, ratio) {
+  closeZoom();
+  zoomOpener = document.activeElement;
+  const label = `${tr(kind)}: ${countryName(id)}`;
+  const overlay = document.createElement('div');
+  overlay.className = 'zoom';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', label);
+  overlay.innerHTML = `
+    <figure class="zoom-card">
+      <img class="zoom-${kind}" src="${symbolSrc(kind, id)}" alt="${escapeHtml(label)}" style="--ratio: ${Number(ratio).toFixed(4)}">
+      <figcaption><span class="tag">${escapeHtml(tr(kind))}</span><strong>${escapeHtml(countryName(id))}</strong></figcaption>
+      <button type="button" class="zoom-close" aria-label="${escapeHtml(tr('close'))}">×</button>
+    </figure>`;
+  overlay.onclick = closeZoom;
+  document.body.append(overlay);
+  overlay.querySelector('.zoom-close').focus();
+  // Векторный герб есть только в сети, в офлайн-кэш он не входит (см.
+  // tools/gen-sw.py). Сразу показываем маленький из кэша и подменяем его,
+  // когда векторный догрузился; без сети так и остаётся маленький.
+  if (kind === 'coat' && navigator.onLine !== false) {
+    const vector = new Image();
+    vector.onload = () => {
+      if (overlay.isConnected) overlay.querySelector('img').src = vector.src;
+    };
+    vector.src = `assets/coats-svg/${id}.svg`;
+  }
+}
+
+function closeZoom() {
+  const overlay = document.querySelector('.zoom');
+  if (!overlay) return;
+  overlay.remove();
+  if (zoomOpener?.isConnected) zoomOpener.focus();
+  zoomOpener = null;
+}
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeZoom();
+});
 
 function itemDomId(key) {
   return `atlas-${String(key).replace(/[^a-z0-9_-]/gi, '-')}`;

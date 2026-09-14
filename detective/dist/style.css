@@ -626,7 +626,9 @@ svg {
   background: #f7fbfb;
 }
 
-.item-row button {
+/* Только кнопка-заголовок строки: внутри раскрытой карточки есть свои кнопки
+   (увеличение флага и герба), и эти правила не должны на них протекать. */
+.item-row > button {
   width: 100%;
   min-height: 58px;
   padding: 10px 12px;
@@ -639,17 +641,17 @@ svg {
   background: transparent;
 }
 
-.item-row button.active {
+.item-row > button.active {
   background: #d8f47b;
 }
 
-.item-row button img {
+.item-row > button img {
   width: 30px;
   border-radius: 4px;
   box-shadow: 0 2px 6px #14344018;
 }
 
-.item-row button span {
+.item-row > button span {
   overflow-wrap: anywhere;
 }
 
@@ -704,6 +706,112 @@ svg {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #506c75;
+}
+
+/* Герб в карточке — кнопка, открывающая его крупно. Значок лупы подсказывает,
+   что на него можно нажать. */
+.symbol-zoom {
+  position: relative;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.zoom-badge {
+  position: absolute;
+  right: -8px;
+  bottom: -6px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 2px solid white;
+  border-radius: 50%;
+  background: #143440;
+  color: white;
+}
+
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(16, 45, 56, .82);
+  cursor: zoom-out;
+  animation: zoom-fade .18s ease-out;
+}
+
+@keyframes zoom-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.zoom-card {
+  position: relative;
+  margin: 0;
+  padding: 20px 20px 14px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+
+/* Картинка растягивается до окна, а не до своих 320px: с сетью герб
+   подменяется векторным, а без сети мягкий крупный лучше мелкого.
+   Размер задан явно по пропорциям миниатюры (--ratio из app.js), а не по
+   самой картинке: у части SVG нет собственных размеров, и после подмены
+   окно не должно прыгать. Ширина упирается в экран (88px — поля карточки и
+   место под крестик на её углу), в 640px и в 66% высоты экрана. */
+.zoom-card img {
+  --side: min(100vw - 88px, 640px, 66vh * var(--ratio, 1));
+  display: block;
+  width: var(--side);
+  height: calc(var(--side) / var(--ratio, 1));
+  object-fit: contain;
+}
+
+/* Рамка, чтобы белое поле флага (Япония, Канада) не сливалось с карточкой. */
+.zoom-card .zoom-flag {
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #c7d9dd;
+}
+
+.zoom-card figcaption {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  text-align: center;
+}
+
+.zoom-card figcaption strong {
+  font-size: 20px;
+}
+
+/* Крестик сидит на углу карточки, а не внутри: внутри он закрывал бы угол
+   флага, а там бывают звёзды и крыж. */
+.zoom-close {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 40px;
+  height: 40px;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+  font-size: 26px;
+  line-height: 1;
 }
 
 /* Отступы здесь задаёт сетка карточки; иначе .game .country-panel ниже по файлу
@@ -1040,5 +1148,9 @@ button:hover:not(:disabled) {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+
+  .zoom {
+    animation: none;
   }
 }

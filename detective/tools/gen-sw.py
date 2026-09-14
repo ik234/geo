@@ -5,16 +5,23 @@
 поднять. Поменялся любой байт — поменялась версия — браузер перекачает кэш.
 Workflow вызывает его перед публикацией; пути считаются от расположения файла.
 """
-import hashlib, pathlib, sys
+import hashlib, json, pathlib, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 DIST = ROOT / 'dist'
 SKIP = {'sw.js', '.DS_Store'}
+# Только с сетью: векторные гербы для окна увеличения в атласе весят 61 МБ.
+# В офлайн-кэш они не идут и при просмотре туда не складываются, а без сети
+# окно показывает маленький герб из кэша. В версию кэша они тоже не входят:
+# правка SVG не должна заставлять устройства перекачивать весь офлайн.
+ONLINE_ONLY = ('assets/coats-svg/',)
 
-files = sorted(
+candidates = [
     p for p in DIST.rglob('*')
     if p.is_file() and p.name not in SKIP and not p.name.startswith('.')
-)
+]
+online_only = [p for p in candidates if p.relative_to(DIST).as_posix().startswith(ONLINE_ONLY)]
+files = sorted(p for p in candidates if p not in online_only)
 if not files:
     sys.exit('dist пуст — нечего кэшировать')
 
@@ -29,6 +36,7 @@ version = digest.hexdigest()[:12]
 urls = ['./'] + [p.relative_to(DIST).as_posix() for p in files]
 listing = ',\n  '.join(f'"{u}"' for u in urls)
 total = sum(p.stat().st_size for p in files)
+online_js = json.dumps(['/' + d for d in ONLINE_ONLY])
 
 (DIST / 'sw.js').write_text(f'''// Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
 const VERSION = '{version}';
@@ -36,6 +44,7 @@ const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   {listing}
 ];
+const ONLINE_ONLY = {online_js};
 
 // addAll падает целиком, если хоть один запрос не удался, поэтому кладём
 // по одному: пропущенный флаг не должен отменять весь офлайн.
@@ -60,7 +69,10 @@ self.addEventListener('activate', event => {{
 self.addEventListener('fetch', event => {{
   const request = event.request;
   if (request.method !== 'GET') return;
-  if (new URL(request.url).origin !== self.location.origin) return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+  // Мимо кэша прямо в сеть; без сети запрос просто не удаётся.
+  if (ONLINE_ONLY.some(dir => url.pathname.includes(dir))) return;
 
   event.respondWith(
     caches.match(request).then(hit => {{
@@ -79,4 +91,6 @@ self.addEventListener('fetch', event => {{
 }});
 ''', encoding='utf-8')
 
-print(f'sw.js: версия {version}, {len(urls)} адресов, {total/1024/1024:.1f} МБ')
+online_total = sum(p.stat().st_size for p in online_only)
+print(f'sw.js: версия {version}, {len(urls)} адресов, {total/1024/1024:.1f} МБ; '
+      f'только с сетью: {len(online_only)} файлов, {online_total/1024/1024:.1f} МБ')

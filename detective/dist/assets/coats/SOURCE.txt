@@ -21,3 +21,18 @@ sRGB, so dropping them does not shift colours.
 
 Antarctica (aq) is left out on purpose: under that code MainFacts serves the
 arms of the British Antarctic Territory, and Antarctica itself has none.
+
+Seychelles (sc): the MainFacts PNG is cut off, the lower half of the arms is
+transparent. sc.webp was rebuilt from the SVG instead. WebKit (qlmanage)
+rendered it on a white and on a black page, the alpha channel was recovered
+from the difference of the two renders (alpha = 1 - (white - black), colour
+= black / alpha), and the result was trimmed, resized to 320 px and encoded
+with the same cwebp command as above.
+
+The zoom window in the atlas uses the MainFacts SVG files as they are, in
+../coats-svg/ (61 MB for 193, about 16 MB gzipped on the wire). They are not
+part of the offline cache: see ONLINE_ONLY in detective/tools/gen-sw.py.
+kg.svg was re-encoded from UTF-16 to UTF-8, which halves it; nothing else
+was changed. Every SVG was rendered in WebKit and compared with its 320 px coat
+by PSNR (median 30 dB); the 29 least similar were also checked by eye, and
+apart from the cut-off Seychelles PNG they all show the same arms.

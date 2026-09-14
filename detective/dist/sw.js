@@ -1,5 +1,5 @@
 // Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
-const VERSION = 'c8f4fae24fa8';
+const VERSION = 'a0e977ad8826';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   "./",
@@ -428,6 +428,7 @@ const ASSETS = [
   "summer.html",
   "weekdays.html"
 ];
+const ONLINE_ONLY = ["/assets/coats-svg/"];
 
 // addAll падает целиком, если хоть один запрос не удался, поэтому кладём
 // по одному: пропущенный флаг не должен отменять весь офлайн.
@@ -452,7 +453,10 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
-  if (new URL(request.url).origin !== self.location.origin) return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
+  // Мимо кэша прямо в сеть; без сети запрос просто не удаётся.
+  if (ONLINE_ONLY.some(dir => url.pathname.includes(dir))) return;
 
   event.respondWith(
     caches.match(request).then(hit => {
