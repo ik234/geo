@@ -31,12 +31,6 @@ header a {
   text-decoration: none;
 }
 
-nav {
-  display: flex;
-  gap: 24px;
-  font-size: 16px;
-}
-
 .brand {
   font-weight: 850;
   letter-spacing: 0;
@@ -824,19 +818,9 @@ button:hover:not(:disabled) {
     font-size: 17px;
   }
 
-  nav {
-    order: 3;
-    width: 100%;
-  }
-
   .lang-pick select {
     padding: 5px 8px;
     font-size: 15px;
-  }
-
-  nav {
-    gap: 14px;
-    font-size: 13px;
   }
 
   /* Заголовок и надзаголовок декоративны: номер загадки есть в строке

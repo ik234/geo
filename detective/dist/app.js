@@ -7,13 +7,8 @@ const ui = {
   ru: {
 
 
-    weekdays: 'Дни недели ↗',
-    months: 'Все 12 месяцев ↗',
-    summer: 'Начало лета ↗',
-    school: 'Школа ↗',
     siteTitle: 'Географический детектив',
     brand: 'ГЕО / ДЕТЕКТИВ',
-    navMaps: 'Карты',
     viewGroup: 'Режим',
     topicGroup: 'Тема',
     levelGroup: 'Сложность',
@@ -104,13 +99,8 @@ const ui = {
   en: {
 
 
-    weekdays: 'Weekdays ↗',
-    months: 'All 12 months ↗',
-    summer: 'Summer start ↗',
-    school: 'School year ↗',
     siteTitle: 'Geography Detective',
     brand: 'GEO / DETECTIVE',
-    navMaps: 'Maps',
     viewGroup: 'Mode',
     topicGroup: 'Topic',
     levelGroup: 'Difficulty',
@@ -201,13 +191,8 @@ const ui = {
   pt: {
 
 
-    weekdays: 'Dias da semana ↗',
-    months: 'Todos os 12 meses ↗',
-    summer: 'Início do verão ↗',
-    school: 'Ano letivo ↗',
     siteTitle: 'Detetive de Geografia',
     brand: 'GEO / DETETIVE',
-    navMaps: 'Mapas',
     viewGroup: 'Modo',
     topicGroup: 'Tema',
     levelGroup: 'Dificuldade',
@@ -298,13 +283,8 @@ const ui = {
   es: {
 
 
-    weekdays: 'Días de la semana ↗',
-    months: 'Los 12 meses ↗',
-    summer: 'Inicio del verano ↗',
-    school: 'Curso escolar ↗',
     siteTitle: 'Detective de Geografía',
     brand: 'GEO / DETECTIVE',
-    navMaps: 'Mapas',
     viewGroup: 'Modo',
     topicGroup: 'Tema',
     levelGroup: 'Dificultad',
@@ -395,13 +375,8 @@ const ui = {
   de: {
 
 
-    weekdays: 'Wochentage ↗',
-    months: 'Alle 12 Monate ↗',
-    summer: 'Sommerbeginn ↗',
-    school: 'Schuljahr ↗',
     siteTitle: 'Geografie-Detektiv',
     brand: 'GEO / DETEKTIV',
-    navMaps: 'Karten',
     viewGroup: 'Modus',
     topicGroup: 'Thema',
     levelGroup: 'Schwierigkeit',
@@ -492,13 +467,8 @@ const ui = {
   pl: {
 
 
-    weekdays: 'Dni tygodnia ↗',
-    months: 'Wszystkie 12 miesięcy ↗',
-    summer: 'Początek lata ↗',
-    school: 'Rok szkolny ↗',
     siteTitle: 'Detektyw Geograficzny',
     brand: 'GEO / DETEKTYW',
-    navMaps: 'Mapy',
     viewGroup: 'Tryb',
     topicGroup: 'Temat',
     levelGroup: 'Poziom trudności',
@@ -1622,7 +1592,6 @@ function setStaticText() {
   document.querySelectorAll('[data-i18n]').forEach(node => {
     node.textContent = tr(node.dataset.i18n);
   });
-  document.querySelector('nav').setAttribute('aria-label', tr('navMaps'));
   document.querySelector('.view-modes').setAttribute('aria-label', tr('viewGroup'));
   document.querySelector('.topic-modes').setAttribute('aria-label', tr('topicGroup'));
   document.querySelector('.level-modes').setAttribute('aria-label', tr('levelGroup'));
