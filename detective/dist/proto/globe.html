@@ -4,13 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#102d38">
-    <title>Прототип: страна на глобусе</title>
+    <title>Прототип: страны на глобусе</title>
     <link rel="icon" href="../favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="../style.css">
     <style>
       .proto-note {
         font-size: 14px;
         color: #b8d3d9;
+      }
+
+      .proto-controls {
+        margin-bottom: 16px;
       }
 
       /* Карте нужна колонка пошире, чем флагу. */
@@ -28,6 +32,46 @@
         display: block;
         width: 100%;
         height: 420px;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px 14px;
+      }
+
+      .legend span::before {
+        content: '';
+        display: inline-block;
+        width: 11px;
+        height: 11px;
+        margin-right: 5px;
+        border-radius: 3px;
+        vertical-align: -1px;
+        background: var(--swatch);
+        border: 1px solid var(--edge);
+      }
+
+      .choices button.picked {
+        background: #e3eef1;
+        border-color: #143440;
+        box-shadow: inset 0 0 0 1px #143440;
+      }
+
+      .choices button.wrong-pick {
+        background: #fbe3d6;
+        border-color: #ca501b;
+      }
+
+      .choices button.missed {
+        border-style: dashed;
+        border-color: #138064;
+      }
+
+      .choices button.wrong-pick:disabled,
+      .choices button.missed:disabled {
+        opacity: 1;
       }
 
       @media (max-width: 700px) {
@@ -48,20 +92,27 @@
   <body>
     <header>
       <a class="brand" href="../">ГЕО / ДЕТЕКТИВ</a>
-      <span class="proto-note">прототип: страна на глобусе</span>
+      <span class="proto-note">прототип: страны на глобусе</span>
     </header>
     <main>
+      <div class="controls proto-controls">
+        <div class="modes" id="modes" aria-label="Вопрос"></div>
+        <div class="modes" id="levels" aria-label="Сложность"></div>
+      </div>
       <section class="game globe-game">
         <div class="visual globe-visual">
-          <canvas id="globe" role="img" aria-label="Глобус с отмеченной страной"></canvas>
-          <small id="caption">Загружаем карту…</small>
+          <canvas id="globe" role="img" aria-label="Глобус"></canvas>
+          <small class="legend" id="legend">Загружаем карту…</small>
         </div>
         <div class="question">
           <span class="tag" id="tag"></span>
-          <h2>Какая страна отмечена?</h2>
+          <h2 id="title"></h2>
           <div class="choices" id="choices"></div>
           <p class="message" id="message" role="status"></p>
-          <div class="actions"><button class="primary" id="next" disabled>Дальше →</button></div>
+          <div class="actions">
+            <button id="check" hidden>Проверить</button>
+            <button class="primary" id="next" disabled>Дальше →</button>
+          </div>
         </div>
       </section>
     </main>
@@ -70,11 +121,12 @@
     <script type="module">
       import world110 from '../assets/world.mjs';
 
-      // Прототип режима «Какая страна отмечена?». Глобус поворачивается к стране
-      // и приближается, пока её не станет видно, но соседи остаются вокруг; на
+      // Прототип вопросов на глобусе: «какая страна отмечена» и пять видов
+      // вопросов про границы. Глобус поворачивается к нужному месту и
+      // приближается, пока его не станет видно, но соседи остаются вокруг; на
       // дальних перелётах по пути отдаляется до целого глобуса. Маленькие страны
       // обведены кольцом. В полёте рисуются грубые контуры 110m, на месте —
-      // подробные 50m: перерисовывать 80 тысяч точек каждый кадр iPad не обязан.
+      // подробные 50m: перерисовывать 80 тысяч точек каждый кадр незачем.
 
       const $ = selector => document.querySelector(selector);
       const deg = Math.PI / 180;
@@ -86,10 +138,30 @@
       const regionNames = new Intl.DisplayNames(['ru'], { type: 'region' });
       const overrides = { KOS: 'Косово', SAH: 'Западная Сахара', FLK: 'Фолклендские острова', NCL: 'Новая Каледония', GRL: 'Гренландия', PRI: 'Пуэрто-Рико' };
       const nameOf = id => overrides[id] || regionNames.of(alpha2.get(id).toUpperCase());
+      const collator = new Intl.Collator('ru');
+      const byName = ids => [...ids].sort((a, b) => collator.compare(nameOf(a), nameOf(b)));
 
-      // Страны разного размера и в разных концах света, вперемешку большие и
-      // крошечные, чтобы перелёты были и длинные, и короткие.
-      const tour = ['RUS', 'KWT', 'BRA', 'LUX', 'JPN', 'TUV', 'EGY', 'SGP', 'CHL', 'VAT', 'MDG', 'NPL', 'ISL', 'NZL', 'FRA'];
+      // Поправки к соседям из контуров. Сомалиленд и Северный Кипр в данных
+      // отдельные, а в игре это части Сомали и Кипра; Гонконг и Макао — части
+      // Китая. Ледник Сиачен не страна: его в игре нет, и он отпадает сам.
+      // Трёх настоящих заморских границ в контурах нет, их добавляем руками.
+      const partOf = { SOL: 'SOM', CYN: 'CYP', HKG: 'CHN', MAC: 'CHN' };
+      const extraBorders = [['FRA', 'NLD'], ['ESP', 'MAR'], ['ESP', 'GBR']];
+      const borderNotes = {
+        'BRA|FRA': 'С Бразилией Франция граничит через Французскую Гвиану в Южной Америке',
+        'FRA|SUR': 'С Суринамом Франция граничит через Французскую Гвиану',
+        'FRA|NLD': 'С Нидерландами Франция граничит на острове Сен-Мартен в Карибском море',
+        'ESP|MAR': 'С Марокко Испания граничит в Сеуте и Мелилье, испанских городах в Африке',
+        'ESP|GBR': 'С Великобританией Испания граничит у Гибралтара',
+      };
+
+      const palette = {
+        trail: { fill: '#f9dfa6', stroke: '#d9a441', label: 'пройденный путь' },
+        neighbour: { fill: '#9ed8c9', stroke: '#2f7f8a', label: 'соседи' },
+        goal: { fill: '#b7d85a', stroke: '#5b7d17', label: 'цель' },
+        primary: { fill: '#f4b333', stroke: '#ca501b', label: 'страна' },
+      };
+      const paintOrder = ['trail', 'neighbour', 'goal', 'primary'];
 
       const canvas = $('#globe');
       const ctx = canvas.getContext('2d');
@@ -109,6 +181,8 @@
         return copy;
       }
 
+      const pick = items => items[Math.floor(Math.random() * items.length)];
+
       function resize() {
         const rect = canvas.getBoundingClientRect();
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -122,52 +196,103 @@
       const world50 = await fetch('countries-50m.json').then(response => response.json());
       const obj50 = world50.objects.features;
       const obj110 = world110.objects.features;
-      const features50 = topojson.feature(world50, obj50).features;
-      const byId = new Map(features50.map(feature => [feature.properties.id, feature]));
-      const detail = { land: topojson.merge(world50, obj50.geometries), borders: topojson.mesh(world50, obj50, (a, b) => a !== b) };
-      const coarse = { land: topojson.merge(world110, obj110.geometries), borders: topojson.mesh(world110, obj110, (a, b) => a !== b) };
-      const neighborIndex = topojson.neighbors(obj50.geometries);
+      const byId = new Map(topojson.feature(world50, obj50).features.map(feature => [feature.properties.id, feature]));
+      const owner = geometry => partOf[geometry.properties.id] || geometry.properties.id;
+      const inner = (a, b) => a !== b && owner(a) !== owner(b);
+      const detail = { land: topojson.merge(world50, obj50.geometries), borders: topojson.mesh(world50, obj50, inner) };
+      const coarse = { land: topojson.merge(world110, obj110.geometries), borders: topojson.mesh(world110, obj110, inner) };
+
+      const partsById = new Map([...game].map(id => [id, [id]]));
+      for (const [part, whole] of Object.entries(partOf)) {
+        if (byId.has(part)) partsById.get(whole).push(part);
+      }
+
+      const adj = new Map([...game].map(id => [id, new Set()]));
+      topojson.neighbors(obj50.geometries).forEach((list, i) => {
+        const a = owner(obj50.geometries[i]);
+        for (const j of list) {
+          const b = owner(obj50.geometries[j]);
+          if (a !== b && adj.has(a) && adj.has(b)) {
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+          }
+        }
+      });
+      for (const [a, b] of extraBorders) {
+        adj.get(a).add(b);
+        adj.get(b).add(a);
+      }
 
       // У Франции есть Гвиана, у США — Аляска и Гавайи: целиться во всю страну
       // значило бы показывать пол-океана. Берём самый большой кусок и то, что
       // лежит не дальше 25° от него.
-      function focusOf(feature) {
-        const geometry = feature.geometry;
-        if (geometry.type !== 'MultiPolygon') return geometry;
-        const polygons = geometry.coordinates.map(coordinates => ({ type: 'Polygon', coordinates }));
+      function focusOf(id) {
+        const polygons = [];
+        for (const part of partsById.get(id)) {
+          const geometry = byId.get(part).geometry;
+          if (geometry.type === 'Polygon') polygons.push({ type: 'Polygon', coordinates: geometry.coordinates });
+          else if (geometry.type === 'MultiPolygon') polygons.push(...geometry.coordinates.map(coordinates => ({ type: 'Polygon', coordinates })));
+        }
         const main = polygons.reduce((best, polygon) => (d3.geoArea(polygon) > d3.geoArea(best) ? polygon : best));
         const center = d3.geoCentroid(main);
         const near = polygons.filter(polygon => d3.geoDistance(d3.geoCentroid(polygon), center) < 25 * deg);
         return { type: 'MultiPolygon', coordinates: near.map(polygon => polygon.coordinates) };
       }
 
-      const focus = new Map([...game].map(id => [id, focusOf(byId.get(id))]));
+      const focus = new Map([...game].map(id => [id, focusOf(id)]));
       const centroids = new Map([...game].map(id => [id, d3.geoCentroid(focus.get(id))]));
+      const away = (a, b) => d3.geoDistance(centroids.get(a), centroids.get(b)) / deg;
+
+      const hopsCache = new Map();
+      function hops(from) {
+        if (!hopsCache.has(from)) {
+          const distance = new Map([[from, 0]]);
+          const queue = [from];
+          for (let i = 0; i < queue.length; i++) {
+            for (const next of adj.get(queue[i])) {
+              if (!distance.has(next)) {
+                distance.set(next, distance.get(queue[i]) + 1);
+                queue.push(next);
+              }
+            }
+          }
+          hopsCache.set(from, distance);
+        }
+        return hopsCache.get(from);
+      }
+
+      const withNeighbours = [...game].filter(id => adj.get(id).size > 0);
+      const islands = [...game].filter(id => adj.get(id).size === 0 && id !== 'ATA');
 
       function wholeGlobeScale() {
         return (Math.min(W, H) / 2) * 0.92;
       }
 
-      // Страна занимает до половины окна, но ближе, чем 18° по короткой стороне,
-      // не подлетаем: без соседей непонятно, где это вообще. Совсем крошечным
-      // странам, которые и так будут в кольце, даём 30°: у Тувалу при 18° вокруг
-      // один океан и сориентироваться не по чему.
-      function viewFor(id) {
-        const shape = focus.get(id);
-        const center = centroids.get(id);
-        const probe = d3.geoOrthographic().rotate([-center[0], -center[1]]).scale(1).translate([0, 0]).clipAngle(90);
+      // Показываемое занимает до половины окна, но ближе, чем 18° по короткой
+      // стороне, не подлетаем: без соседей непонятно, где это вообще. Совсем
+      // крошечному (оно и так будет в кольце) даём 30°: у Тувалу при 18° вокруг
+      // один океан. Чуть обрезанный по краям глобус выглядит ошибкой, поэтому
+      // приближение меньше чем в 1,3 раза не делаем.
+      function viewFor(ids, center) {
+        const shape = { type: 'GeometryCollection', geometries: ids.map(id => focus.get(id)) };
+        const middle = center || (ids.length === 1 ? centroids.get(ids[0]) : d3.geoCentroid(shape));
+        const probe = d3.geoOrthographic().rotate([-middle[0], -middle[1]]).scale(1).translate([0, 0]).clipAngle(90);
         const [[x0, y0], [x1, y1]] = d3.geoPath(probe).bounds(shape);
         const fit = Math.min((W * 0.5) / Math.max(x1 - x0, 1e-6), (H * 0.5) / Math.max(y1 - y0, 1e-6));
         const near = Math.min(W, H) / (18 * deg);
         const closest = Math.max(x1 - x0, y1 - y0) * near < 16 ? Math.min(W, H) / (30 * deg) : near;
         const whole = wholeGlobeScale();
         const scale = Math.min(fit, closest);
-        // Чуть обрезанный по краям глобус выглядит ошибкой, а не приближением:
-        // большим странам вроде России оставляем глобус целиком.
-        return { center, scale: scale < whole * 1.3 ? whole : scale };
+        return { center: middle, scale: scale < whole * 1.3 ? whole : scale };
       }
 
-      function draw(view, target, detailed) {
+      let marks = {};
+
+      function outline(id) {
+        for (const part of partsById.get(id)) path(byId.get(part));
+      }
+
+      function draw(view, detailed) {
         projection.rotate([-view.center[0], -view.center[1]]).scale(view.scale).translate([W / 2, H / 2]);
         const layers = detailed ? detail : coarse;
         ctx.clearRect(0, 0, W, H);
@@ -189,14 +314,17 @@
         ctx.strokeStyle = '#9db4bb';
         ctx.lineWidth = 0.7;
         ctx.stroke();
-        const feature = byId.get(target);
-        ctx.beginPath();
-        path(feature);
-        ctx.fillStyle = '#f4b333';
-        ctx.fill();
-        ctx.strokeStyle = '#ca501b';
-        ctx.lineWidth = 1;
-        ctx.stroke();
+        for (const kind of paintOrder) {
+          for (const id of marks[kind] || []) {
+            ctx.beginPath();
+            outline(id);
+            ctx.fillStyle = palette[kind].fill;
+            ctx.fill();
+            ctx.strokeStyle = palette[kind].stroke;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
         ctx.beginPath();
         path(sphere);
         ctx.strokeStyle = 'rgba(20, 52, 64, .35)';
@@ -204,30 +332,35 @@
         ctx.stroke();
         if (!detailed) return;
         // Кольцо, как на картах в Википедии, — если страна меньше пятна 16×16px.
-        if (path.area(feature) < 250) {
-          const [cx, cy] = projection(centroids.get(target));
-          const [[x0, y0], [x1, y1]] = path.bounds(focus.get(target));
-          const radius = Math.min(60, Math.max(16, Math.hypot(x1 - x0, y1 - y0) / 2 + 8));
-          ctx.beginPath();
-          ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
-          ctx.strokeStyle = 'white';
-          ctx.lineWidth = 5;
-          ctx.stroke();
-          ctx.strokeStyle = '#ca501b';
-          ctx.lineWidth = 2.5;
-          ctx.stroke();
+        // Пройденному пути колец не нужно: на Балканах они сливались в кучу.
+        for (const kind of paintOrder.filter(kind => kind !== 'trail')) {
+          for (const id of marks[kind] || []) {
+            const area = partsById.get(id).reduce((sum, part) => sum + path.area(byId.get(part)), 0);
+            if (area >= 250 || d3.geoDistance(centroids.get(id), view.center) > 85 * deg) continue;
+            const [cx, cy] = projection(centroids.get(id));
+            const [[x0, y0], [x1, y1]] = path.bounds(focus.get(id));
+            const radius = Math.min(60, Math.max(16, Math.hypot(x1 - x0, y1 - y0) / 2 + 8));
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 5;
+            ctx.stroke();
+            ctx.strokeStyle = palette[kind].stroke;
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+          }
         }
       }
 
       let view = null;
       let flight = null;
 
-      function flyTo(target) {
-        const to = viewFor(target);
+      function flyTo(to) {
         flight?.stop();
+        flight = null;
         if (!view || matchMedia('(prefers-reduced-motion: reduce)').matches) {
           view = to;
-          draw(view, target, true);
+          draw(view, true);
           return;
         }
         const from = view;
@@ -237,76 +370,294 @@
         // На далёкий перелёт отдаляемся до целого глобуса, на соседний — чуть-чуть.
         const lift = Math.min(1, distance / (60 * deg));
         const dip = Math.max(0, Math.log(Math.max(from.scale, to.scale)) - Math.log(whole));
-        // От 1.4 с к соседней стране до 3.6 с на другую сторону Земли.
+        // От 1,4 с к соседней стране до 3,6 с на другую сторону Земли.
         const duration = 1400 + 2200 * Math.min(1, distance / Math.PI);
-        flight = d3.timer(elapsed => {
+        const timer = d3.timer(elapsed => {
           const t = Math.min(1, elapsed / duration);
           const e = d3.easeCubicInOut(t);
           const logScale = Math.log(from.scale) + (Math.log(to.scale) - Math.log(from.scale)) * e - lift * dip * Math.sin(Math.PI * e);
           view = t < 1 ? { center: route(e), scale: Math.max(whole, Math.exp(logScale)) } : to;
-          draw(view, target, t === 1);
+          draw(view, t === 1);
           if (t === 1) {
-            flight.stop();
-            flight = null;
+            timer.stop();
+            if (flight === timer) flight = null;
           }
         });
+        flight = timer;
       }
 
-      // Неправильные варианты — соседи по суше, как на сложном уровне игры.
-      // У островов соседей нет, их добираем ближайшими странами.
-      function distractors(id) {
-        const index = obj50.geometries.findIndex(geometry => geometry.properties.id === id);
-        const center = centroids.get(id);
-        const borders = neighborIndex[index]
-          .map(i => obj50.geometries[i].properties.id)
-          .filter(other => game.has(other) && d3.geoDistance(centroids.get(other), center) < 35 * deg);
-        const picked = shuffle(borders).slice(0, 3);
-        if (picked.length < 3) {
-          const nearest = [...game]
-            .filter(other => other !== id && !picked.includes(other))
-            .sort((a, b) => d3.geoDistance(centroids.get(a), center) - d3.geoDistance(centroids.get(b), center));
-          picked.push(...nearest.slice(0, 3 - picked.length));
+      function show(nextMarks, ids, center) {
+        marks = nextMarks;
+        $('#legend').innerHTML = paintOrder
+          .filter(kind => (marks[kind] || []).length)
+          .map(kind => `<span style="--swatch: ${palette[kind].fill}; --edge: ${palette[kind].stroke}">${palette[kind].label}</span>`)
+          .join('');
+        flyTo(viewFor(ids, center));
+      }
+
+      // Неправильные варианты по сложности: на простом — страны за полсвета,
+      // на среднем — с того же края света, на сложном — через одну границу
+      // (для Германии это Венгрия, а соседка — Австрия).
+      let level = 'medium';
+
+      function distractors(x, count, { exclude = new Set(), neighboursToo = false } = {}) {
+        const pool = [...game].filter(id => id !== x && !exclude.has(id));
+        const tiers = {
+          easy: pool.filter(id => away(id, x) > 50),
+          medium: pool.filter(id => away(id, x) > 12 && away(id, x) < 45),
+          hard: pool.filter(id => hops(x).get(id) === 2 || (neighboursToo && adj.get(x).has(id))),
+        };
+        const picked = shuffle(tiers[level]).slice(0, count);
+        if (picked.length < count) {
+          const rest = pool.filter(id => !picked.includes(id)).sort((a, b) => away(a, x) - away(b, x));
+          picked.push(...rest.slice(0, count - picked.length));
         }
         return picked;
       }
 
-      let step = 0;
+      function nearNeighbours(x) {
+        return [...adj.get(x)].filter(id => away(id, x) < 35);
+      }
+
+      function notesFor(x, ids) {
+        const notes = ids.map(id => borderNotes[[x, id].sort().join('|')]).filter(Boolean);
+        return notes.length ? ` ${notes.join('. ')}.` : '';
+      }
+
+      function setTitle(text) {
+        $('#title').textContent = text;
+      }
+
+      function setMessage(text) {
+        $('#message').textContent = text;
+      }
+
+      function setChoices(ids, onPick) {
+        $('#choices').innerHTML = ids.map(id => `<button data-id="${id}">${nameOf(id)}</button>`).join('');
+        document.querySelectorAll('#choices button').forEach(button => {
+          button.onclick = () => onPick(button.dataset.id, button);
+        });
+      }
+
+      function finish(button) {
+        document.querySelectorAll('#choices button').forEach(other => { other.disabled = true; });
+        if (button) {
+          button.classList.add('correct');
+          button.textContent += ' ✓';
+        }
+      }
+
+      function revealNeighbours(x, lead) {
+        const neighbours = byName(adj.get(x));
+        setMessage(`${lead} Все соседи (${neighbours.length}): ${neighbours.map(nameOf).join(', ')}.${notesFor(x, neighbours)}`);
+        show({ primary: [x], neighbour: neighbours }, [x, ...nearNeighbours(x)], centroids.get(x));
+      }
+
+      const questions = {
+        which: {
+          label: 'Какая страна?',
+          ask() {
+            const x = pick([...game]);
+            setTitle('Какая страна отмечена?');
+            setChoices(shuffle([x, ...distractors(x, 3, { neighboursToo: true })]), (id, button) => {
+              if (id === x) {
+                finish(button);
+                setMessage(`Разгадано! Это ${nameOf(x)}.`);
+              } else {
+                button.disabled = true;
+                setMessage('Пока не совпало. Попробуй другой вариант.');
+              }
+            });
+            show({ primary: [x] }, [x]);
+          },
+        },
+        border: {
+          label: 'С кем граничит?',
+          ask() {
+            const x = pick(withNeighbours);
+            const answer = pick([...adj.get(x)]);
+            setTitle(`С какой страной граничит ${nameOf(x)}?`);
+            setChoices(shuffle([answer, ...distractors(x, 3, { exclude: adj.get(x) })]), (id, button) => {
+              if (adj.get(x).has(id)) {
+                finish(button);
+                revealNeighbours(x, `Верно: ${nameOf(id)} — сосед.`);
+              } else {
+                button.disabled = true;
+                setMessage(`${nameOf(id)} — не сосед.`);
+              }
+            });
+            show({ primary: [x] }, [x]);
+          },
+        },
+        all: {
+          label: 'Все соседи',
+          ask() {
+            const x = pick(withNeighbours.filter(id => adj.get(id).size >= 2 && adj.get(id).size <= 6));
+            const neighbours = adj.get(x);
+            const options = shuffle([...neighbours, ...distractors(x, Math.max(2, 8 - neighbours.size), { exclude: neighbours })]);
+            const picked = new Set();
+            setTitle(`${nameOf(x)}: отметь всех соседей`);
+            setChoices(options, (id, button) => {
+              if (picked.has(id)) picked.delete(id); else picked.add(id);
+              button.classList.toggle('picked', picked.has(id));
+            });
+            const check = $('#check');
+            check.hidden = false;
+            check.disabled = false;
+            check.onclick = () => {
+              check.disabled = true;
+              const wrong = [];
+              let found = 0;
+              document.querySelectorAll('#choices button').forEach(button => {
+                const id = button.dataset.id;
+                button.disabled = true;
+                button.classList.remove('picked');
+                if (neighbours.has(id) && picked.has(id)) {
+                  found++;
+                  button.classList.add('correct');
+                  button.textContent += ' ✓';
+                } else if (neighbours.has(id)) {
+                  button.classList.add('missed');
+                } else if (picked.has(id)) {
+                  wrong.push(id);
+                  button.classList.add('wrong-pick');
+                  button.textContent += ' ✗';
+                }
+              });
+              const lead = found === neighbours.size && !wrong.length
+                ? 'Все соседи найдены!'
+                : `Найдено ${found} из ${neighbours.size}.${wrong.length ? ` Не соседи: ${wrong.map(nameOf).join(', ')}.` : ''}`;
+              revealNeighbours(x, lead);
+            };
+            setMessage('Отметь нужные страны и нажми «Проверить».');
+            show({ primary: [x] }, [x]);
+          },
+        },
+        odd: {
+          label: 'Лишний',
+          ask() {
+            const x = pick(withNeighbours.filter(id => adj.get(id).size >= 3));
+            const [intruder] = distractors(x, 1, { exclude: adj.get(x) });
+            setTitle(`${nameOf(x)}: какая из этих стран не соседняя?`);
+            setChoices(shuffle([...shuffle([...adj.get(x)]).slice(0, 3), intruder]), (id, button) => {
+              if (id === intruder) {
+                finish(button);
+                revealNeighbours(x, `Верно: ${nameOf(id)} — не сосед.`);
+              } else {
+                button.disabled = true;
+                setMessage(`${nameOf(id)} — сосед, ищи дальше.`);
+              }
+            });
+            show({ primary: [x] }, [x]);
+          },
+        },
+        island: {
+          label: 'Без соседей',
+          ask() {
+            const island = pick(islands);
+            const others = withNeighbours.filter(id => id !== island).sort((a, b) => away(a, island) - away(b, island)).slice(0, 3);
+            const all = [island, ...others];
+            setTitle('У какой страны нет соседей по суше?');
+            setChoices(shuffle(all), (id, button) => {
+              if (id === island) {
+                finish(button);
+                setMessage(`Верно! ${nameOf(island)}: вокруг только море. У остальных соседи есть.`);
+                show({ primary: [island], neighbour: others }, all);
+              } else {
+                button.disabled = true;
+                setMessage(`${nameOf(id)} не подходит: соседи — ${byName(adj.get(id)).slice(0, 3).map(nameOf).join(', ')}.`);
+              }
+            });
+            show({}, all);
+          },
+        },
+        journey: {
+          label: 'Путешествие по суше',
+          ask() {
+            const [min, max] = { easy: [2, 3], medium: [3, 5], hard: [5, 8] }[level];
+            for (let attempt = 0; attempt < 300; attempt++) {
+              const start = pick(withNeighbours);
+              const goals = [...hops(start)].filter(([, distance]) => distance >= min && distance <= max).map(([id]) => id);
+              if (goals.length) {
+                const goal = pick(goals);
+                this.step({ goal, best: hops(start).get(goal), path: [start] });
+                return;
+              }
+            }
+          },
+          // На каждом шаге до четырёх соседей, и хотя бы один из них ближе к цели.
+          step(trip) {
+            const here = trip.path[trip.path.length - 1];
+            const toGoal = hops(trip.goal);
+            const midpoint = d3.geoInterpolate(centroids.get(here), centroids.get(trip.goal))(0.5);
+            $('#tag').textContent = `ГРАНИЦ ПРОЙДЕНО: ${trip.path.length - 1}`;
+            if (here === trip.goal) {
+              setTitle(`Добрался: ${nameOf(trip.goal)}!`);
+              setChoices([], () => {});
+              const extra = trip.path.length - 1 - trip.best;
+              setMessage(`Путь: ${trip.path.map(nameOf).join(' → ')}. Границ: ${trip.path.length - 1}${extra ? `, а самый короткий путь — ${trip.best}` : ' — это самый короткий путь'}.`);
+              show({ trail: trip.path.slice(0, -1), goal: [trip.goal] }, [trip.path[0], trip.goal]);
+              return;
+            }
+            const neighbours = [...adj.get(here)];
+            const closer = neighbours.filter(id => toGoal.get(id) < toGoal.get(here));
+            const helper = pick(closer);
+            const options = neighbours.length <= 4 ? neighbours : [helper, ...shuffle(neighbours.filter(id => id !== helper)).slice(0, 3)];
+            setTitle(`${nameOf(here)} → ${nameOf(trip.goal)}: куда дальше?`);
+            setMessage(`До цели осталось границ: ${toGoal.get(here)}.`);
+            setChoices(shuffle(options), id => {
+              trip.path.push(id);
+              this.step(trip);
+            });
+            show({ trail: trip.path.slice(0, -1), primary: [here], goal: [trip.goal] }, [here, trip.goal], midpoint);
+          },
+        },
+      };
+
+      let mode = 'which';
+      let count = 0;
 
       function ask() {
-        const target = tour[step];
-        const options = shuffle([target, ...distractors(target)]);
-        $('#tag').textContent = `СТРАНА ${step + 1} / ${tour.length}`;
-        $('#message').textContent = '';
-        $('#choices').innerHTML = options.map(id => `<button data-id="${id}">${nameOf(id)}</button>`).join('');
-        document.querySelectorAll('[data-id]').forEach(button => {
+        count++;
+        $('#tag').textContent = `ВОПРОС ${count}`;
+        $('#check').hidden = true;
+        setMessage('');
+        questions[mode].ask();
+      }
+
+      function renderSwitches() {
+        $('#modes').innerHTML = Object.entries(questions)
+          .map(([key, question]) => `<button data-mode="${key}" class="${key === mode ? 'active' : ''}">${question.label}</button>`)
+          .join('');
+        $('#levels').innerHTML = [['easy', 'Простой'], ['medium', 'Средний'], ['hard', 'Сложный']]
+          .map(([key, label]) => `<button data-level="${key}" class="${key === level ? 'active' : ''}">${label}</button>`)
+          .join('');
+        document.querySelectorAll('[data-mode]').forEach(button => {
           button.onclick = () => {
-            if (button.dataset.id === target) {
-              document.querySelectorAll('[data-id]').forEach(other => { other.disabled = true; });
-              button.classList.add('correct');
-              button.textContent = `${nameOf(target)} ✓`;
-              $('#message').textContent = `Разгадано! Это ${nameOf(target)}.`;
-            } else {
-              button.disabled = true;
-              $('#message').textContent = 'Пока не совпало. Попробуй другой вариант.';
-            }
+            mode = button.dataset.mode;
+            renderSwitches();
+            ask();
           };
         });
-        flyTo(target);
+        document.querySelectorAll('[data-level]').forEach(button => {
+          button.onclick = () => {
+            level = button.dataset.level;
+            renderSwitches();
+            ask();
+          };
+        });
       }
 
       resize();
-      $('#caption').textContent = 'Прототип: 15 стран разного размера. Маленькие обведены кольцом.';
+      renderSwitches();
       $('#next').disabled = false;
-      $('#next').onclick = () => {
-        step = (step + 1) % tour.length;
-        ask();
-      };
+      $('#next').onclick = ask;
       addEventListener('resize', () => {
         resize();
         if (view) {
           flight?.stop();
-          view = viewFor(tour[step]);
-          draw(view, tour[step], true);
+          flight = null;
+          draw(view, true);
         }
       });
       ask();
