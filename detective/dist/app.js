@@ -58,11 +58,16 @@ const ui = {
     flagAltHidden: 'Фрагмент флага',
     coatAltHidden: 'Герб страны',
     flagPartial: 'Часть флага скрыта. Узнаешь?',
+    veilKeyhole: 'Смотрим в замочную скважину. Узнаешь?',
+    veilHoles: 'Флаг весь в дырках, как сыр. Узнаешь?',
+    veilStrip: 'Видна только узкая полоска. Узнаешь?',
+    veilPixels: 'Флаг рассыпался на пиксели. Узнаешь?',
     coatPartial: 'На гербе спрятана страна. Узнаешь?',
     capitalPrompt: 'Выбери столицу страны.',
     flagHintOpen: 'Теперь флаг открыт целиком.',
     coatHintOpen: 'Теперь герб открыт целиком.',
     capitalHint: 'Столица начинается на «{letter}».',
+    countryHint: 'Страна начинается на «{letter}».',
     animalPrompt: 'Где живёт в природе, а не в зоопарке?',
     coatSolved: 'Это герб страны {name}.',
     capitalSolved: 'Столица страны {name} — {capital}.',
@@ -153,11 +158,16 @@ const ui = {
     flagAltHidden: 'Flag fragment',
     coatAltHidden: 'Country coat of arms',
     flagPartial: 'Part of the flag is hidden. Can you tell?',
+    veilKeyhole: 'Peek through the keyhole. Can you tell?',
+    veilHoles: 'This flag is full of holes, like cheese. Can you tell?',
+    veilStrip: 'Only a narrow strip is showing. Can you tell?',
+    veilPixels: 'The flag fell apart into pixels. Can you tell?',
     coatPartial: 'This coat of arms hides a country. Can you tell?',
     capitalPrompt: 'Choose the country’s capital.',
     flagHintOpen: 'Now the whole flag is visible.',
     coatHintOpen: 'Now the whole coat of arms is visible.',
     capitalHint: 'The capital starts with “{letter}”.',
+    countryHint: 'The country starts with “{letter}”.',
     animalPrompt: 'Where does it live in the wild, not in a zoo?',
     coatSolved: 'This is the coat of arms of {name}.',
     capitalSolved: 'The capital of {name} is {capital}.',
@@ -248,11 +258,16 @@ const ui = {
     flagAltHidden: 'Fragmento da bandeira',
     coatAltHidden: 'Brasão do país',
     flagPartial: 'Parte da bandeira está escondida. Consegues reconhecer?',
+    veilKeyhole: 'Espreita pelo buraco da fechadura. Consegues reconhecer?',
+    veilHoles: 'A bandeira está cheia de buracos, como um queijo. Consegues reconhecer?',
+    veilStrip: 'Só se vê uma faixa estreita. Consegues reconhecer?',
+    veilPixels: 'A bandeira desfez-se em píxeis. Consegues reconhecer?',
     coatPartial: 'Este brasão esconde um país. Consegues reconhecer?',
     capitalPrompt: 'Escolhe a capital do país.',
     flagHintOpen: 'Agora a bandeira está inteira.',
     coatHintOpen: 'Agora o brasão está inteiro.',
     capitalHint: 'A capital começa por “{letter}”.',
+    countryHint: 'O país começa por “{letter}”.',
     animalPrompt: 'Onde vive na natureza, e não no zoológico?',
     coatSolved: 'Este é o brasão de {name}.',
     capitalSolved: 'A capital de {name} é {capital}.',
@@ -343,11 +358,16 @@ const ui = {
     flagAltHidden: 'Fragmento de bandera',
     coatAltHidden: 'Escudo del país',
     flagPartial: 'Parte de la bandera está oculta. ¿La reconoces?',
+    veilKeyhole: 'Mira por el ojo de la cerradura. ¿La reconoces?',
+    veilHoles: 'La bandera está llena de agujeros, como un queso. ¿La reconoces?',
+    veilStrip: 'Solo se ve una franja estrecha. ¿La reconoces?',
+    veilPixels: 'La bandera se deshizo en píxeles. ¿La reconoces?',
     coatPartial: 'Este escudo esconde un país. ¿Lo reconoces?',
     capitalPrompt: 'Elige la capital del país.',
     flagHintOpen: 'Ahora se ve la bandera completa.',
     coatHintOpen: 'Ahora se ve el escudo completo.',
     capitalHint: 'La capital empieza por “{letter}”.',
+    countryHint: 'El país empieza por “{letter}”.',
     animalPrompt: '¿Dónde vive en la naturaleza, no en un zoológico?',
     coatSolved: 'Este es el escudo de {name}.',
     capitalSolved: 'La capital de {name} es {capital}.',
@@ -438,11 +458,16 @@ const ui = {
     flagAltHidden: 'Flaggenausschnitt',
     coatAltHidden: 'Staatswappen',
     flagPartial: 'Ein Teil der Flagge ist verdeckt. Erkennst du sie?',
+    veilKeyhole: 'Blick durchs Schlüsselloch. Erkennst du sie?',
+    veilHoles: 'Die Flagge ist voller Löcher wie ein Käse. Erkennst du sie?',
+    veilStrip: 'Nur ein schmaler Streifen ist zu sehen. Erkennst du sie?',
+    veilPixels: 'Die Flagge ist in Pixel zerfallen. Erkennst du sie?',
     coatPartial: 'Dieses Wappen versteckt ein Land. Erkennst du es?',
     capitalPrompt: 'Wähle die Hauptstadt des Landes.',
     flagHintOpen: 'Jetzt ist die ganze Flagge sichtbar.',
     coatHintOpen: 'Jetzt ist das ganze Wappen sichtbar.',
     capitalHint: 'Die Hauptstadt beginnt mit „{letter}”.',
+    countryHint: 'Das Land beginnt mit „{letter}”.',
     animalPrompt: 'Wo lebt es in der Natur, nicht im Zoo?',
     coatSolved: 'Das ist das Wappen von {name}.',
     capitalSolved: 'Die Hauptstadt von {name} ist {capital}.',
@@ -533,11 +558,16 @@ const ui = {
     flagAltHidden: 'Fragment flagi',
     coatAltHidden: 'Herb państwa',
     flagPartial: 'Część flagi jest ukryta. Rozpoznasz?',
+    veilKeyhole: 'Zajrzyj przez dziurkę od klucza. Rozpoznasz?',
+    veilHoles: 'Flaga jest dziurawa jak ser. Rozpoznasz?',
+    veilStrip: 'Widać tylko wąski pasek. Rozpoznasz?',
+    veilPixels: 'Flaga rozsypała się na piksele. Rozpoznasz?',
     coatPartial: 'Ten herb ukrywa państwo. Rozpoznasz?',
     capitalPrompt: 'Wybierz stolicę kraju.',
     flagHintOpen: 'Teraz widać całą flagę.',
     coatHintOpen: 'Teraz widać cały herb.',
     capitalHint: 'Stolica zaczyna się od „{letter}”.',
+    countryHint: 'Nazwa kraju zaczyna się od „{letter}”.',
     animalPrompt: 'Gdzie żyje w naturze, a nie w zoo?',
     coatSolved: 'To herb kraju {name}.',
     capitalSolved: 'Stolicą kraju {name} jest {capital}.',
@@ -583,12 +613,12 @@ const featureFlags = {
 };
 
 const countryNameOverrides = {
-  ru: { xk: 'Косово', eh: 'Западная Сахара', tf: 'Французские Южные и Антарктические территории', fk: 'Фолклендские острова', nc: 'Новая Каледония', gl: 'Гренландия', pr: 'Пуэрто-Рико' },
-  en: { xk: 'Kosovo', eh: 'Western Sahara', tf: 'French Southern and Antarctic Lands', fk: 'Falkland Islands', nc: 'New Caledonia', gl: 'Greenland', pr: 'Puerto Rico' },
-  pt: { xk: 'Kosovo', eh: 'Saara Ocidental', tf: 'Terras Austrais e Antárticas Francesas', fk: 'Ilhas Malvinas', nc: 'Nova Caledónia', gl: 'Gronelândia', pr: 'Porto Rico' },
-  es: { xk: 'Kosovo', eh: 'Sáhara Occidental', tf: 'Tierras Australes y Antárticas Francesas', fk: 'Islas Malvinas', nc: 'Nueva Caledonia', gl: 'Groenlandia', pr: 'Puerto Rico' },
-  de: { xk: 'Kosovo', eh: 'Westsahara', tf: 'Französische Süd- und Antarktisgebiete', fk: 'Falklandinseln', nc: 'Neukaledonien', gl: 'Grönland', pr: 'Puerto Rico' },
-  pl: { xk: 'Kosowo', eh: 'Sahara Zachodnia', tf: 'Francuskie Terytoria Południowe i Antarktyczne', fk: 'Falklandy', nc: 'Nowa Kaledonia', gl: 'Grenlandia', pr: 'Portoryko' },
+  ru: { xk: 'Косово', eh: 'Западная Сахара', fk: 'Фолклендские острова', nc: 'Новая Каледония', gl: 'Гренландия', pr: 'Пуэрто-Рико' },
+  en: { xk: 'Kosovo', eh: 'Western Sahara', fk: 'Falkland Islands', nc: 'New Caledonia', gl: 'Greenland', pr: 'Puerto Rico' },
+  pt: { xk: 'Kosovo', eh: 'Saara Ocidental', fk: 'Ilhas Malvinas', nc: 'Nova Caledónia', gl: 'Gronelândia', pr: 'Porto Rico' },
+  es: { xk: 'Kosovo', eh: 'Sáhara Occidental', fk: 'Islas Malvinas', nc: 'Nueva Caledonia', gl: 'Groenlandia', pr: 'Puerto Rico' },
+  de: { xk: 'Kosovo', eh: 'Westsahara', fk: 'Falklandinseln', nc: 'Neukaledonien', gl: 'Grönland', pr: 'Puerto Rico' },
+  pl: { xk: 'Kosowo', eh: 'Sahara Zachodnia', fk: 'Falklandy', nc: 'Nowa Kaledonia', gl: 'Grenlandia', pr: 'Portoryko' },
 };
 
 const easyFlagFacts = {
@@ -1738,12 +1768,13 @@ function render() {
     return;
   }
 
-  // На простом уровне флаг или герб показывается целиком: там задача — узнать
-  // символ, а не разгадать его по обрывку.
-  const masked = (q.type === 'flag' || q.type === 'coat') && !hinted && !solved && level !== 'easy';
+  // На простом уровне флаг показывается целиком: там задача — узнать символ,
+  // а не разгадать его по обрывку. Герб прячется только на сложном уровне.
+  const hideable = q.type === 'flag' ? level !== 'easy' : q.type === 'coat' && level === 'max';
+  const masked = hideable && !hinted && !solved;
   const idAnswerType = q.type === 'flag' || q.type === 'coat' || q.type === 'capital';
   const visual = q.type === 'flag'
-    ? `<div class="flag-window"><span class="flag-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></span></div>`
+    ? `<div class="flag-window">${flagShot(q, masked)}</div>`
     : q.type === 'coat'
       ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
     : q.type === 'capital'
@@ -1751,7 +1782,17 @@ function render() {
       : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   // Карта результата на телефоне не помещается и всё равно не читается:
   // половину стран на ней не разглядеть даже на десктопе.
-  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : q.type === 'capital' ? tr('capitalPrompt') : tr('animalPrompt');
+  const prompt = q.type === 'flag'
+    ? (masked ? tr(level === 'max' ? veilPrompts[veilFor(q).kind] : 'flagPartial') : '')
+    : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : q.type === 'capital' ? tr('capitalPrompt') : tr('animalPrompt');
+  // Подсказка открывает спрятанное. Если прятать было нечего (простой уровень,
+  // герб не на сложном), «теперь открыт целиком» было бы неправдой — даём
+  // первую букву страны.
+  const hint = q.type === 'capital'
+    ? tr('capitalHint', { letter: firstLetter(capitalName(q)) })
+    : q.type === 'flag' || q.type === 'coat'
+      ? (hideable ? tr(q.type === 'flag' ? 'flagHintOpen' : 'coatHintOpen') : tr('countryHint', { letter: firstLetter(name(q)) }))
+      : escapeHtml(fact(q));
   const visualNote = solved
     ? (wideScreen() ? '<div class="result-map" id="map"></div>' : '')
     : (prompt ? `<small>${prompt}</small>` : '');
@@ -1761,7 +1802,7 @@ function render() {
     : wrong.size
       ? tr('wrong')
       : hinted
-        ? (q.type === 'flag' ? tr('flagHintOpen') : q.type === 'coat' ? tr('coatHintOpen') : q.type === 'capital' ? tr('capitalHint', { letter: firstLetter(capitalName(q)) }) : escapeHtml(fact(q)))
+        ? hint
         : '';
 
   $('#game').innerHTML = `
@@ -1811,6 +1852,79 @@ function render() {
       render();
     };
   }
+}
+
+// На сложном уровне флаг каждый раз прячется по-своему: одно и то же угловое
+// окно ребёнку наскучило. Эффект выбирается один раз на вопрос и хранится в
+// нём самом, иначе менялся бы при каждой перерисовке (ошибка, подсказка), и
+// два раза подряд один и тот же не выпадает. Каждый эффект открывает около
+// четверти флага, «пиксели» — весь флаг, но без мелких деталей.
+// Координаты накладок — в единицах флага 100×75.
+const flagVeils = ['corner', 'keyhole', 'holes', 'strip', 'pixels'];
+const veilPrompts = { corner: 'flagPartial', keyhole: 'veilKeyhole', holes: 'veilHoles', strip: 'veilStrip', pixels: 'veilPixels' };
+let lastVeil = null;
+
+function randomBetween(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function veilFor(q) {
+  if (q.veil) return q.veil;
+  const kinds = flagVeils.filter(kind => kind !== lastVeil);
+  const kind = kinds[Math.floor(Math.random() * kinds.length)];
+  lastVeil = kind;
+  if (kind === 'corner') {
+    // Верхний левый угол не открываем: там у полусотни флагов крыж.
+    q.veil = { kind, inset: ['45% 45% 0 0', '45% 0 0 45%', '0 0 45% 45%'][Math.floor(Math.random() * 3)] };
+  } else if (kind === 'strip') {
+    q.veil = { kind, inset: Math.random() < 0.5 ? stripInset(26, true) : stripInset(30, false) };
+  } else if (kind === 'keyhole') {
+    q.veil = { kind, x: Math.round(randomBetween(22, 78)), y: Math.round(randomBetween(17, 35)) };
+  } else if (kind === 'holes') {
+    q.veil = { kind, holes: scatterHoles(6, 9) };
+  } else {
+    q.veil = { kind };
+  }
+  return q.veil;
+}
+
+function stripInset(size, vertical) {
+  const start = Math.round(randomBetween(0, 100 - size));
+  const end = 100 - start - size;
+  return vertical ? `0 ${end}% 0 ${start}%` : `${start}% 0 ${end}% 0`;
+}
+
+function scatterHoles(count, radius) {
+  const holes = [];
+  for (let attempt = 0; holes.length < count && attempt < 500; attempt++) {
+    const x = randomBetween(radius, 100 - radius);
+    const y = randomBetween(radius, 75 - radius);
+    if (holes.every(([hx, hy]) => Math.hypot(hx - x, hy - y) > radius * 2 + 3)) holes.push([Math.round(x), Math.round(y)]);
+  }
+  return holes;
+}
+
+function flagShot(q, masked) {
+  const src = `assets/flags/${q.id}.svg`;
+  const alt = escapeHtml(solved ? name(q) : tr('flagAltHidden'));
+  if (!masked) return `<span class="flag-shot"><img src="${src}" alt="${alt}"></span>`;
+  if (level !== 'max') return `<span class="flag-shot masked masked-${level}"><img src="${src}" alt="${alt}"></span>`;
+  const veil = veilFor(q);
+  if (veil.kind === 'corner' || veil.kind === 'strip') {
+    return `<span class="flag-shot masked"><img src="${src}" alt="${alt}" style="clip-path: inset(${veil.inset})"></span>`;
+  }
+  // Пиксельные копии собирает tools/gen-pixel-flags.sh. Настоящий флаг
+  // остаётся под ними невидимым: он держит размер окна.
+  if (veil.kind === 'pixels') {
+    return `<span class="flag-shot masked"><img class="veil-hidden" src="${src}" alt=""><img class="veil veil-pixels" src="assets/flags-pixel/${q.id}.png" alt="${alt}"></span>`;
+  }
+  const openings = veil.kind === 'keyhole'
+    ? `<circle cx="${veil.x}" cy="${veil.y}" r="17"/><polygon points="${veil.x - 6},${veil.y + 8} ${veil.x + 6},${veil.y + 8} ${veil.x + 13},${veil.y + 40} ${veil.x - 13},${veil.y + 40}"/>`
+    : veil.holes.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9"/>`).join('');
+  // Плашка шире окна на 5 единиц со всех сторон: край, совпавший с краем флага,
+  // сглаживается, и по нему просвечивала тонкая полоска флага. Лишнее
+  // обрезает сам svg.
+  return `<span class="flag-shot masked"><img src="${src}" alt="${alt}"><svg class="veil" viewBox="0 0 100 75" preserveAspectRatio="none" aria-hidden="true"><mask id="veil-mask"><rect x="-5" y="-5" width="110" height="85" fill="#fff"/><g fill="#000">${openings}</g></mask><rect x="-5" y="-5" width="110" height="85" fill="#b9d2d7" mask="url(#veil-mask)"/></svg></span>`;
 }
 
 function choiceButton(question, id) {

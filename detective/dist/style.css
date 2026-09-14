@@ -353,6 +353,7 @@ a:focus-visible {
 }
 
 .flag-shot {
+  position: relative;
   display: block;
   width: 100%;
   border-radius: 4px;
@@ -393,21 +394,32 @@ a:focus-visible {
    Прежняя вертикальная полоса посередине у горизонтального триколора
    оставляла все три цвета на виду и не загадывала ничего. Верхний левый
    угол не годится: у доброй полусотни флагов там крыж, самая узнаваемая
-   часть. */
+   часть. На сложном уровне флаг прячется разными эффектами (flagShot в
+   app.js), а герб прячется только там. */
 .flag-shot.masked-medium img {
   clip-path: inset(30% 30% 0 0);
 }
 
-.flag-shot.masked-max img {
-  clip-path: inset(45% 45% 0 0);
-}
-
-.coat-shot.masked-medium img {
-  clip-path: inset(28% 28% 0 0);
-}
-
 .coat-shot.masked-max img {
   clip-path: inset(42% 42% 0 0);
+}
+
+/* Накладки сложного уровня: плашка с прорезями или пиксельная копия флага. */
+.flag-shot .veil {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.flag-shot .veil-hidden {
+  visibility: hidden;
+}
+
+.flag-shot .veil-pixels {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
 }
 
 .animal {
