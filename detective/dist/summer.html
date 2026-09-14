@@ -1076,7 +1076,7 @@ function saveUiLang(){try{localStorage.setItem('geoDetectiveLang',uiLang)}catch{
 function t(key){return ui[uiLang][key]||ui.en[key]||key}
 function text(entry){return entry[uiLang]||entry.en||entry.ru}
 function setText(selector,key){document.querySelectorAll(selector).forEach(el=>{el.textContent=t(key)})}
-function countryName(id){const code=alpha2[id]||id;try{return new Intl.DisplayNames([uiLang],{type:'region'}).of(code)||id}catch{return id}}
+function countryName(id){const code=alpha2[id]||id;try{return new Intl.DisplayNames([uiLang === 'pt' ? 'pt-PT' : uiLang],{type:'region'}).of(code)||id}catch{return id}}
 function groupTitle(index){return text(groups[index])[0]}
 function groupNote(index){return text(groups[index])[1]}
 function renderLanguageSelect(){const langSelect=root.querySelector('.ui-language');langSelect.replaceChildren();for(const lang of supportedUiLangs){const o=document.createElement('option');o.value=lang;o.textContent={ru:'Русский',en:'English',pt:'Português',es:'Español',de:'Deutsch',pl:'Polski'}[lang];langSelect.append(o)}langSelect.value=uiLang;langSelect.addEventListener('change',()=>{uiLang=langSelect.value;saveUiLang();selected=defaultCountryByLang[uiLang]||selected;applyLocale();draw()})}

@@ -1093,8 +1093,8 @@ let uiLang=loadUiLang();
 function t(key){return ui[uiLang][key]||ui.en[key]||key}
 function setText(selector,key){document.querySelectorAll(selector).forEach(el=>{el.textContent=t(key)})}
 function renderLanguageSelect(){const select=root.querySelector('.ui-language');select.replaceChildren();for(const lang of supportedUiLangs){const o=document.createElement('option');o.value=lang;o.textContent={ru:'Русский',en:'English',pt:'Português',es:'Español',de:'Deutsch',pl:'Polski'}[lang];select.append(o)}select.value=uiLang;select.addEventListener('change',()=>{uiLang=select.value;saveUiLang();applyLocale();draw()})}
-function countryName(id){const code=alpha2[id]||id;try{return new Intl.DisplayNames([uiLang],{type:'region'}).of(code)||id}catch{return id}}
-function languageName(code){try{return new Intl.DisplayNames([uiLang],{type:'language'}).of(code)||code}catch{return code}}
+function countryName(id){const code=alpha2[id]||id;try{return new Intl.DisplayNames([uiLang === 'pt' ? 'pt-PT' : uiLang],{type:'region'}).of(code)||id}catch{return id}}
+function languageName(code){try{return new Intl.DisplayNames([uiLang === 'pt' ? 'pt-PT' : uiLang],{type:'language'}).of(code)||code}catch{return code}}
 function monthName(index){try{return new Intl.DateTimeFormat(uiLang,{month:'long',timeZone:'UTC'}).format(new Date(Date.UTC(2024,index,1)))}catch{return String(index+1)}}
 function groupTitle(groups,index){return (groups[index][uiLang]||groups[index].en)[0]}
 function groupNote(groups,index){return (groups[index][uiLang]||groups[index].en)[1]}

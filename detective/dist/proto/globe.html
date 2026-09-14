@@ -506,6 +506,10 @@
         return (text[lang][key] ?? text.en[key] ?? key).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
       }
 
+      // Португальский в игре европейский, а Intl по коду «pt» отдаёт бразильские
+      // названия («Polônia», «Irã»), поэтому для Intl просим pt-PT.
+      const intlLocale = code => (code === 'pt' ? 'pt-PT' : code);
+
       function escapeHtml(value) {
         return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
       }
@@ -523,8 +527,8 @@
       };
       const alpha2 = new Map(pairs.map(([a2, a3]) => [a3, a2]));
       const game = new Set(pairs.map(([, a3]) => a3));
-      let regionNames = new Intl.DisplayNames([lang], { type: 'region' });
-      let collator = new Intl.Collator(lang);
+      let regionNames = new Intl.DisplayNames([intlLocale(lang)], { type: 'region' });
+      let collator = new Intl.Collator(intlLocale(lang));
       const nameOf = id => nameOverrides[lang]?.[alpha2.get(id)] || regionNames.of(alpha2.get(id).toUpperCase());
       const byName = ids => [...ids].sort((a, b) => collator.compare(nameOf(a), nameOf(b)));
       const listOf = ids => byName(ids).map(nameOf).join(', ');
@@ -1058,8 +1062,8 @@
         try {
           localStorage.setItem('geoDetectiveLang', lang);
         } catch {}
-        regionNames = new Intl.DisplayNames([lang], { type: 'region' });
-        collator = new Intl.Collator(lang);
+        regionNames = new Intl.DisplayNames([intlLocale(lang)], { type: 'region' });
+        collator = new Intl.Collator(intlLocale(lang));
         render();
       };
 
