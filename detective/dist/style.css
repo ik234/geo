@@ -349,6 +349,15 @@ a:focus-visible {
   justify-content: center;
 }
 
+.coat-window {
+  width: 100%;
+  max-width: 270px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .flag-shot {
   display: block;
   width: 100%;
@@ -356,16 +365,34 @@ a:focus-visible {
   overflow: hidden;
 }
 
+.coat-shot {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
 /* Закрытая часть — сплошная плашка, а не прозрачность: сквозь неё не должно
    просвечивать ничего, иначе загадки нет. */
-.flag-shot.masked {
+.flag-shot.masked,
+.coat-shot.masked {
   background: #b9d2d7;
 }
 
-.flag-shot img {
+.flag-shot img,
+.coat-shot img {
   display: block;
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
   transition: clip-path .3s;
+}
+
+.flag-shot img {
+  width: 100%;
 }
 
 /* Окно открыто от нижнего левого угла и режет флаг сразу по обеим осям.
@@ -379,6 +406,14 @@ a:focus-visible {
 
 .flag-shot.masked-max img {
   clip-path: inset(45% 45% 0 0);
+}
+
+.coat-shot.masked-medium img {
+  clip-path: inset(28% 28% 0 0);
+}
+
+.coat-shot.masked-max img {
+  clip-path: inset(42% 42% 0 0);
 }
 
 .animal {
@@ -801,6 +836,10 @@ button:hover:not(:disabled) {
 
   .flag-window {
     max-width: 160px;
+  }
+
+  .coat-window {
+    max-width: 150px;
   }
 
   /* Карту результата на телефоне не рисуем (см. wideScreen в app.js);

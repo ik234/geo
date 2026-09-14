@@ -1,0 +1,7 @@
+Country coat of arms images are downloaded from MainFacts:
+https://mainfacts.com/
+
+REST Countries documents the coatOfArms field as MainFacts SVG/PNG URLs:
+https://restcountries.com/docs
+
+For this game the PNG files were resized locally to a maximum side of 320 px.

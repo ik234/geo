@@ -22,6 +22,7 @@ const ui = {
     viewExplore: 'Карта',
     modeMixed: 'Всё вперемешку',
     modeFlags: 'Флаги',
+    modeCoats: 'Гербы',
     modeAnimals: 'Животные',
     levelEasy: 'Простой',
     levelMedium: 'Средний',
@@ -55,11 +56,16 @@ const ui = {
     finishText: 'Выбери другую тему или отправляйся в новый раунд.',
     playAgain: 'Новый раунд',
     flagQuestion: 'Чей это флаг?',
+    coatQuestion: 'Чей это герб?',
     animalQuestion: 'Где его родной дом?',
     flagAltHidden: 'Фрагмент флага',
+    coatAltHidden: 'Герб страны',
     flagPartial: 'Часть флага скрыта. Узнаешь?',
+    coatPartial: 'На гербе спрятана страна. Узнаешь?',
     flagHintOpen: 'Теперь флаг открыт целиком.',
+    coatHintOpen: 'Теперь герб открыт целиком.',
     animalPrompt: 'Где живёт в природе, а не в зоопарке?',
+    coatSolved: 'Это герб страны {name}.',
     solved: 'Разгадано!',
     wrong: 'Пока не совпало. Попробуй другой вариант — спешить не нужно.',
     hint: 'Подсказка',
@@ -68,6 +74,7 @@ const ui = {
     finishRound: 'Завершить раунд',
     all: 'Всё',
     flags: 'Флаги',
+    coats: 'Гербы',
     animals: 'Животные',
     country: 'СТРАНА / ТЕРРИТОРИЯ',
     animal: 'ЖИВОТНОЕ',
@@ -75,6 +82,8 @@ const ui = {
     currency: 'Валюта',
     officialLanguages: 'Официальные языки',
     flagStory: 'Что на флаге',
+    coatStory: 'О гербе',
+    coatStoryText: 'Герб — официальный символ страны {name}. Рассмотри щит, корону, животных, растения и цвета: в геральдике почти каждая деталь что-то значит.',
     funFact: 'Любопытный факт',
     infoLoading: 'Загружаем сведения…',
     animalPointNote: 'Точка — пример места, не весь ареал',
@@ -85,6 +94,7 @@ const ui = {
     footerLead: 'Без спешки. Подсказки разрешены — играйте вместе.',
     sourcesTitle: 'Об игре и источниках',
     sourceFlags: 'Флаги:',
+    sourceCoats: 'Гербы:',
     sourceMap: 'Контуры: Natural Earth / D3 Maps. Карта мира схематическая; маленькие страны могут быть едва заметны.',
     sourceFacts: 'Сведения о странах: столица, валюта и официальные языки — по международным кодам, названия валют и языков подставляет браузер. Рассказы о флагах и факты написаны для этой игры.',
   },
@@ -106,6 +116,7 @@ const ui = {
     viewExplore: 'Map',
     modeMixed: 'Mixed',
     modeFlags: 'Flags',
+    modeCoats: 'Coats of arms',
     modeAnimals: 'Animals',
     levelEasy: 'Easy',
     levelMedium: 'Medium',
@@ -139,11 +150,16 @@ const ui = {
     finishText: 'Choose another topic or start a new round.',
     playAgain: 'New round',
     flagQuestion: 'Whose flag is this?',
+    coatQuestion: 'Whose coat of arms is this?',
     animalQuestion: 'Where is its native home?',
     flagAltHidden: 'Flag fragment',
+    coatAltHidden: 'Country coat of arms',
     flagPartial: 'Part of the flag is hidden. Can you tell?',
+    coatPartial: 'This coat of arms hides a country. Can you tell?',
     flagHintOpen: 'Now the whole flag is visible.',
+    coatHintOpen: 'Now the whole coat of arms is visible.',
     animalPrompt: 'Where does it live in the wild, not in a zoo?',
+    coatSolved: 'This is the coat of arms of {name}.',
     solved: 'Solved!',
     wrong: 'Not quite. Try another answer; there is no rush.',
     hint: 'Hint',
@@ -152,6 +168,7 @@ const ui = {
     finishRound: 'Finish round',
     all: 'All',
     flags: 'Flags',
+    coats: 'Coats',
     animals: 'Animals',
     country: 'COUNTRY / TERRITORY',
     animal: 'ANIMAL',
@@ -159,6 +176,8 @@ const ui = {
     currency: 'Currency',
     officialLanguages: 'Official languages',
     flagStory: 'On the flag',
+    coatStory: 'About the coat of arms',
+    coatStoryText: 'The coat of arms is an official symbol of {name}. Look at the shield, crown, animals, plants and colors: in heraldry, almost every detail carries meaning.',
     funFact: 'Fun fact',
     infoLoading: 'Loading details…',
     animalPointNote: 'The point is one example place, not the whole range',
@@ -169,6 +188,7 @@ const ui = {
     footerLead: 'Take your time. Hints are allowed; play together.',
     sourcesTitle: 'About the game and sources',
     sourceFlags: 'Flags:',
+    sourceCoats: 'Coats of arms:',
     sourceMap: 'Outlines: Natural Earth / D3 Maps. The world map is schematic; small countries may be hard to see.',
     sourceFacts: 'Country details: capital, currency and official languages come from international codes, and the browser supplies the currency and language names. The flag stories and fun facts were written for this game.',
   },
@@ -190,6 +210,7 @@ const ui = {
     viewExplore: 'Mapa',
     modeMixed: 'Misturado',
     modeFlags: 'Bandeiras',
+    modeCoats: 'Brasões',
     modeAnimals: 'Animais',
     levelEasy: 'Fácil',
     levelMedium: 'Médio',
@@ -223,11 +244,16 @@ const ui = {
     finishText: 'Escolhe outro tema ou começa uma nova rodada.',
     playAgain: 'Nova rodada',
     flagQuestion: 'De quem é esta bandeira?',
+    coatQuestion: 'De quem é este brasão?',
     animalQuestion: 'Onde vive na natureza?',
     flagAltHidden: 'Fragmento da bandeira',
+    coatAltHidden: 'Brasão do país',
     flagPartial: 'Parte da bandeira está escondida. Consegues reconhecer?',
+    coatPartial: 'Este brasão esconde um país. Consegues reconhecer?',
     flagHintOpen: 'Agora a bandeira está inteira.',
+    coatHintOpen: 'Agora o brasão está inteiro.',
     animalPrompt: 'Onde vive na natureza, e não no zoológico?',
+    coatSolved: 'Este é o brasão de {name}.',
     solved: 'Descoberto!',
     wrong: 'Ainda não. Tenta outra resposta; não há pressa.',
     hint: 'Dica',
@@ -236,6 +262,7 @@ const ui = {
     finishRound: 'Terminar rodada',
     all: 'Tudo',
     flags: 'Bandeiras',
+    coats: 'Brasões',
     animals: 'Animais',
     country: 'PAÍS / TERRITÓRIO',
     animal: 'ANIMAL',
@@ -243,6 +270,8 @@ const ui = {
     currency: 'Moeda',
     officialLanguages: 'Línguas oficiais',
     flagStory: 'Na bandeira',
+    coatStory: 'Sobre o brasão',
+    coatStoryText: 'O brasão é um símbolo oficial de {name}. Observa o escudo, a coroa, os animais, as plantas e as cores: na heráldica, quase cada detalhe tem significado.',
     funFact: 'Facto curioso',
     infoLoading: 'A carregar detalhes…',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
@@ -253,6 +282,7 @@ const ui = {
     footerLead: 'Sem pressa. As dicas são permitidas; joguem juntos.',
     sourcesTitle: 'Sobre o jogo e as fontes',
     sourceFlags: 'Bandeiras:',
+    sourceCoats: 'Brasões:',
     sourceMap: 'Contornos: Natural Earth / D3 Maps. O mapa-múndi é esquemático; países pequenos podem ficar difíceis de ver.',
     sourceFacts: 'Dados dos países: capital, moeda e línguas oficiais vêm de códigos internacionais, e o navegador fornece os nomes das moedas e das línguas. Os textos sobre as bandeiras e os factos foram escritos para este jogo.',
   },
@@ -274,6 +304,7 @@ const ui = {
     viewExplore: 'Mapa',
     modeMixed: 'Mezclado',
     modeFlags: 'Banderas',
+    modeCoats: 'Escudos',
     modeAnimals: 'Animales',
     levelEasy: 'Fácil',
     levelMedium: 'Medio',
@@ -307,11 +338,16 @@ const ui = {
     finishText: 'Elige otro tema o empieza una ronda nueva.',
     playAgain: 'Nueva ronda',
     flagQuestion: '¿De quién es esta bandera?',
+    coatQuestion: '¿De quién es este escudo?',
     animalQuestion: '¿Dónde está su hogar natural?',
     flagAltHidden: 'Fragmento de bandera',
+    coatAltHidden: 'Escudo del país',
     flagPartial: 'Parte de la bandera está oculta. ¿La reconoces?',
+    coatPartial: 'Este escudo esconde un país. ¿Lo reconoces?',
     flagHintOpen: 'Ahora se ve la bandera completa.',
+    coatHintOpen: 'Ahora se ve el escudo completo.',
     animalPrompt: '¿Dónde vive en la naturaleza, no en un zoológico?',
+    coatSolved: 'Este es el escudo de {name}.',
     solved: '¡Resuelto!',
     wrong: 'Todavía no. Prueba otra respuesta; no hay prisa.',
     hint: 'Pista',
@@ -320,6 +356,7 @@ const ui = {
     finishRound: 'Terminar ronda',
     all: 'Todo',
     flags: 'Banderas',
+    coats: 'Escudos',
     animals: 'Animales',
     country: 'PAÍS / TERRITORIO',
     animal: 'ANIMAL',
@@ -327,6 +364,8 @@ const ui = {
     currency: 'Moneda',
     officialLanguages: 'Lenguas oficiales',
     flagStory: 'En la bandera',
+    coatStory: 'Sobre el escudo',
+    coatStoryText: 'El escudo es un símbolo oficial de {name}. Mira el escudo, la corona, los animales, las plantas y los colores: en heráldica casi cada detalle tiene significado.',
     funFact: 'Dato curioso',
     infoLoading: 'Cargando detalles…',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
@@ -337,6 +376,7 @@ const ui = {
     footerLead: 'Sin prisa. Las pistas valen; jugad juntos.',
     sourcesTitle: 'Sobre el juego y las fuentes',
     sourceFlags: 'Banderas:',
+    sourceCoats: 'Escudos:',
     sourceMap: 'Contornos: Natural Earth / D3 Maps. El mapa mundial es esquemático; los países pequeños pueden ser difíciles de ver.',
     sourceFacts: 'Datos de los países: capital, moneda y lenguas oficiales provienen de códigos internacionales, y el navegador aporta los nombres de monedas e idiomas. Los textos sobre las banderas y los datos curiosos se escribieron para este juego.',
   },
@@ -358,6 +398,7 @@ const ui = {
     viewExplore: 'Karte',
     modeMixed: 'Gemischt',
     modeFlags: 'Flaggen',
+    modeCoats: 'Wappen',
     modeAnimals: 'Tiere',
     levelEasy: 'Einfach',
     levelMedium: 'Mittel',
@@ -391,11 +432,16 @@ const ui = {
     finishText: 'Wähle ein anderes Thema oder starte eine neue Runde.',
     playAgain: 'Neue Runde',
     flagQuestion: 'Zu wem gehört diese Flagge?',
+    coatQuestion: 'Zu wem gehört dieses Wappen?',
     animalQuestion: 'Wo ist seine natürliche Heimat?',
     flagAltHidden: 'Flaggenausschnitt',
+    coatAltHidden: 'Staatswappen',
     flagPartial: 'Ein Teil der Flagge ist verdeckt. Erkennst du sie?',
+    coatPartial: 'Dieses Wappen versteckt ein Land. Erkennst du es?',
     flagHintOpen: 'Jetzt ist die ganze Flagge sichtbar.',
+    coatHintOpen: 'Jetzt ist das ganze Wappen sichtbar.',
     animalPrompt: 'Wo lebt es in der Natur, nicht im Zoo?',
+    coatSolved: 'Das ist das Wappen von {name}.',
     solved: 'Gelöst!',
     wrong: 'Noch nicht ganz. Probiere eine andere Antwort; keine Eile.',
     hint: 'Hinweis',
@@ -404,6 +450,7 @@ const ui = {
     finishRound: 'Runde beenden',
     all: 'Alles',
     flags: 'Flaggen',
+    coats: 'Wappen',
     animals: 'Tiere',
     country: 'LAND / GEBIET',
     animal: 'TIER',
@@ -411,6 +458,8 @@ const ui = {
     currency: 'Währung',
     officialLanguages: 'Amtssprachen',
     flagStory: 'Auf der Flagge',
+    coatStory: 'Über das Wappen',
+    coatStoryText: 'Das Wappen ist ein offizielles Symbol von {name}. Schau auf Schild, Krone, Tiere, Pflanzen und Farben: In der Heraldik hat fast jedes Detail eine Bedeutung.',
     funFact: 'Kurioses',
     infoLoading: 'Details werden geladen…',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
@@ -421,6 +470,7 @@ const ui = {
     footerLead: 'Ganz ohne Eile. Hinweise sind erlaubt; spielt zusammen.',
     sourcesTitle: 'Über das Spiel und die Quellen',
     sourceFlags: 'Flaggen:',
+    sourceCoats: 'Wappen:',
     sourceMap: 'Umrisse: Natural Earth / D3 Maps. Die Weltkarte ist schematisch; kleine Länder können schwer zu sehen sein.',
     sourceFacts: 'Länderdaten: Hauptstadt, Währung und Amtssprachen stammen aus internationalen Codes, die Namen von Währungen und Sprachen liefert der Browser. Die Flaggentexte und Kuriositäten wurden für dieses Spiel geschrieben.',
   },
@@ -442,6 +492,7 @@ const ui = {
     viewExplore: 'Mapa',
     modeMixed: 'Mieszane',
     modeFlags: 'Flagi',
+    modeCoats: 'Herby',
     modeAnimals: 'Zwierzęta',
     levelEasy: 'Łatwy',
     levelMedium: 'Średni',
@@ -475,11 +526,16 @@ const ui = {
     finishText: 'Wybierz inny temat albo zacznij nową rundę.',
     playAgain: 'Nowa runda',
     flagQuestion: 'Czyja to flaga?',
+    coatQuestion: 'Czyj to herb?',
     animalQuestion: 'Gdzie jest jego naturalny dom?',
     flagAltHidden: 'Fragment flagi',
+    coatAltHidden: 'Herb państwa',
     flagPartial: 'Część flagi jest ukryta. Rozpoznasz?',
+    coatPartial: 'Ten herb ukrywa państwo. Rozpoznasz?',
     flagHintOpen: 'Teraz widać całą flagę.',
+    coatHintOpen: 'Teraz widać cały herb.',
     animalPrompt: 'Gdzie żyje w naturze, a nie w zoo?',
+    coatSolved: 'To herb kraju {name}.',
     solved: 'Rozwiązane!',
     wrong: 'Jeszcze nie. Spróbuj innej odpowiedzi; nie trzeba się spieszyć.',
     hint: 'Podpowiedź',
@@ -488,6 +544,7 @@ const ui = {
     finishRound: 'Zakończ rundę',
     all: 'Wszystko',
     flags: 'Flagi',
+    coats: 'Herby',
     animals: 'Zwierzęta',
     country: 'KRAJ / TERYTORIUM',
     animal: 'ZWIERZĘ',
@@ -495,6 +552,8 @@ const ui = {
     currency: 'Waluta',
     officialLanguages: 'Języki urzędowe',
     flagStory: 'Na fladze',
+    coatStory: 'O herbie',
+    coatStoryText: 'Herb jest oficjalnym symbolem kraju {name}. Przyjrzyj się tarczy, koronie, zwierzętom, roślinom i kolorom: w heraldyce prawie każdy szczegół ma znaczenie.',
     funFact: 'Ciekawostka',
     infoLoading: 'Wczytywanie szczegółów…',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
@@ -505,6 +564,7 @@ const ui = {
     footerLead: 'Bez pośpiechu. Podpowiedzi są dozwolone; grajcie razem.',
     sourcesTitle: 'O grze i źródłach',
     sourceFlags: 'Flagi:',
+    sourceCoats: 'Herby:',
     sourceMap: 'Kontury: Natural Earth / D3 Maps. Mapa świata jest schematyczna; małe kraje mogą być słabo widoczne.',
     sourceFacts: 'Dane o krajach: stolica, waluta i języki urzędowe pochodzą z kodów międzynarodowych, a nazwy walut i języków podaje przeglądarka. Teksty o flagach i ciekawostki napisano na potrzeby tej gry.',
   },
@@ -512,6 +572,7 @@ const ui = {
 
 const featureFlags = {
   animals: false,
+  coats: true,
 };
 
 const countryNameOverrides = {
@@ -567,6 +628,18 @@ const similarFlagGroups = [
   ['nr', 'tv', 'pw', 'mh', 'fm', 'ws', 'to', 'vu', 'ki'],
   ['kn', 'gd', 'vc', 'bb', 'ag', 'lc'],
   ['mv', 'sc', 'sg', 'bh'],
+];
+
+const coatIds = [
+  'af', 'ao', 'al', 'ae', 'ar', 'am', 'aq', 'tf', 'au', 'at', 'az', 'bi', 'be', 'bj', 'bf', 'bd', 'bg', 'bs', 'ba', 'by', 'bz', 'bo', 'br', 'bn', 'bt', 'bw', 'cf', 'ca', 'ch', 'cl', 'cn', 'ci', 'cm', 'cd', 'co', 'cr', 'cu', 'cy', 'cz', 'de', 'dj', 'dk', 'do', 'dz', 'ec', 'eg', 'er', 'es', 'ee', 'et', 'fi', 'fj', 'fk', 'fr', 'ga', 'gb', 'ge', 'gh', 'gn', 'gm', 'gw', 'gq', 'gr', 'gl', 'gt', 'gy', 'hn', 'hr', 'ht', 'hu', 'id', 'in', 'ie', 'ir', 'iq', 'is', 'il', 'it', 'jm', 'jo', 'jp', 'kz', 'ke', 'kg', 'kh', 'kr', 'xk', 'kw', 'la', 'lb', 'lr', 'ly', 'lk', 'ls', 'lt', 'lu', 'lv', 'ma', 'mc', 'md', 'mg', 'mx', 'mk', 'ml', 'mm', 'me', 'mn', 'mz', 'mr', 'mw', 'my', 'na', 'nc', 'ne', 'ng', 'ni', 'nl', 'no', 'np', 'nz', 'om', 'pk', 'pa', 'pe', 'ph', 'pg', 'pl', 'kp', 'pt', 'py', 'ps', 'qa', 'ro', 'ru', 'rw', 'sa', 'sd', 'ss', 'sn', 'sb', 'sl', 'sv', 'so', 'rs', 'sr', 'sk', 'si', 'se', 'sy', 'td', 'tg', 'th', 'tj', 'tm', 'tt', 'tn', 'tr', 'tw', 'tz', 'ug', 'ua', 'uy', 'us', 'uz', 've', 'vn', 'vu', 'ye', 'za', 'zm', 'zw', 'va', 'sm', 'li', 'ad', 'mt', 'nr', 'tv', 'pw', 'mh', 'fm', 'ws', 'to', 'ki', 'kn', 'gd', 'vc', 'bb', 'ag', 'lc', 'mv', 'sc', 'sg', 'bh',
+];
+
+const similarCoatGroups = [
+  ['de', 'pl', 'at', 'us', 'mx', 'ru', 'ro', 'rs', 'me', 'al'],
+  ['gb', 'es', 'nl', 'no', 'fi', 'cz', 'bg', 'ee', 'lv'],
+  ['ch', 'sk', 'hr', 'si', 'ge', 'dk', 'se', 'gr'],
+  ['pt', 'br', 'ar', 'ca', 'au', 'za'],
+  ['lt', 'by', 'ua', 'md'],
 ];
 
 const flagPoints = {
@@ -697,7 +770,7 @@ let mode = 'flags';
 let level = 'max';
 let lengthMode = 'fixed';
 let view = 'quiz';
-let exploreKind = 'all';
+let exploreKind = 'flags';
 let selectedKey = 'flag:pt';
 let exploreScroll = null; // { block, behavior } — отложенная прокрутка списка после перерисовки
 let round = [];
@@ -812,7 +885,7 @@ function validatePlayerName(value) {
 }
 
 function modeLabel(value = mode) {
-  return tr(value === 'flags' ? 'modeFlags' : value === 'animals' ? 'modeAnimals' : 'modeMixed');
+  return tr(value === 'flags' ? 'modeFlags' : value === 'coats' ? 'modeCoats' : value === 'animals' ? 'modeAnimals' : 'modeMixed');
 }
 
 function levelLabel(value = level) {
@@ -1092,21 +1165,23 @@ function languageNames(codes) {
 }
 
 function hasLore(item) {
-  return item.type === 'flag' && Boolean(countryFlagText(item.id));
+  return (item.type === 'flag' && Boolean(countryFlagText(item.id))) || item.type === 'coat';
 }
 
 function countryPanel(item) {
-  if (item.type !== 'flag') return '';
+  if (item.type !== 'flag' && item.type !== 'coat') return '';
   const info = countryInfo(item.id);
-  const flagText = countryFlagText(item.id);
+  const flagText = item.type === 'flag' ? countryFlagText(item.id) : '';
+  const coatText = item.type === 'coat' ? tr('coatStoryText', { name: name(item) }) : '';
   const facts = countryFacts(item.id);
-  if (!info && !flagText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
+  if (!info && !flagText && !coatText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
   const rows = [];
   if (info?.capital) rows.push([tr('capital'), info.capital[lang] || info.capital.en]);
   if (info?.currency) rows.push([tr('currency'), currencyName(info.currency)]);
   if (info?.languages?.length) rows.push([tr('officialLanguages'), languageNames(info.languages)]);
   const notes = [];
   if (flagText) notes.push([tr('flagStory'), flagText]);
+  if (coatText) notes.push([tr('coatStory'), coatText]);
   const pick = chosenFact(item, facts);
   if (pick) notes.push([tr('funFact'), pick]);
   if (!rows.length && !notes.length) return '';
@@ -1122,10 +1197,11 @@ function countryName(id, locale = lang) {
 }
 
 function name(item) {
-  return item.type === 'flag' ? countryName(item.id) : (item.names[lang] || item.names.en || item.names.ru);
+  return item.type === 'flag' || item.type === 'coat' ? countryName(item.id) : (item.names[lang] || item.names.en || item.names.ru);
 }
 
 function fact(item) {
+  if (item.type === 'coat') return tr('coatSolved', { name: name(item) });
   if (item.type === 'animal') return item.facts[lang] || item.facts.en || item.facts.ru;
   return item.facts?.[lang] || '';
 }
@@ -1155,6 +1231,9 @@ const mediumFlagIds = new Set([
   'cl', 'pe', 'co', 've', 'uy', 'py', 'bo', 'ec', 'pa', 'cr', 'cu', 'jm', 'ht', 'do', 'bs',
   'id', 'my', 'th', 'vn', 'kh', 'la', 'mm', 'ph', 'kr', 'kp', 'pk', 'bd', 'lk', 'np', 'bt', 'mn', 'nz', 'fj', 'pg',
 ]);
+const coatIdSet = new Set(coatIds);
+const easyCoatIds = new Set([...easyIds].filter(id => coatIdSet.has(id)));
+const mediumCoatIds = new Set([...mediumFlagIds].filter(id => coatIdSet.has(id)));
 const flags = countries.map(([id, iso]) => ({
   id,
   iso,
@@ -1164,7 +1243,20 @@ const flags = countries.map(([id, iso]) => ({
   point: flagPoints[id],
   facts: easyFlagFacts[id],
 }));
-const allItems = [...flags, ...animals];
+const flagById = new Map(flags.map(flag => [flag.id, flag]));
+const coats = coatIds.map(id => {
+  const flag = flagById.get(id);
+  return {
+    id,
+    iso: flag?.iso,
+    type: 'coat',
+    key: `coat:${id}`,
+    tier: easyCoatIds.has(id) ? 'easy' : mediumCoatIds.has(id) ? 'medium' : 'max',
+    point: flag?.point,
+  };
+});
+const coatById = new Map(coats.map(coat => [coat.id, coat]));
+const allItems = [...flags, ...coats, ...animals];
 
 function tierAllowed(item) {
   return levelRank[item.tier || 'easy'] <= levelRank[level];
@@ -1176,6 +1268,10 @@ function flagPool() {
 
 function animalPool() {
   return animals.filter(tierAllowed);
+}
+
+function coatPool() {
+  return coats.filter(tierAllowed);
 }
 
 function roundLength() {
@@ -1213,6 +1309,24 @@ function flagOptions(question, availableFlags) {
   return shuffle([question, ...shuffle(availableFlags.filter(flag => flag.id !== question.id)).slice(0, 3)]).map(flag => flag.id);
 }
 
+function similarCoatOptions(question, availableCoats) {
+  const byId = new Map(availableCoats.map(coat => [coat.id, coat]));
+  const used = new Set([question.id]);
+  const distractors = [];
+  const relatedIds = similarCoatGroups.find(group => group.includes(question.id)) || [];
+  const related = relatedIds.filter(id => id !== question.id).map(id => byId.get(id)).filter(Boolean);
+  const hardFallback = availableCoats.filter(coat => coat.tier === 'max');
+  pushUniqueFlags(distractors, shuffle(related), used, 3);
+  pushUniqueFlags(distractors, shuffle(hardFallback), used, 3);
+  pushUniqueFlags(distractors, shuffle(availableCoats), used, 3);
+  return shuffle([question, ...distractors]).map(coat => coat.id);
+}
+
+function coatOptions(question, availableCoats) {
+  if (level === 'max') return similarCoatOptions(question, availableCoats);
+  return shuffle([question, ...shuffle(availableCoats.filter(coat => coat.id !== question.id)).slice(0, 3)]).map(coat => coat.id);
+}
+
 function mixedPool(availableFlags, availableAnimals) {
   if (lengthMode === 'endless') return shuffle([...availableFlags, ...availableAnimals]);
   const total = fixedRoundSizes[level];
@@ -1239,8 +1353,9 @@ function sortedByName(items, kind) {
 }
 
 function visibleItems() {
-  if (!featureFlags.animals) return sortedByName(flags, 'flags');
+  if (!featureFlags.animals && !featureFlags.coats) return sortedByName(flags, 'flags');
   if (exploreKind === 'flags') return sortedByName(flags, 'flags');
+  if (exploreKind === 'coats') return sortedByName(coats, 'coats');
   if (exploreKind === 'animals') return sortedByName(animals, 'animals');
   return sortedByName(allItems, 'all');
 }
@@ -1265,8 +1380,10 @@ function setStaticText() {
   document.querySelector('[data-view="explore"]').textContent = tr('viewExplore');
   document.querySelector('[data-mode="mixed"]').textContent = tr('modeMixed');
   document.querySelector('[data-mode="flags"]').textContent = tr('modeFlags');
+  document.querySelector('[data-mode="coats"]').textContent = tr('modeCoats');
   document.querySelector('[data-mode="animals"]').textContent = tr('modeAnimals');
   document.querySelector('[data-mode="mixed"]').hidden = !featureFlags.animals;
+  document.querySelector('[data-mode="coats"]').hidden = !featureFlags.coats;
   document.querySelector('[data-mode="animals"]').hidden = !featureFlags.animals;
   document.querySelector('[data-level="easy"]').textContent = tr('levelEasy');
   document.querySelector('[data-level="medium"]').textContent = tr('levelMedium');
@@ -1285,7 +1402,7 @@ function setChrome() {
   setStaticText();
   $('#eyebrow').textContent = tr(quiz ? 'quizEyebrow' : 'exploreEyebrow');
   $('#title').textContent = tr(quiz ? 'quizTitle' : 'exploreTitle');
-  document.querySelector('.topic-modes').hidden = !quiz || !featureFlags.animals;
+  document.querySelector('.topic-modes').hidden = !quiz || (!featureFlags.animals && !featureFlags.coats);
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.length-modes').hidden = !quiz;
   document.querySelector('.player-board').hidden = !isRoundFinished();
@@ -1295,12 +1412,15 @@ function setChrome() {
 // Собирает до count вопросов из текущих пулов, пропуская уже сыгранные.
 function buildQuestions(count, usedKeys = new Set()) {
   const availableFlags = flagPool();
+  const availableCoats = coatPool();
   const availableAnimals = animalPool();
   const availableRegions = [...new Set(availableAnimals.map(animal => animal.region))];
-  const activeMode = featureFlags.animals ? mode : 'flags';
+  const activeMode = mode === 'coats' && featureFlags.coats ? 'coats' : featureFlags.animals ? mode : 'flags';
   mode = activeMode;
   const pool = activeMode === 'flags'
     ? shuffle(availableFlags)
+    : activeMode === 'coats'
+      ? shuffle(availableCoats)
     : activeMode === 'animals'
       ? shuffle(availableAnimals)
       : mixedPool(availableFlags, availableAnimals);
@@ -1309,6 +1429,8 @@ function buildQuestions(count, usedKeys = new Set()) {
     ...question,
     options: question.type === 'flag'
       ? flagOptions(question, availableFlags)
+      : question.type === 'coat'
+        ? coatOptions(question, availableCoats)
       : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
 }
@@ -1365,15 +1487,17 @@ function render() {
     return;
   }
 
-  // На простом уровне флаг показывается целиком: там задача — узнать флаг,
-  // а не разгадать его по обрывку.
-  const masked = q.type === 'flag' && !hinted && !solved && level !== 'easy';
+  // На простом уровне флаг или герб показывается целиком: там задача — узнать
+  // символ, а не разгадать его по обрывку.
+  const masked = (q.type === 'flag' || q.type === 'coat') && !hinted && !solved && level !== 'easy';
   const visual = q.type === 'flag'
     ? `<div class="flag-window"><span class="flag-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></span></div>`
-    : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
+    : q.type === 'coat'
+      ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.png" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
+      : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   // Карта результата на телефоне не помещается и всё равно не читается:
   // половину стран на ней не разглядеть даже на десктопе.
-  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : tr('animalPrompt');
+  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : tr('animalPrompt');
   const visualNote = solved
     ? (wideScreen() ? '<div class="result-map" id="map"></div>' : '')
     : (prompt ? `<small>${prompt}</small>` : '');
@@ -1383,14 +1507,14 @@ function render() {
     : wrong.size
       ? tr('wrong')
       : hinted
-        ? (q.type === 'flag' ? tr('flagHintOpen') : escapeHtml(fact(q)))
+        ? (q.type === 'flag' ? tr('flagHintOpen') : q.type === 'coat' ? tr('coatHintOpen') : escapeHtml(fact(q)))
         : '';
 
   $('#game').innerHTML = `
     <div class="visual">${visual}${visualNote}</div>
     <div class="question">
       <span class="tag">${tr('clueTag', { current: pos + 1, total: round.length })}</span>
-      <h2>${q.type === 'flag' ? tr('flagQuestion') : tr('animalQuestion')}</h2>
+      <h2>${q.type === 'flag' ? tr('flagQuestion') : q.type === 'coat' ? tr('coatQuestion') : tr('animalQuestion')}</h2>
       <div class="choices">${q.options.map(id => choiceButton(q, id)).join('')}</div>
       <p class="message" role="status">${message}</p>
       <div class="actions">${solved ? `<button class="primary" id="next">${pos === round.length - 1 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
@@ -1398,8 +1522,9 @@ function render() {
 
   document.querySelectorAll('[data-answer]').forEach(button => {
     button.onclick = () => {
-      const answer = q.type === 'flag' ? button.dataset.answer : Number(button.dataset.answer);
-      if (answer === (q.type === 'flag' ? q.id : q.region)) {
+      const countrySymbol = q.type === 'flag' || q.type === 'coat';
+      const answer = countrySymbol ? button.dataset.answer : Number(button.dataset.answer);
+      if (answer === (countrySymbol ? q.id : q.region)) {
         awardQuestion(false);
         solved = true;
       } else if (!wrong.has(answer)) {
@@ -1436,8 +1561,12 @@ function render() {
 }
 
 function choiceButton(question, id) {
-  const correct = question.type === 'flag' ? id === question.id : id === question.region;
-  const label = question.type === 'flag' ? name(flags.find(flag => flag.id === id)) : regionName(id);
+  const correct = question.type === 'flag' || question.type === 'coat' ? id === question.id : id === question.region;
+  const label = question.type === 'flag'
+    ? name(flagById.get(id))
+    : question.type === 'coat'
+      ? name(coatById.get(id))
+      : regionName(id);
   return `<button data-answer="${id}" ${solved || wrong.has(id) ? 'disabled' : ''} class="${solved && correct ? 'correct' : ''}">${escapeHtml(label)}${solved && correct ? ' ✓' : ''}</button>`;
 }
 
@@ -1452,10 +1581,10 @@ function renderExplore() {
   $('#game').innerHTML = `
     <div class="explore-map" id="exploreMap"></div>
     <div class="atlas">
-      ${featureFlags.animals ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
-        <button data-kind="all" class="${exploreKind === 'all' ? 'active' : ''}">${tr('all')}</button>
+      ${featureFlags.animals || featureFlags.coats ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
         <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
-        <button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>
+        ${featureFlags.coats ? `<button data-kind="coats" class="${exploreKind === 'coats' ? 'active' : ''}">${tr('coats')}</button>` : ''}
+        ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
       </div>` : ''}
       <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
     </div>`;
@@ -1484,7 +1613,7 @@ function listItem(item) {
   return `
     <article class="item-row ${active ? 'active' : ''}" id="${rowId}">
       <button type="button" data-item="${escapeHtml(item.key)}" class="${active ? 'active' : ''}" aria-expanded="${active}" ${active ? `aria-controls="${rowId}-detail"` : ''}>
-        ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
+        ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
         <span>${escapeHtml(name(item))}</span>
       </button>
       ${active ? itemDetail(item, rowId) : ''}
@@ -1496,9 +1625,9 @@ function itemDetail(item, rowId) {
   const region = item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : '';
   return `
     <div class="item-detail" id="${rowId}-detail">
-      ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
+      ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
       <div>
-        <span class="tag">${item.type === 'flag' ? tr('country') : tr('animal')}</span>
+        <span class="tag">${item.type === 'flag' || item.type === 'coat' ? tr('country') : tr('animal')}</span>
         <h2>${escapeHtml(name(item))}</h2>
         ${plain ? `<p>${region}${escapeHtml(plain)}</p>` : ''}
         ${countryPanel(item)}
@@ -1566,42 +1695,44 @@ function baseMap(container, label) {
 }
 
 function drawResult(q) {
-  const { features, projection, path, svg } = baseMap('#map', q.type === 'flag' ? tr('resultMapLabel', { name: name(q) }) : tr('animalPointNote'));
+  const countrySymbol = q.type === 'flag' || q.type === 'coat';
+  const { features, projection, path, svg } = baseMap('#map', countrySymbol ? tr('resultMapLabel', { name: name(q) }) : tr('animalPointNote'));
   svg.selectAll('.land').data(features).join('path').attr('d', path).attr('fill', feature => q.iso && featureId(feature) === q.iso ? '#f4b333' : '#f6faf6').attr('stroke', '#86a5af').attr('stroke-width', 0.4);
   if (q.point) {
     const [x, y] = projection(q.point);
     svg.append('circle').attr('cx', x).attr('cy', y).attr('r', 6).attr('fill', '#ca501b').attr('stroke', 'white').attr('stroke-width', 2);
   }
-  $('#map').insertAdjacentHTML('beforeend', `<small>${q.type === 'flag' ? escapeHtml(name(q)) : tr('animalPointNote')}</small>`);
+  $('#map').insertAdjacentHTML('beforeend', `<small>${countrySymbol ? escapeHtml(name(q)) : tr('animalPointNote')}</small>`);
 }
 
 function drawExplore(current) {
-  const flagIsos = new Set(flags.map(flag => flag.iso));
+  const mapItems = exploreKind === 'coats' || current.type === 'coat' ? coats : flags;
+  const itemIsos = new Set(mapItems.map(item => item.iso));
   const { features, projection, path, svg } = baseMap('#exploreMap', tr('mapLabel'));
   svg.selectAll('.land').data(features).join('path')
     .attr('d', path)
-    .attr('fill', feature => current.iso === featureId(feature) ? '#f4b333' : flagIsos.has(featureId(feature)) ? '#dff0df' : '#f6faf6')
+    .attr('fill', feature => current.iso === featureId(feature) ? '#f4b333' : itemIsos.has(featureId(feature)) ? '#dff0df' : '#f6faf6')
     .attr('stroke', '#86a5af')
     .attr('stroke-width', 0.4)
-    .attr('class', feature => flagIsos.has(featureId(feature)) ? 'map-click land' : 'land')
+    .attr('class', feature => itemIsos.has(featureId(feature)) ? 'map-click land' : 'land')
     .on('click', (_, feature) => {
-      const found = flags.find(flag => flag.iso === featureId(feature));
+      const found = mapItems.find(item => item.iso === featureId(feature));
       if (found) {
         selectExploreItem(found.key, 'start');
       }
     });
-  flags.filter(flag => flag.point).forEach(flag => {
-    const [x, y] = projection(flag.point);
+  mapItems.filter(item => item.point).forEach(item => {
+    const [x, y] = projection(item.point);
     svg.append('circle')
       .attr('cx', x)
       .attr('cy', y)
-      .attr('r', current.key === flag.key ? 5.5 : 4)
-      .attr('fill', current.key === flag.key ? '#ca501b' : '#2f7f8a')
+      .attr('r', current.key === item.key ? 5.5 : 4)
+      .attr('fill', current.key === item.key ? '#ca501b' : '#2f7f8a')
       .attr('stroke', 'white')
       .attr('stroke-width', 1.8)
       .attr('class', 'map-click')
       .on('click', () => {
-        selectExploreItem(flag.key, 'start');
+        selectExploreItem(item.key, 'start');
       });
   });
   if (featureFlags.animals) {
@@ -1657,7 +1788,10 @@ document.querySelectorAll('[data-length]').forEach(button => {
 });
 document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
-    if (!featureFlags.animals && button.dataset.mode !== 'flags') return;
+    const availableModes = ['flags'];
+    if (featureFlags.coats) availableModes.push('coats');
+    if (featureFlags.animals) availableModes.push('mixed', 'animals');
+    if (!availableModes.includes(button.dataset.mode)) return;
     const changed = mode !== button.dataset.mode;
     mode = button.dataset.mode;
     document.querySelectorAll('[data-mode]').forEach(item => item.classList.toggle('active', item === button));
@@ -1671,6 +1805,10 @@ flags.forEach(flag => {
   const image = new Image();
   image.src = `assets/flags/${flag.id}.svg`;
 });
+coats.forEach(coat => {
+  const image = new Image();
+  image.src = `assets/coats/${coat.id}.png`;
+});
 
 if (document.modelContext?.registerTool) {
   try {
@@ -1680,7 +1818,7 @@ if (document.modelContext?.registerTool) {
       inputSchema: {
         type: 'object',
         properties: {
-          mode: { type: 'string', enum: featureFlags.animals ? ['mixed', 'flags', 'animals'] : ['flags'] },
+          mode: { type: 'string', enum: ['flags', ...(featureFlags.coats ? ['coats'] : []), ...(featureFlags.animals ? ['mixed', 'animals'] : [])] },
           level: { type: 'string', enum: ['easy', 'medium', 'max'] },
           lengthMode: { type: 'string', enum: ['fixed', 'endless'] },
         },
@@ -1689,7 +1827,9 @@ if (document.modelContext?.registerTool) {
       },
       annotations: { readOnlyHint: false },
       execute(input) {
-        const availableModes = featureFlags.animals ? ['mixed', 'flags', 'animals'] : ['flags'];
+        const availableModes = ['flags'];
+        if (featureFlags.coats) availableModes.push('coats');
+        if (featureFlags.animals) availableModes.push('mixed', 'animals');
         if (!input || !availableModes.includes(input.mode)) throw Error('Invalid mode');
         if (input.level && !['easy', 'medium', 'max'].includes(input.level)) throw Error('Invalid level');
         if (input.lengthMode && !['fixed', 'endless'].includes(input.lengthMode)) throw Error('Invalid length mode');
