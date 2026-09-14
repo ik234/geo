@@ -1758,7 +1758,7 @@ function render() {
   const visual = q.type === 'flag'
     ? `<div class="flag-window"><span class="flag-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></span></div>`
     : q.type === 'coat'
-      ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.png" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
+      ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
     : q.type === 'capital'
       ? `<div class="capital-card"><img src="assets/flags/${q.id}.svg" alt=""><span class="tag">${tr('country')}</span><strong>${escapeHtml(name(q))}</strong></div>`
       : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
@@ -1910,7 +1910,7 @@ function itemDetail(item, rowId) {
       </div>
       <div class="country-symbols">
         <figure><img class="symbol-flag" src="assets/flags/${item.id}.svg" alt=""><figcaption>${tr('flag')}</figcaption></figure>
-        ${coatById.has(item.id) ? `<figure><img src="assets/coats/${item.id}.png" alt=""><figcaption>${tr('coat')}</figcaption></figure>` : ''}
+        ${coatById.has(item.id) ? `<figure><img src="assets/coats/${item.id}.webp" alt=""><figcaption>${tr('coat')}</figcaption></figure>` : ''}
       </div>
       ${countryPanel(item)}
     </div>`;
@@ -2089,7 +2089,7 @@ flags.forEach(flag => {
 });
 coats.forEach(coat => {
   const image = new Image();
-  image.src = `assets/coats/${coat.id}.png`;
+  image.src = `assets/coats/${coat.id}.webp`;
 });
 
 if (document.modelContext?.registerTool) {

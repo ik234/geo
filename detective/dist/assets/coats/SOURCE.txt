@@ -4,4 +4,20 @@ https://mainfacts.com/
 REST Countries documents the coatOfArms field as MainFacts SVG/PNG URLs:
 https://restcountries.com/docs
 
-For this game the PNG files were resized locally to a maximum side of 320 px.
+For this game the PNG files were resized locally to a maximum side of 320 px
+and then converted to near-lossless WebP (cwebp 1.6.0), 6.0 MB instead of
+20.1 MB for all 193:
+
+  cwebp -near_lossless 20 xx.png -o xx.webp
+
+Near-lossless, not lossy: lossy WebP stores colour at half resolution, and on
+flat heraldic art that blurs thin coloured lines (sun rays, star outlines,
+waves). Raising the lossy quality does not help: at -q 95 Brazil stays at
+26 dB PSNR, while -near_lossless 20 gives at least 37 dB for every coat
+(median 40) and is still smaller than lossy -q 90. Levels 20-39 produce identical files.
+Fully transparent and fully opaque pixels stay exact; only anti-aliased
+edges shift by a few alpha levels. The embedded ICC profiles were all plain
+sRGB, so dropping them does not shift colours.
+
+Antarctica (aq) is left out on purpose: under that code MainFacts serves the
+arms of the British Antarctic Territory, and Antarctica itself has none.
