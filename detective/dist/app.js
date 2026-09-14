@@ -23,6 +23,7 @@ const ui = {
     modeMixed: 'Всё вперемешку',
     modeFlags: 'Флаги',
     modeCoats: 'Гербы',
+    modeCapitals: 'Столицы',
     modeAnimals: 'Животные',
     levelEasy: 'Простой',
     levelMedium: 'Средний',
@@ -57,15 +58,19 @@ const ui = {
     playAgain: 'Новый раунд',
     flagQuestion: 'Чей это флаг?',
     coatQuestion: 'Чей это герб?',
+    capitalQuestion: 'Какая столица у этой страны?',
     animalQuestion: 'Где его родной дом?',
     flagAltHidden: 'Фрагмент флага',
     coatAltHidden: 'Герб страны',
     flagPartial: 'Часть флага скрыта. Узнаешь?',
     coatPartial: 'На гербе спрятана страна. Узнаешь?',
+    capitalPrompt: 'Выбери столицу страны.',
     flagHintOpen: 'Теперь флаг открыт целиком.',
     coatHintOpen: 'Теперь герб открыт целиком.',
+    capitalHint: 'Столица начинается на «{letter}».',
     animalPrompt: 'Где живёт в природе, а не в зоопарке?',
     coatSolved: 'Это герб страны {name}.',
+    capitalSolved: 'Столица страны {name} — {capital}.',
     solved: 'Разгадано!',
     wrong: 'Пока не совпало. Попробуй другой вариант — спешить не нужно.',
     hint: 'Подсказка',
@@ -75,6 +80,7 @@ const ui = {
     all: 'Всё',
     flags: 'Флаги',
     coats: 'Гербы',
+    capitals: 'Столицы',
     animals: 'Животные',
     country: 'СТРАНА / ТЕРРИТОРИЯ',
     animal: 'ЖИВОТНОЕ',
@@ -117,6 +123,7 @@ const ui = {
     modeMixed: 'Mixed',
     modeFlags: 'Flags',
     modeCoats: 'Coats of arms',
+    modeCapitals: 'Capitals',
     modeAnimals: 'Animals',
     levelEasy: 'Easy',
     levelMedium: 'Medium',
@@ -151,15 +158,19 @@ const ui = {
     playAgain: 'New round',
     flagQuestion: 'Whose flag is this?',
     coatQuestion: 'Whose coat of arms is this?',
+    capitalQuestion: 'What is the capital of this country?',
     animalQuestion: 'Where is its native home?',
     flagAltHidden: 'Flag fragment',
     coatAltHidden: 'Country coat of arms',
     flagPartial: 'Part of the flag is hidden. Can you tell?',
     coatPartial: 'This coat of arms hides a country. Can you tell?',
+    capitalPrompt: 'Choose the country’s capital.',
     flagHintOpen: 'Now the whole flag is visible.',
     coatHintOpen: 'Now the whole coat of arms is visible.',
+    capitalHint: 'The capital starts with “{letter}”.',
     animalPrompt: 'Where does it live in the wild, not in a zoo?',
     coatSolved: 'This is the coat of arms of {name}.',
+    capitalSolved: 'The capital of {name} is {capital}.',
     solved: 'Solved!',
     wrong: 'Not quite. Try another answer; there is no rush.',
     hint: 'Hint',
@@ -169,6 +180,7 @@ const ui = {
     all: 'All',
     flags: 'Flags',
     coats: 'Coats',
+    capitals: 'Capitals',
     animals: 'Animals',
     country: 'COUNTRY / TERRITORY',
     animal: 'ANIMAL',
@@ -211,6 +223,7 @@ const ui = {
     modeMixed: 'Misturado',
     modeFlags: 'Bandeiras',
     modeCoats: 'Brasões',
+    modeCapitals: 'Capitais',
     modeAnimals: 'Animais',
     levelEasy: 'Fácil',
     levelMedium: 'Médio',
@@ -245,15 +258,19 @@ const ui = {
     playAgain: 'Nova rodada',
     flagQuestion: 'De quem é esta bandeira?',
     coatQuestion: 'De quem é este brasão?',
+    capitalQuestion: 'Qual é a capital deste país?',
     animalQuestion: 'Onde vive na natureza?',
     flagAltHidden: 'Fragmento da bandeira',
     coatAltHidden: 'Brasão do país',
     flagPartial: 'Parte da bandeira está escondida. Consegues reconhecer?',
     coatPartial: 'Este brasão esconde um país. Consegues reconhecer?',
+    capitalPrompt: 'Escolhe a capital do país.',
     flagHintOpen: 'Agora a bandeira está inteira.',
     coatHintOpen: 'Agora o brasão está inteiro.',
+    capitalHint: 'A capital começa por “{letter}”.',
     animalPrompt: 'Onde vive na natureza, e não no zoológico?',
     coatSolved: 'Este é o brasão de {name}.',
+    capitalSolved: 'A capital de {name} é {capital}.',
     solved: 'Descoberto!',
     wrong: 'Ainda não. Tenta outra resposta; não há pressa.',
     hint: 'Dica',
@@ -263,6 +280,7 @@ const ui = {
     all: 'Tudo',
     flags: 'Bandeiras',
     coats: 'Brasões',
+    capitals: 'Capitais',
     animals: 'Animais',
     country: 'PAÍS / TERRITÓRIO',
     animal: 'ANIMAL',
@@ -305,6 +323,7 @@ const ui = {
     modeMixed: 'Mezclado',
     modeFlags: 'Banderas',
     modeCoats: 'Escudos',
+    modeCapitals: 'Capitales',
     modeAnimals: 'Animales',
     levelEasy: 'Fácil',
     levelMedium: 'Medio',
@@ -339,15 +358,19 @@ const ui = {
     playAgain: 'Nueva ronda',
     flagQuestion: '¿De quién es esta bandera?',
     coatQuestion: '¿De quién es este escudo?',
+    capitalQuestion: '¿Cuál es la capital de este país?',
     animalQuestion: '¿Dónde está su hogar natural?',
     flagAltHidden: 'Fragmento de bandera',
     coatAltHidden: 'Escudo del país',
     flagPartial: 'Parte de la bandera está oculta. ¿La reconoces?',
     coatPartial: 'Este escudo esconde un país. ¿Lo reconoces?',
+    capitalPrompt: 'Elige la capital del país.',
     flagHintOpen: 'Ahora se ve la bandera completa.',
     coatHintOpen: 'Ahora se ve el escudo completo.',
+    capitalHint: 'La capital empieza por “{letter}”.',
     animalPrompt: '¿Dónde vive en la naturaleza, no en un zoológico?',
     coatSolved: 'Este es el escudo de {name}.',
+    capitalSolved: 'La capital de {name} es {capital}.',
     solved: '¡Resuelto!',
     wrong: 'Todavía no. Prueba otra respuesta; no hay prisa.',
     hint: 'Pista',
@@ -357,6 +380,7 @@ const ui = {
     all: 'Todo',
     flags: 'Banderas',
     coats: 'Escudos',
+    capitals: 'Capitales',
     animals: 'Animales',
     country: 'PAÍS / TERRITORIO',
     animal: 'ANIMAL',
@@ -399,6 +423,7 @@ const ui = {
     modeMixed: 'Gemischt',
     modeFlags: 'Flaggen',
     modeCoats: 'Wappen',
+    modeCapitals: 'Hauptstädte',
     modeAnimals: 'Tiere',
     levelEasy: 'Einfach',
     levelMedium: 'Mittel',
@@ -433,15 +458,19 @@ const ui = {
     playAgain: 'Neue Runde',
     flagQuestion: 'Zu wem gehört diese Flagge?',
     coatQuestion: 'Zu wem gehört dieses Wappen?',
+    capitalQuestion: 'Wie heißt die Hauptstadt dieses Landes?',
     animalQuestion: 'Wo ist seine natürliche Heimat?',
     flagAltHidden: 'Flaggenausschnitt',
     coatAltHidden: 'Staatswappen',
     flagPartial: 'Ein Teil der Flagge ist verdeckt. Erkennst du sie?',
     coatPartial: 'Dieses Wappen versteckt ein Land. Erkennst du es?',
+    capitalPrompt: 'Wähle die Hauptstadt des Landes.',
     flagHintOpen: 'Jetzt ist die ganze Flagge sichtbar.',
     coatHintOpen: 'Jetzt ist das ganze Wappen sichtbar.',
+    capitalHint: 'Die Hauptstadt beginnt mit „{letter}”.',
     animalPrompt: 'Wo lebt es in der Natur, nicht im Zoo?',
     coatSolved: 'Das ist das Wappen von {name}.',
+    capitalSolved: 'Die Hauptstadt von {name} ist {capital}.',
     solved: 'Gelöst!',
     wrong: 'Noch nicht ganz. Probiere eine andere Antwort; keine Eile.',
     hint: 'Hinweis',
@@ -451,6 +480,7 @@ const ui = {
     all: 'Alles',
     flags: 'Flaggen',
     coats: 'Wappen',
+    capitals: 'Hauptstädte',
     animals: 'Tiere',
     country: 'LAND / GEBIET',
     animal: 'TIER',
@@ -493,6 +523,7 @@ const ui = {
     modeMixed: 'Mieszane',
     modeFlags: 'Flagi',
     modeCoats: 'Herby',
+    modeCapitals: 'Stolice',
     modeAnimals: 'Zwierzęta',
     levelEasy: 'Łatwy',
     levelMedium: 'Średni',
@@ -527,15 +558,19 @@ const ui = {
     playAgain: 'Nowa runda',
     flagQuestion: 'Czyja to flaga?',
     coatQuestion: 'Czyj to herb?',
+    capitalQuestion: 'Jaka jest stolica tego kraju?',
     animalQuestion: 'Gdzie jest jego naturalny dom?',
     flagAltHidden: 'Fragment flagi',
     coatAltHidden: 'Herb państwa',
     flagPartial: 'Część flagi jest ukryta. Rozpoznasz?',
     coatPartial: 'Ten herb ukrywa państwo. Rozpoznasz?',
+    capitalPrompt: 'Wybierz stolicę kraju.',
     flagHintOpen: 'Teraz widać całą flagę.',
     coatHintOpen: 'Teraz widać cały herb.',
+    capitalHint: 'Stolica zaczyna się od „{letter}”.',
     animalPrompt: 'Gdzie żyje w naturze, a nie w zoo?',
     coatSolved: 'To herb kraju {name}.',
+    capitalSolved: 'Stolicą kraju {name} jest {capital}.',
     solved: 'Rozwiązane!',
     wrong: 'Jeszcze nie. Spróbuj innej odpowiedzi; nie trzeba się spieszyć.',
     hint: 'Podpowiedź',
@@ -545,6 +580,7 @@ const ui = {
     all: 'Wszystko',
     flags: 'Flagi',
     coats: 'Herby',
+    capitals: 'Stolice',
     animals: 'Zwierzęta',
     country: 'KRAJ / TERYTORIUM',
     animal: 'ZWIERZĘ',
@@ -573,6 +609,7 @@ const ui = {
 const featureFlags = {
   animals: false,
   coats: true,
+  capitals: true,
 };
 
 const countryNameOverrides = {
@@ -668,6 +705,207 @@ const flagPoints = {
   sc: [55.45, -4.62],
   sg: [103.82, 1.35],
   bh: [50.56, 26.07],
+};
+
+const capitalData = {
+  "af": {"ru": "Кабул", "en": "Kabul", "pt": "Kabul", "es": "Kabul", "de": "Kabul", "pl": "Kabul"},
+  "ao": {"ru": "Луанда", "en": "Luanda", "pt": "Luanda", "es": "Luanda", "de": "Luanda", "pl": "Luanda"},
+  "al": {"ru": "Тирана", "en": "Tirana", "pt": "Tirana", "es": "Tirana", "de": "Tirana", "pl": "Tirana"},
+  "ae": {"ru": "Абу-Даби", "en": "Abu Dhabi", "pt": "Abu Dhabi", "es": "Abu Dabi", "de": "Abu Dhabi", "pl": "Abu Zabi"},
+  "ar": {"ru": "Буэнос-Айрес", "en": "Buenos Aires", "pt": "Buenos Aires", "es": "Buenos Aires", "de": "Buenos Aires", "pl": "Buenos Aires"},
+  "am": {"ru": "Ереван", "en": "Yerevan", "pt": "Erevan", "es": "Ereván", "de": "Eriwan", "pl": "Erywań"},
+  "tf": {"ru": "Порт-о-Франсе", "en": "Port-aux-Français", "pt": "Port-aux-Français", "es": "Port-aux-Français", "de": "Port-aux-Français", "pl": "Port-aux-Français"},
+  "au": {"ru": "Канберра", "en": "Canberra", "pt": "Canberra", "es": "Canberra", "de": "Canberra", "pl": "Canberra"},
+  "at": {"ru": "Вена", "en": "Vienna", "pt": "Viena", "es": "Viena", "de": "Wien", "pl": "Wiedeń"},
+  "az": {"ru": "Баку", "en": "Baku", "pt": "Baku", "es": "Baku", "de": "Baku", "pl": "Baku"},
+  "bi": {"ru": "Гитега", "en": "Gitega", "pt": "Gitega", "es": "Gitega", "de": "Gitega", "pl": "Gitega"},
+  "be": {"ru": "Брюссель", "en": "Brussels", "pt": "Bruxelas", "es": "Bruselas", "de": "Brüssel", "pl": "Bruksela"},
+  "bj": {"ru": "Порто-Ново", "en": "Porto-Novo", "pt": "Porto-Novo", "es": "Porto-Novo", "de": "Porto-Novo", "pl": "Porto-Novo"},
+  "bf": {"ru": "Уагадугу", "en": "Ouagadougou", "pt": "Ouagadougou", "es": "Ouagadougou", "de": "Ouagadougou", "pl": "Ouagadougou"},
+  "bd": {"ru": "Дакка", "en": "Dhaka", "pt": "Dhaka", "es": "Dhaka", "de": "Dhaka", "pl": "Dhaka"},
+  "bg": {"ru": "София", "en": "Sofia", "pt": "Sófia", "es": "Sofia", "de": "Sofia", "pl": "Sofia"},
+  "bs": {"ru": "Нассау", "en": "Nassau", "pt": "Nassau", "es": "Nassau", "de": "Nassau", "pl": "Nassau"},
+  "ba": {"ru": "Сараево", "en": "Sarajevo", "pt": "Sarajevo", "es": "Sarajevo", "de": "Sarajevo", "pl": "Sarajewo"},
+  "by": {"ru": "Минск", "en": "Minsk", "pt": "Minsk", "es": "Minsk", "de": "Minsk", "pl": "Mińsk"},
+  "bz": {"ru": "Бельмопан", "en": "Belmopan", "pt": "Belmopan", "es": "Belmopan", "de": "Belmopan", "pl": "Belmopan"},
+  "bo": {"ru": "Сукре", "en": "Sucre", "pt": "Sucre", "es": "Sucre", "de": "Sucre", "pl": "Sucre"},
+  "br": {"ru": "Бразилиа", "en": "Brasília", "pt": "Brasília", "es": "Brasília", "de": "Brasília", "pl": "Brasília"},
+  "bn": {"ru": "Бандар-Сери-Бегаван", "en": "Bandar Seri Begawan", "pt": "Bandar Seri Begawan", "es": "Bandar Seri Begawan", "de": "Bandar Seri Begawan", "pl": "Bandar Seri Begawan"},
+  "bt": {"ru": "Тхимпху", "en": "Thimphu", "pt": "Thimphu", "es": "Thimphu", "de": "Thimphu", "pl": "Thimphu"},
+  "bw": {"ru": "Габороне", "en": "Gaborone", "pt": "Gaborone", "es": "Gaborone", "de": "Gaborone", "pl": "Gaborone"},
+  "cf": {"ru": "Банги", "en": "Bangui", "pt": "Bangui", "es": "Bangui", "de": "Bangui", "pl": "Bangui"},
+  "ca": {"ru": "Оттава", "en": "Ottawa", "pt": "Ottawa", "es": "Ottawa", "de": "Ottawa", "pl": "Ottawa"},
+  "ch": {"ru": "Берн", "en": "Bern", "pt": "Berna", "es": "Berna", "de": "Bern", "pl": "Berno"},
+  "cl": {"ru": "Сантьяго", "en": "Santiago", "pt": "Santiago", "es": "Santiago", "de": "Santiago", "pl": "Santiago"},
+  "cn": {"ru": "Пекин", "en": "Beijing", "pt": "Pequim", "es": "Pekín", "de": "Peking", "pl": "Pekin"},
+  "ci": {"ru": "Ямусукро", "en": "Yamoussoukro", "pt": "Yamoussoukro", "es": "Yamoussoukro", "de": "Yamoussoukro", "pl": "Yamoussoukro"},
+  "cm": {"ru": "Яунде", "en": "Yaoundé", "pt": "Yaoundé", "es": "Yaoundé", "de": "Yaoundé", "pl": "Yaoundé"},
+  "cd": {"ru": "Киншаса", "en": "Kinshasa", "pt": "Kinshasa", "es": "Kinshasa", "de": "Kinshasa", "pl": "Kinshasa"},
+  "cg": {"ru": "Браззавиль", "en": "Brazzaville", "pt": "Brazzaville", "es": "Brazzaville", "de": "Brazzaville", "pl": "Brazzaville"},
+  "co": {"ru": "Богота", "en": "Bogotá", "pt": "Bogotá", "es": "Bogotá", "de": "Bogotá", "pl": "Bogotá"},
+  "cr": {"ru": "Сан-Хосе", "en": "San José", "pt": "San José", "es": "San José", "de": "San José", "pl": "San José"},
+  "cu": {"ru": "Гавана", "en": "Havana", "pt": "Havana", "es": "La Habana", "de": "Havanna", "pl": "Hawana"},
+  "cy": {"ru": "Никосия", "en": "Nicosia", "pt": "Nicósia", "es": "Nicosia", "de": "Nicosia", "pl": "Nikozja"},
+  "cz": {"ru": "Прага", "en": "Prague", "pt": "Praga", "es": "Praga", "de": "Prag", "pl": "Praga"},
+  "de": {"ru": "Берлин", "en": "Berlin", "pt": "Berlin", "es": "Berlin", "de": "Berlin", "pl": "Berlin"},
+  "dj": {"ru": "Джибути", "en": "Djibouti", "pt": "Djibuti", "es": "Yibuti", "de": "Djibouti", "pl": "Dżibuti"},
+  "dk": {"ru": "Копенгаген", "en": "Copenhagen", "pt": "Copenhaga", "es": "Copenhague", "de": "Kopenhagen", "pl": "Kopenhaga"},
+  "do": {"ru": "Санто-Доминго", "en": "Santo Domingo", "pt": "Santo Domingo", "es": "Santo Domingo", "de": "Santo Domingo", "pl": "Santo Domingo"},
+  "dz": {"ru": "Алжир", "en": "Algiers", "pt": "Argel", "es": "Argel", "de": "Algier", "pl": "Algier"},
+  "ec": {"ru": "Кито", "en": "Quito", "pt": "Quito", "es": "Quito", "de": "Quito", "pl": "Quito"},
+  "eg": {"ru": "Каир", "en": "Cairo", "pt": "Cairo", "es": "El Cairo", "de": "Kairo", "pl": "Kair"},
+  "er": {"ru": "Асмэра", "en": "Asmara", "pt": "Asmara", "es": "Asmara", "de": "Asmara", "pl": "Asmara"},
+  "es": {"ru": "Мадрид", "en": "Madrid", "pt": "Madrid", "es": "Madrid", "de": "Madrid", "pl": "Madrid"},
+  "ee": {"ru": "Таллин", "en": "Tallinn", "pt": "Tallinn", "es": "Tallinn", "de": "Tallinn", "pl": "Tallinn"},
+  "et": {"ru": "Аддис-Абеба", "en": "Addis Ababa", "pt": "Adis Abeba", "es": "Adís Abeba", "de": "Addis Abeba", "pl": "Addis Abeba"},
+  "fi": {"ru": "Хельсинки", "en": "Helsinki", "pt": "Helsinki", "es": "Helsinki", "de": "Helsinki", "pl": "Helsinki"},
+  "fj": {"ru": "Сува", "en": "Suva", "pt": "Suva", "es": "Suva", "de": "Suva", "pl": "Suva"},
+  "fk": {"ru": "Стэнли", "en": "Stanley", "pt": "Stanley", "es": "Stanley", "de": "Stanley", "pl": "Stanley"},
+  "fr": {"ru": "Париж", "en": "Paris", "pt": "Paris", "es": "Paris", "de": "Paris", "pl": "Paryż"},
+  "ga": {"ru": "Либревиль", "en": "Libreville", "pt": "Libreville", "es": "Libreville", "de": "Libreville", "pl": "Libreville"},
+  "gb": {"ru": "Лондон", "en": "London", "pt": "Londres", "es": "Londres", "de": "London", "pl": "Londyn"},
+  "ge": {"ru": "Тбилиси", "en": "Tbilisi", "pt": "Tbilisi", "es": "Tbilisi", "de": "Tbilisi", "pl": "Tbilisi"},
+  "gh": {"ru": "Аккра", "en": "Accra", "pt": "Accra", "es": "Accra", "de": "Accra", "pl": "Accra"},
+  "gn": {"ru": "Конакри", "en": "Conakry", "pt": "Conakry", "es": "Conakry", "de": "Conakry", "pl": "Conakry"},
+  "gm": {"ru": "Банжул", "en": "Banjul", "pt": "Banjul", "es": "Banjul", "de": "Banjul", "pl": "Banjul"},
+  "gw": {"ru": "Бисау", "en": "Bissau", "pt": "Bissau", "es": "Bissau", "de": "Bissau", "pl": "Bissau"},
+  "gq": {"ru": "Малабо", "en": "Malabo", "pt": "Malabo", "es": "Malabo", "de": "Malabo", "pl": "Malabo"},
+  "gr": {"ru": "Афины", "en": "Athens", "pt": "Atenas", "es": "Atenas", "de": "Athen", "pl": "Ateny"},
+  "gl": {"ru": "Нуук", "en": "Nuuk", "pt": "Nuuk", "es": "Nuuk", "de": "Nuuk", "pl": "Nuuk"},
+  "gt": {"ru": "Гватемала", "en": "Guatemala City", "pt": "Cidade da Guatemala", "es": "Ciudad de Guatemala", "de": "Guatemala-Stadt", "pl": "Gwatemala"},
+  "gy": {"ru": "Джорджтаун", "en": "Georgetown", "pt": "Georgetown", "es": "Georgetown", "de": "Georgetown", "pl": "Georgetown"},
+  "hn": {"ru": "Тегусигальпа", "en": "Tegucigalpa", "pt": "Tegucigalpa", "es": "Tegucigalpa", "de": "Tegucigalpa", "pl": "Tegucigalpa"},
+  "hr": {"ru": "Загреб", "en": "Zagreb", "pt": "Zagreb", "es": "Zagreb", "de": "Zagreb", "pl": "Zagreb"},
+  "ht": {"ru": "Порт-о-Пренс", "en": "Port-au-Prince", "pt": "Port-au-Prince", "es": "Port-au-Prince", "de": "Port-au-Prince", "pl": "Port-au-Prince"},
+  "hu": {"ru": "Будапешт", "en": "Budapest", "pt": "Budapest", "es": "Budapest", "de": "Budapest", "pl": "Budapeszt"},
+  "id": {"ru": "Джакарта", "en": "Jakarta", "pt": "Jacarta", "es": "Yakarta", "de": "Jakarta", "pl": "Dżakarta"},
+  "in": {"ru": "Нью-Дели", "en": "New Delhi", "pt": "Nova Deli", "es": "Nueva Delhi", "de": "Neu-Delhi", "pl": "Nowe Delhi"},
+  "ie": {"ru": "Дублин", "en": "Dublin", "pt": "Dublin", "es": "Dublin", "de": "Dublin", "pl": "Dublin"},
+  "ir": {"ru": "Тегеран", "en": "Tehran", "pt": "Teerã", "es": "Teherán", "de": "Teheran", "pl": "Teheran"},
+  "iq": {"ru": "Багдад", "en": "Baghdad", "pt": "Bagdá", "es": "Bagdad", "de": "Bagdad", "pl": "Bagdad"},
+  "is": {"ru": "Рейкьявик", "en": "Reykjavík", "pt": "Reykjavík", "es": "Reykjavík", "de": "Reykjavík", "pl": "Reykjavík"},
+  "il": {"ru": "Иерусалим", "en": "Jerusalem", "pt": "Jerusalém", "es": "Jerusalén", "de": "Jerusalem", "pl": "Jerozolima"},
+  "it": {"ru": "Рим", "en": "Rome", "pt": "Roma", "es": "Roma", "de": "Rom", "pl": "Rzym"},
+  "jm": {"ru": "Кингстон", "en": "Kingston", "pt": "Kingston", "es": "Kingston", "de": "Kingston", "pl": "Kingston"},
+  "jo": {"ru": "Амман", "en": "Amman", "pt": "Amman", "es": "Amman", "de": "Amman", "pl": "Amman"},
+  "jp": {"ru": "Токио", "en": "Tokyo", "pt": "Tóquio", "es": "Tokio", "de": "Tokio", "pl": "Tokio"},
+  "kz": {"ru": "Астана", "en": "Astana", "pt": "Astana", "es": "Astana", "de": "Astana", "pl": "Astana"},
+  "ke": {"ru": "Найроби", "en": "Nairobi", "pt": "Nairobi", "es": "Nairobi", "de": "Nairobi", "pl": "Nairobi"},
+  "kg": {"ru": "Бишкек", "en": "Bishkek", "pt": "Bishkek", "es": "Bishkek", "de": "Bishkek", "pl": "Biszkek"},
+  "kh": {"ru": "Пномпень", "en": "Phnom Penh", "pt": "Phnom Penh", "es": "Phnom Penh", "de": "Phnom Penh", "pl": "Phnom Penh"},
+  "kr": {"ru": "Сеул", "en": "Seoul", "pt": "Seul", "es": "Seúl", "de": "Seoul", "pl": "Seul"},
+  "xk": {"ru": "Приштина", "en": "Pristina", "pt": "Pristina", "es": "Pristina", "de": "Pristina", "pl": "Prisztina"},
+  "kw": {"ru": "Эль-Кувейт", "en": "Kuwait City", "pt": "Cidade do Kuwait", "es": "Ciudad de Kuwait", "de": "Kuwait-Stadt", "pl": "Kuwejt"},
+  "la": {"ru": "Вьентьян", "en": "Vientiane", "pt": "Vientiane", "es": "Vientiane", "de": "Vientiane", "pl": "Vientiane"},
+  "lb": {"ru": "Бейрут", "en": "Beirut", "pt": "Beirute", "es": "Beirut", "de": "Beirut", "pl": "Bejrut"},
+  "lr": {"ru": "Монровия", "en": "Monrovia", "pt": "Monrovia", "es": "Monrovia", "de": "Monrovia", "pl": "Monrovia"},
+  "ly": {"ru": "Триполи", "en": "Tripoli", "pt": "Trípoli", "es": "Trípoli", "de": "Tripolis", "pl": "Trypolis"},
+  "lk": {"ru": "Шри-Джаяварденепура-Котте", "en": "Sri Jayawardenepura Kotte", "pt": "Sri Jayawardenepura Kotte", "es": "Sri Jayawardenepura Kotte", "de": "Sri Jayawardenepura Kotte", "pl": "Sri Jayawardenepura Kotte"},
+  "ls": {"ru": "Масеру", "en": "Maseru", "pt": "Maseru", "es": "Maseru", "de": "Maseru", "pl": "Maseru"},
+  "lt": {"ru": "Вильнюс", "en": "Vilnius", "pt": "Vilnius", "es": "Vilnius", "de": "Vilnius", "pl": "Wilno"},
+  "lu": {"ru": "Люксембург", "en": "Luxembourg", "pt": "Luxemburgo", "es": "Luxemburgo", "de": "Luxemburg", "pl": "Luksemburg"},
+  "lv": {"ru": "Рига", "en": "Riga", "pt": "Riga", "es": "Riga", "de": "Riga", "pl": "Ryga"},
+  "ma": {"ru": "Рабат", "en": "Rabat", "pt": "Rabat", "es": "Rabat", "de": "Rabat", "pl": "Rabat"},
+  "mc": {"ru": "Монако", "en": "Monaco", "pt": "Mónaco", "es": "Monaco", "de": "Monaco", "pl": "Monako"},
+  "md": {"ru": "Кишинёв", "en": "Chișinău", "pt": "Chisinau", "es": "Chisináu", "de": "Chișinău", "pl": "Kiszyniów"},
+  "mg": {"ru": "Антананариву", "en": "Antananarivo", "pt": "Antananarivo", "es": "Antananarivo", "de": "Antananarivo", "pl": "Antananarivo"},
+  "mx": {"ru": "Мехико", "en": "Mexico City", "pt": "Cidade do México", "es": "Ciudad de México", "de": "Mexiko-Stadt", "pl": "Meksyk"},
+  "mk": {"ru": "Скопье", "en": "Skopje", "pt": "Skopje", "es": "Skopje", "de": "Skopje", "pl": "Skopje"},
+  "ml": {"ru": "Бамако", "en": "Bamako", "pt": "Bamako", "es": "Bamako", "de": "Bamako", "pl": "Bamako"},
+  "mm": {"ru": "Нейпьидо", "en": "Naypyidaw", "pt": "Naypyidaw", "es": "Naypyidaw", "de": "Naypyidaw", "pl": "Naypyidaw"},
+  "me": {"ru": "Подгорица", "en": "Podgorica", "pt": "Podgorica", "es": "Podgorica", "de": "Podgorica", "pl": "Podgorica"},
+  "mn": {"ru": "Улан-Батор", "en": "Ulaanbaatar", "pt": "Ulan Bator", "es": "Ulán Bator", "de": "Ulaanbaatar", "pl": "Ułan Bator"},
+  "mz": {"ru": "Мапуту", "en": "Maputo", "pt": "Maputo", "es": "Maputo", "de": "Maputo", "pl": "Maputo"},
+  "mr": {"ru": "Нуакшот", "en": "Nouakchott", "pt": "Nouakchott", "es": "Nouakchott", "de": "Nouakchott", "pl": "Nouakchott"},
+  "mw": {"ru": "Лилонгве", "en": "Lilongwe", "pt": "Lilongwe", "es": "Lilongwe", "de": "Lilongwe", "pl": "Lilongwe"},
+  "my": {"ru": "Куала-Лумпур", "en": "Kuala Lumpur", "pt": "Kuala Lumpur", "es": "Kuala Lumpur", "de": "Kuala Lumpur", "pl": "Kuala Lumpur"},
+  "na": {"ru": "Виндхук", "en": "Windhoek", "pt": "Windhoek", "es": "Windhoek", "de": "Windhoek", "pl": "Windhoek"},
+  "nc": {"ru": "Нумеа", "en": "Nouméa", "pt": "Nouméa", "es": "Nouméa", "de": "Nouméa", "pl": "Nouméa"},
+  "ne": {"ru": "Ниамей", "en": "Niamey", "pt": "Niamey", "es": "Niamey", "de": "Niamey", "pl": "Niamey"},
+  "ng": {"ru": "Абуджа", "en": "Abuja", "pt": "Abuja", "es": "Abuja", "de": "Abuja", "pl": "Abuja"},
+  "ni": {"ru": "Манагуа", "en": "Managua", "pt": "Managua", "es": "Managua", "de": "Managua", "pl": "Managua"},
+  "nl": {"ru": "Амстердам", "en": "Amsterdam", "pt": "Amsterdam", "es": "Amsterdam", "de": "Amsterdam", "pl": "Amsterdam"},
+  "no": {"ru": "Осло", "en": "Oslo", "pt": "Oslo", "es": "Oslo", "de": "Oslo", "pl": "Oslo"},
+  "np": {"ru": "Катманду", "en": "Kathmandu", "pt": "Katmandu", "es": "Katmandú", "de": "Kathmandu", "pl": "Katmandu"},
+  "nz": {"ru": "Веллингтон", "en": "Wellington", "pt": "Wellington", "es": "Wellington", "de": "Wellington", "pl": "Wellington"},
+  "om": {"ru": "Маскат", "en": "Muscat", "pt": "Mascate", "es": "Mascate", "de": "Maskat", "pl": "Maskat"},
+  "pk": {"ru": "Исламабад", "en": "Islamabad", "pt": "Islamabad", "es": "Islamabad", "de": "Islamabad", "pl": "Islamabad"},
+  "pa": {"ru": "Панама", "en": "Panama City", "pt": "Cidade do Panamá", "es": "Ciudad de Panamá", "de": "Panama-Stadt", "pl": "Panama"},
+  "pe": {"ru": "Лима", "en": "Lima", "pt": "Lima", "es": "Lima", "de": "Lima", "pl": "Lima"},
+  "ph": {"ru": "Манила", "en": "Manila", "pt": "Manila", "es": "Manila", "de": "Manila", "pl": "Manila"},
+  "pg": {"ru": "Порт-Морсби", "en": "Port Moresby", "pt": "Port Moresby", "es": "Port Moresby", "de": "Port Moresby", "pl": "Port Moresby"},
+  "pl": {"ru": "Варшава", "en": "Warsaw", "pt": "Varsóvia", "es": "Varsovia", "de": "Warschau", "pl": "Warszawa"},
+  "pr": {"ru": "Сан-Хуан", "en": "San Juan", "pt": "San Juan", "es": "San Juan", "de": "San Juan", "pl": "San Juan"},
+  "kp": {"ru": "Пхеньян", "en": "Pyongyang", "pt": "Pyongyang", "es": "Pionyang", "de": "Pjöngjang", "pl": "Pjongjang"},
+  "pt": {"ru": "Лиссабон", "en": "Lisbon", "pt": "Lisboa", "es": "Lisboa", "de": "Lissabon", "pl": "Lizbona"},
+  "py": {"ru": "Асунсьон", "en": "Asunción", "pt": "Asunción", "es": "Asunción", "de": "Asunción", "pl": "Asunción"},
+  "ps": {"ru": "Рамалла", "en": "Ramallah", "pt": "Ramallah", "es": "Ramallah", "de": "Ramallah", "pl": "Ramallah"},
+  "qa": {"ru": "Доха", "en": "Doha", "pt": "Doha", "es": "Doha", "de": "Doha", "pl": "Doha"},
+  "ro": {"ru": "Бухарест", "en": "Bucharest", "pt": "Bucareste", "es": "Bucarest", "de": "Bukarest", "pl": "Bukareszt"},
+  "ru": {"ru": "Москва", "en": "Moscow", "pt": "Moscou", "es": "Moscú", "de": "Moskau", "pl": "Moskwa"},
+  "rw": {"ru": "Кигали", "en": "Kigali", "pt": "Kigali", "es": "Kigali", "de": "Kigali", "pl": "Kigali"},
+  "eh": {"ru": "Эль-Аюн", "en": "Laayoune", "pt": "Laayoune", "es": "Laayoune", "de": "Laayoune", "pl": "Laayoune"},
+  "sa": {"ru": "Эр-Рияд", "en": "Riyadh", "pt": "Riade", "es": "Riad", "de": "Riad", "pl": "Rijad"},
+  "sd": {"ru": "Хартум", "en": "Khartoum", "pt": "Cartum", "es": "Jartum", "de": "Khartum", "pl": "Chartum"},
+  "ss": {"ru": "Джуба", "en": "Juba", "pt": "Juba", "es": "Juba", "de": "Juba", "pl": "Juba"},
+  "sn": {"ru": "Дакар", "en": "Dakar", "pt": "Dakar", "es": "Dakar", "de": "Dakar", "pl": "Dakar"},
+  "sb": {"ru": "Хониара", "en": "Honiara", "pt": "Honiara", "es": "Honiara", "de": "Honiara", "pl": "Honiara"},
+  "sl": {"ru": "Фритаун", "en": "Freetown", "pt": "Freetown", "es": "Freetown", "de": "Freetown", "pl": "Freetown"},
+  "sv": {"ru": "Сан-Сальвадор", "en": "San Salvador", "pt": "San Salvador", "es": "San Salvador", "de": "San Salvador", "pl": "San Salvador"},
+  "so": {"ru": "Могадишо", "en": "Mogadishu", "pt": "Mogadíscio", "es": "Mogadiscio", "de": "Mogadischu", "pl": "Mogadiszu"},
+  "rs": {"ru": "Белград", "en": "Belgrade", "pt": "Belgrado", "es": "Belgrado", "de": "Belgrad", "pl": "Belgrad"},
+  "sr": {"ru": "Парамарибо", "en": "Paramaribo", "pt": "Paramaribo", "es": "Paramaribo", "de": "Paramaribo", "pl": "Paramaribo"},
+  "sk": {"ru": "Братислава", "en": "Bratislava", "pt": "Bratislava", "es": "Bratislava", "de": "Bratislava", "pl": "Bratislava"},
+  "si": {"ru": "Любляна", "en": "Ljubljana", "pt": "Ljubljana", "es": "Ljubljana", "de": "Ljubljana", "pl": "Lublana"},
+  "se": {"ru": "Стокгольм", "en": "Stockholm", "pt": "Estocolmo", "es": "Estocolmo", "de": "Stockholm", "pl": "Sztokholm"},
+  "sz": {"ru": "Мбабане", "en": "Mbabane", "pt": "Mbabane", "es": "Mbabane", "de": "Mbabane", "pl": "Mbabane"},
+  "sy": {"ru": "Дамаск", "en": "Damascus", "pt": "Damasco", "es": "Damasco", "de": "Damaskus", "pl": "Damaszek"},
+  "td": {"ru": "Нджамена", "en": "N'Djamena", "pt": "N'Djamena", "es": "N'Djamena", "de": "N'Djamena", "pl": "N'Djamena"},
+  "tg": {"ru": "Ломе", "en": "Lomé", "pt": "Lomé", "es": "Lomé", "de": "Lomé", "pl": "Lomé"},
+  "th": {"ru": "Бангкок", "en": "Bangkok", "pt": "Bangkok", "es": "Bangkok", "de": "Bangkok", "pl": "Bangkok"},
+  "tj": {"ru": "Душанбе", "en": "Dushanbe", "pt": "Dushanbe", "es": "Dushanbe", "de": "Dushanbe", "pl": "Duszanbe"},
+  "tm": {"ru": "Ашхабад", "en": "Ashgabat", "pt": "Ashgabat", "es": "Ashgabat", "de": "Aschgabat", "pl": "Aszchabad"},
+  "tl": {"ru": "Дили", "en": "Dili", "pt": "Dili", "es": "Dili", "de": "Dili", "pl": "Dili"},
+  "tt": {"ru": "Порт-оф-Спейн", "en": "Port of Spain", "pt": "Port of Spain", "es": "Port of Spain", "de": "Port of Spain", "pl": "Port of Spain"},
+  "tn": {"ru": "Тунис", "en": "Tunis", "pt": "Tunis", "es": "Tunis", "de": "Tunis", "pl": "Tunis"},
+  "tr": {"ru": "Анкара", "en": "Ankara", "pt": "Ankara", "es": "Ankara", "de": "Ankara", "pl": "Ankara"},
+  "tw": {"ru": "Тайбэй", "en": "Taipei", "pt": "Taipé", "es": "Taipéi", "de": "Taipeh", "pl": "Tajpej"},
+  "tz": {"ru": "Додома", "en": "Dodoma", "pt": "Dodoma", "es": "Dodoma", "de": "Dodoma", "pl": "Dodoma"},
+  "ug": {"ru": "Кампала", "en": "Kampala", "pt": "Kampala", "es": "Kampala", "de": "Kampala", "pl": "Kampala"},
+  "ua": {"ru": "Киев", "en": "Kyiv", "pt": "Kiev", "es": "Kiev", "de": "Kiew", "pl": "Kijów"},
+  "uy": {"ru": "Монтевидео", "en": "Montevideo", "pt": "Montevideo", "es": "Montevideo", "de": "Montevideo", "pl": "Montevideo"},
+  "us": {"ru": "Вашингтон", "en": "Washington", "pt": "Washington", "es": "Washington", "de": "Washington", "pl": "Washington"},
+  "uz": {"ru": "Ташкент", "en": "Tashkent", "pt": "Tasquente", "es": "Taskent", "de": "Taschkent", "pl": "Taszkent"},
+  "ve": {"ru": "Каракас", "en": "Caracas", "pt": "Caracas", "es": "Caracas", "de": "Caracas", "pl": "Caracas"},
+  "vn": {"ru": "Ханой", "en": "Hanoi", "pt": "Hanói", "es": "Hanói", "de": "Hanoi", "pl": "Hanoi"},
+  "vu": {"ru": "Порт-Вила", "en": "Port Vila", "pt": "Port Vila", "es": "Port Vila", "de": "Port Vila", "pl": "Port Vila"},
+  "ye": {"ru": "Сана", "en": "Sanaa", "pt": "Sanaa", "es": "Saná", "de": "Sanaa", "pl": "Sana"},
+  "za": {"ru": "Претория", "en": "Pretoria", "pt": "Pretoria", "es": "Pretoria", "de": "Pretoria", "pl": "Pretoria"},
+  "zm": {"ru": "Лусака", "en": "Lusaka", "pt": "Lusaka", "es": "Lusaka", "de": "Lusaka", "pl": "Lusaka"},
+  "zw": {"ru": "Хараре", "en": "Harare", "pt": "Harare", "es": "Harare", "de": "Harare", "pl": "Harare"},
+  "va": {"ru": "Ватикан", "en": "Vatican City", "pt": "Cidade do Vaticano", "es": "Ciudad del Vaticano", "de": "Vatikanstadt", "pl": "Watykan"},
+  "sm": {"ru": "Сан-Марино", "en": "San Marino", "pt": "San Marino", "es": "San Marino", "de": "San Marino", "pl": "San Marino"},
+  "li": {"ru": "Вадуц", "en": "Vaduz", "pt": "Vaduz", "es": "Vaduz", "de": "Vaduz", "pl": "Vaduz"},
+  "ad": {"ru": "Андорра-ла-Велья", "en": "Andorra la Vella", "pt": "Andorra la Vella", "es": "Andorra la Vella", "de": "Andorra la Vella", "pl": "Andorra la Vella"},
+  "mt": {"ru": "Валлетта", "en": "Valletta", "pt": "Valeta", "es": "La Valeta", "de": "Valletta", "pl": "Valletta"},
+  "nr": {"ru": "Ярен", "en": "Yaren", "pt": "Yaren", "es": "Yaren", "de": "Yaren", "pl": "Yaren"},
+  "tv": {"ru": "Фунафути", "en": "Funafuti", "pt": "Funafuti", "es": "Funafuti", "de": "Funafuti", "pl": "Funafuti"},
+  "pw": {"ru": "Нгерулмуд", "en": "Ngerulmud", "pt": "Ngerulmud", "es": "Ngerulmud", "de": "Ngerulmud", "pl": "Ngerulmud"},
+  "mh": {"ru": "Маджуро", "en": "Majuro", "pt": "Majuro", "es": "Majuro", "de": "Majuro", "pl": "Majuro"},
+  "fm": {"ru": "Паликир", "en": "Palikir", "pt": "Palikir", "es": "Palikir", "de": "Palikir", "pl": "Palikir"},
+  "ws": {"ru": "Апиа", "en": "Apia", "pt": "Apia", "es": "Apia", "de": "Apia", "pl": "Apia"},
+  "to": {"ru": "Нукуалофа", "en": "Nuku'alofa", "pt": "Nuku'alofa", "es": "Nuku'alofa", "de": "Nuku'alofa", "pl": "Nuku'alofa"},
+  "ki": {"ru": "Южная Тарава", "en": "South Tarawa", "pt": "South Tarawa", "es": "South Tarawa", "de": "South Tarawa", "pl": "South Tarawa"},
+  "kn": {"ru": "Бастер", "en": "Basseterre", "pt": "Basseterre", "es": "Basseterre", "de": "Basseterre", "pl": "Basseterre"},
+  "gd": {"ru": "Сент-Джорджес", "en": "St. George's", "pt": "St. George's", "es": "St. George's", "de": "St. George's", "pl": "St. George's"},
+  "vc": {"ru": "Кингстаун", "en": "Kingstown", "pt": "Kingstown", "es": "Kingstown", "de": "Kingstown", "pl": "Kingstown"},
+  "bb": {"ru": "Бриджтаун", "en": "Bridgetown", "pt": "Bridgetown", "es": "Bridgetown", "de": "Bridgetown", "pl": "Bridgetown"},
+  "ag": {"ru": "Сент-Джонс", "en": "Saint John's", "pt": "Saint John's", "es": "Saint John's", "de": "Saint John's", "pl": "Saint John's"},
+  "lc": {"ru": "Кастри", "en": "Castries", "pt": "Castries", "es": "Castries", "de": "Castries", "pl": "Castries"},
+  "mv": {"ru": "Мале", "en": "Malé", "pt": "Malé", "es": "Malé", "de": "Malé", "pl": "Malé"},
+  "sc": {"ru": "Виктория", "en": "Victoria", "pt": "Victoria", "es": "Victoria", "de": "Victoria", "pl": "Victoria"},
+  "sg": {"ru": "Сингапур", "en": "Singapore", "pt": "Singapura", "es": "Singapur", "de": "Singapur", "pl": "Singapur"},
+  "bh": {"ru": "Манама", "en": "Manama", "pt": "Manama", "es": "Manama", "de": "Manama", "pl": "Manama"},
 };
 
 const regions = [
@@ -885,7 +1123,7 @@ function validatePlayerName(value) {
 }
 
 function modeLabel(value = mode) {
-  return tr(value === 'flags' ? 'modeFlags' : value === 'coats' ? 'modeCoats' : value === 'animals' ? 'modeAnimals' : 'modeMixed');
+  return tr(value === 'flags' ? 'modeFlags' : value === 'coats' ? 'modeCoats' : value === 'capitals' ? 'modeCapitals' : value === 'animals' ? 'modeAnimals' : 'modeMixed');
 }
 
 function levelLabel(value = level) {
@@ -1165,11 +1403,11 @@ function languageNames(codes) {
 }
 
 function hasLore(item) {
-  return (item.type === 'flag' && Boolean(countryFlagText(item.id))) || item.type === 'coat';
+  return (item.type === 'flag' && Boolean(countryFlagText(item.id))) || item.type === 'coat' || item.type === 'capital';
 }
 
 function countryPanel(item) {
-  if (item.type !== 'flag' && item.type !== 'coat') return '';
+  if (item.type !== 'flag' && item.type !== 'coat' && item.type !== 'capital') return '';
   const info = countryInfo(item.id);
   const flagText = item.type === 'flag' ? countryFlagText(item.id) : '';
   const coatText = item.type === 'coat' ? tr('coatStoryText', { name: name(item) }) : '';
@@ -1196,14 +1434,24 @@ function countryName(id, locale = lang) {
   return countryNameOverrides[locale]?.[id] || new Intl.DisplayNames([locale], { type: 'region' }).of(id.toUpperCase()) || id.toUpperCase();
 }
 
+function capitalName(item, locale = lang) {
+  const value = typeof item === 'string' ? capitalById.get(item) : item;
+  return value?.capital?.[locale] || value?.capital?.en || value?.capital?.ru || '';
+}
+
 function name(item) {
-  return item.type === 'flag' || item.type === 'coat' ? countryName(item.id) : (item.names[lang] || item.names.en || item.names.ru);
+  return item.type === 'flag' || item.type === 'coat' || item.type === 'capital' ? countryName(item.id) : (item.names[lang] || item.names.en || item.names.ru);
 }
 
 function fact(item) {
   if (item.type === 'coat') return tr('coatSolved', { name: name(item) });
+  if (item.type === 'capital') return tr('capitalSolved', { name: name(item), capital: capitalName(item) });
   if (item.type === 'animal') return item.facts[lang] || item.facts.en || item.facts.ru;
   return item.facts?.[lang] || '';
+}
+
+function firstLetter(value) {
+  return [...String(value).trim()][0]?.toLocaleUpperCase(lang) || '';
 }
 
 function regionName(index) {
@@ -1256,7 +1504,17 @@ const coats = coatIds.map(id => {
   };
 });
 const coatById = new Map(coats.map(coat => [coat.id, coat]));
-const allItems = [...flags, ...coats, ...animals];
+const capitals = countries.filter(([id]) => capitalData[id]).map(([id, iso]) => ({
+  id,
+  iso,
+  type: 'capital',
+  key: `capital:${id}`,
+  tier: easyIds.has(id) ? 'easy' : mediumFlagIds.has(id) ? 'medium' : 'max',
+  point: flagPoints[id],
+  capital: capitalData[id],
+}));
+const capitalById = new Map(capitals.map(capital => [capital.id, capital]));
+const allItems = [...flags, ...coats, ...capitals, ...animals];
 
 function tierAllowed(item) {
   return levelRank[item.tier || 'easy'] <= levelRank[level];
@@ -1272,6 +1530,10 @@ function animalPool() {
 
 function coatPool() {
   return coats.filter(tierAllowed);
+}
+
+function capitalPool() {
+  return capitals.filter(tierAllowed);
 }
 
 function roundLength() {
@@ -1327,6 +1589,19 @@ function coatOptions(question, availableCoats) {
   return shuffle([question, ...shuffle(availableCoats.filter(coat => coat.id !== question.id)).slice(0, 3)]).map(coat => coat.id);
 }
 
+function capitalOptions(question, availableCapitals) {
+  const usedLabels = new Set([capitalName(question)]);
+  const distractors = [];
+  for (const capital of shuffle(availableCapitals.filter(item => item.id !== question.id))) {
+    const label = capitalName(capital);
+    if (!label || usedLabels.has(label)) continue;
+    distractors.push(capital);
+    usedLabels.add(label);
+    if (distractors.length >= 3) break;
+  }
+  return shuffle([question, ...distractors]).map(capital => capital.id);
+}
+
 function mixedPool(availableFlags, availableAnimals) {
   if (lengthMode === 'endless') return shuffle([...availableFlags, ...availableAnimals]);
   const total = fixedRoundSizes[level];
@@ -1353,9 +1628,10 @@ function sortedByName(items, kind) {
 }
 
 function visibleItems() {
-  if (!featureFlags.animals && !featureFlags.coats) return sortedByName(flags, 'flags');
+  if (!featureFlags.animals && !featureFlags.coats && !featureFlags.capitals) return sortedByName(flags, 'flags');
   if (exploreKind === 'flags') return sortedByName(flags, 'flags');
   if (exploreKind === 'coats') return sortedByName(coats, 'coats');
+  if (exploreKind === 'capitals') return sortedByName(capitals, 'capitals');
   if (exploreKind === 'animals') return sortedByName(animals, 'animals');
   return sortedByName(allItems, 'all');
 }
@@ -1381,9 +1657,11 @@ function setStaticText() {
   document.querySelector('[data-mode="mixed"]').textContent = tr('modeMixed');
   document.querySelector('[data-mode="flags"]').textContent = tr('modeFlags');
   document.querySelector('[data-mode="coats"]').textContent = tr('modeCoats');
+  document.querySelector('[data-mode="capitals"]').textContent = tr('modeCapitals');
   document.querySelector('[data-mode="animals"]').textContent = tr('modeAnimals');
   document.querySelector('[data-mode="mixed"]').hidden = !featureFlags.animals;
   document.querySelector('[data-mode="coats"]').hidden = !featureFlags.coats;
+  document.querySelector('[data-mode="capitals"]').hidden = !featureFlags.capitals;
   document.querySelector('[data-mode="animals"]').hidden = !featureFlags.animals;
   document.querySelector('[data-level="easy"]').textContent = tr('levelEasy');
   document.querySelector('[data-level="medium"]').textContent = tr('levelMedium');
@@ -1402,7 +1680,7 @@ function setChrome() {
   setStaticText();
   $('#eyebrow').textContent = tr(quiz ? 'quizEyebrow' : 'exploreEyebrow');
   $('#title').textContent = tr(quiz ? 'quizTitle' : 'exploreTitle');
-  document.querySelector('.topic-modes').hidden = !quiz || (!featureFlags.animals && !featureFlags.coats);
+  document.querySelector('.topic-modes').hidden = !quiz || (!featureFlags.animals && !featureFlags.coats && !featureFlags.capitals);
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.length-modes').hidden = !quiz;
   document.querySelector('.player-board').hidden = !isRoundFinished();
@@ -1413,14 +1691,23 @@ function setChrome() {
 function buildQuestions(count, usedKeys = new Set()) {
   const availableFlags = flagPool();
   const availableCoats = coatPool();
+  const availableCapitals = capitalPool();
   const availableAnimals = animalPool();
   const availableRegions = [...new Set(availableAnimals.map(animal => animal.region))];
-  const activeMode = mode === 'coats' && featureFlags.coats ? 'coats' : featureFlags.animals ? mode : 'flags';
+  const activeMode = mode === 'coats' && featureFlags.coats
+    ? 'coats'
+    : mode === 'capitals' && featureFlags.capitals
+      ? 'capitals'
+      : featureFlags.animals
+        ? mode
+        : 'flags';
   mode = activeMode;
   const pool = activeMode === 'flags'
     ? shuffle(availableFlags)
     : activeMode === 'coats'
       ? shuffle(availableCoats)
+    : activeMode === 'capitals'
+      ? shuffle(availableCapitals)
     : activeMode === 'animals'
       ? shuffle(availableAnimals)
       : mixedPool(availableFlags, availableAnimals);
@@ -1431,6 +1718,8 @@ function buildQuestions(count, usedKeys = new Set()) {
       ? flagOptions(question, availableFlags)
       : question.type === 'coat'
         ? coatOptions(question, availableCoats)
+      : question.type === 'capital'
+        ? capitalOptions(question, availableCapitals)
       : shuffle([question.region, ...shuffle(availableRegions.filter(index => index !== question.region)).slice(0, 3)]),
   }));
 }
@@ -1490,14 +1779,17 @@ function render() {
   // На простом уровне флаг или герб показывается целиком: там задача — узнать
   // символ, а не разгадать его по обрывку.
   const masked = (q.type === 'flag' || q.type === 'coat') && !hinted && !solved && level !== 'easy';
+  const idAnswerType = q.type === 'flag' || q.type === 'coat' || q.type === 'capital';
   const visual = q.type === 'flag'
     ? `<div class="flag-window"><span class="flag-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/flags/${q.id}.svg" alt="${escapeHtml(solved ? name(q) : tr('flagAltHidden'))}"></span></div>`
     : q.type === 'coat'
       ? `<div class="coat-window"><span class="coat-shot${masked ? ` masked masked-${level}` : ''}"><img src="assets/coats/${q.id}.png" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"></span></div>`
+    : q.type === 'capital'
+      ? `<div class="capital-card"><img src="assets/flags/${q.id}.svg" alt=""><span class="tag">${tr('country')}</span><strong>${escapeHtml(name(q))}</strong></div>`
       : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   // Карта результата на телефоне не помещается и всё равно не читается:
   // половину стран на ней не разглядеть даже на десктопе.
-  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : tr('animalPrompt');
+  const prompt = q.type === 'flag' ? (masked ? tr('flagPartial') : '') : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : q.type === 'capital' ? tr('capitalPrompt') : tr('animalPrompt');
   const visualNote = solved
     ? (wideScreen() ? '<div class="result-map" id="map"></div>' : '')
     : (prompt ? `<small>${prompt}</small>` : '');
@@ -1507,14 +1799,14 @@ function render() {
     : wrong.size
       ? tr('wrong')
       : hinted
-        ? (q.type === 'flag' ? tr('flagHintOpen') : q.type === 'coat' ? tr('coatHintOpen') : escapeHtml(fact(q)))
+        ? (q.type === 'flag' ? tr('flagHintOpen') : q.type === 'coat' ? tr('coatHintOpen') : q.type === 'capital' ? tr('capitalHint', { letter: firstLetter(capitalName(q)) }) : escapeHtml(fact(q)))
         : '';
 
   $('#game').innerHTML = `
     <div class="visual">${visual}${visualNote}</div>
     <div class="question">
       <span class="tag">${tr('clueTag', { current: pos + 1, total: round.length })}</span>
-      <h2>${q.type === 'flag' ? tr('flagQuestion') : q.type === 'coat' ? tr('coatQuestion') : tr('animalQuestion')}</h2>
+      <h2>${q.type === 'flag' ? tr('flagQuestion') : q.type === 'coat' ? tr('coatQuestion') : q.type === 'capital' ? tr('capitalQuestion') : tr('animalQuestion')}</h2>
       <div class="choices">${q.options.map(id => choiceButton(q, id)).join('')}</div>
       <p class="message" role="status">${message}</p>
       <div class="actions">${solved ? `<button class="primary" id="next">${pos === round.length - 1 ? tr('finishRound') : tr('next')}</button>` : `<button id="hint">${tr('hint')}</button><button id="reveal">${tr('reveal')}</button>`}</div>
@@ -1522,9 +1814,8 @@ function render() {
 
   document.querySelectorAll('[data-answer]').forEach(button => {
     button.onclick = () => {
-      const countrySymbol = q.type === 'flag' || q.type === 'coat';
-      const answer = countrySymbol ? button.dataset.answer : Number(button.dataset.answer);
-      if (answer === (countrySymbol ? q.id : q.region)) {
+      const answer = idAnswerType ? button.dataset.answer : Number(button.dataset.answer);
+      if (answer === (idAnswerType ? q.id : q.region)) {
         awardQuestion(false);
         solved = true;
       } else if (!wrong.has(answer)) {
@@ -1561,11 +1852,14 @@ function render() {
 }
 
 function choiceButton(question, id) {
-  const correct = question.type === 'flag' || question.type === 'coat' ? id === question.id : id === question.region;
+  const idAnswerType = question.type === 'flag' || question.type === 'coat' || question.type === 'capital';
+  const correct = idAnswerType ? id === question.id : id === question.region;
   const label = question.type === 'flag'
     ? name(flagById.get(id))
     : question.type === 'coat'
       ? name(coatById.get(id))
+    : question.type === 'capital'
+      ? capitalName(id)
       : regionName(id);
   return `<button data-answer="${id}" ${solved || wrong.has(id) ? 'disabled' : ''} class="${solved && correct ? 'correct' : ''}">${escapeHtml(label)}${solved && correct ? ' ✓' : ''}</button>`;
 }
@@ -1581,9 +1875,10 @@ function renderExplore() {
   $('#game').innerHTML = `
     <div class="explore-map" id="exploreMap"></div>
     <div class="atlas">
-      ${featureFlags.animals || featureFlags.coats ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
+      ${featureFlags.animals || featureFlags.coats || featureFlags.capitals ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
         <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
         ${featureFlags.coats ? `<button data-kind="coats" class="${exploreKind === 'coats' ? 'active' : ''}">${tr('coats')}</button>` : ''}
+        ${featureFlags.capitals ? `<button data-kind="capitals" class="${exploreKind === 'capitals' ? 'active' : ''}">${tr('capitals')}</button>` : ''}
         ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
       </div>` : ''}
       <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
@@ -1613,7 +1908,7 @@ function listItem(item) {
   return `
     <article class="item-row ${active ? 'active' : ''}" id="${rowId}">
       <button type="button" data-item="${escapeHtml(item.key)}" class="${active ? 'active' : ''}" aria-expanded="${active}" ${active ? `aria-controls="${rowId}-detail"` : ''}>
-        ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
+        ${item.type === 'flag' || item.type === 'capital' ? `<img src="assets/flags/${item.id}.svg" alt="">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
         <span>${escapeHtml(name(item))}</span>
       </button>
       ${active ? itemDetail(item, rowId) : ''}
@@ -1625,9 +1920,9 @@ function itemDetail(item, rowId) {
   const region = item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : '';
   return `
     <div class="item-detail" id="${rowId}-detail">
-      ${item.type === 'flag' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
+      ${item.type === 'flag' || item.type === 'capital' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
       <div>
-        <span class="tag">${item.type === 'flag' || item.type === 'coat' ? tr('country') : tr('animal')}</span>
+        <span class="tag">${item.type === 'flag' || item.type === 'coat' || item.type === 'capital' ? tr('country') : tr('animal')}</span>
         <h2>${escapeHtml(name(item))}</h2>
         ${plain ? `<p>${region}${escapeHtml(plain)}</p>` : ''}
         ${countryPanel(item)}
@@ -1695,7 +1990,7 @@ function baseMap(container, label) {
 }
 
 function drawResult(q) {
-  const countrySymbol = q.type === 'flag' || q.type === 'coat';
+  const countrySymbol = q.type === 'flag' || q.type === 'coat' || q.type === 'capital';
   const { features, projection, path, svg } = baseMap('#map', countrySymbol ? tr('resultMapLabel', { name: name(q) }) : tr('animalPointNote'));
   svg.selectAll('.land').data(features).join('path').attr('d', path).attr('fill', feature => q.iso && featureId(feature) === q.iso ? '#f4b333' : '#f6faf6').attr('stroke', '#86a5af').attr('stroke-width', 0.4);
   if (q.point) {
@@ -1706,7 +2001,7 @@ function drawResult(q) {
 }
 
 function drawExplore(current) {
-  const mapItems = exploreKind === 'coats' || current.type === 'coat' ? coats : flags;
+  const mapItems = exploreKind === 'coats' || current.type === 'coat' ? coats : exploreKind === 'capitals' || current.type === 'capital' ? capitals : flags;
   const itemIsos = new Set(mapItems.map(item => item.iso));
   const { features, projection, path, svg } = baseMap('#exploreMap', tr('mapLabel'));
   svg.selectAll('.land').data(features).join('path')
@@ -1790,6 +2085,7 @@ document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
     const availableModes = ['flags'];
     if (featureFlags.coats) availableModes.push('coats');
+    if (featureFlags.capitals) availableModes.push('capitals');
     if (featureFlags.animals) availableModes.push('mixed', 'animals');
     if (!availableModes.includes(button.dataset.mode)) return;
     const changed = mode !== button.dataset.mode;
@@ -1818,7 +2114,7 @@ if (document.modelContext?.registerTool) {
       inputSchema: {
         type: 'object',
         properties: {
-          mode: { type: 'string', enum: ['flags', ...(featureFlags.coats ? ['coats'] : []), ...(featureFlags.animals ? ['mixed', 'animals'] : [])] },
+          mode: { type: 'string', enum: ['flags', ...(featureFlags.coats ? ['coats'] : []), ...(featureFlags.capitals ? ['capitals'] : []), ...(featureFlags.animals ? ['mixed', 'animals'] : [])] },
           level: { type: 'string', enum: ['easy', 'medium', 'max'] },
           lengthMode: { type: 'string', enum: ['fixed', 'endless'] },
         },
@@ -1829,6 +2125,7 @@ if (document.modelContext?.registerTool) {
       execute(input) {
         const availableModes = ['flags'];
         if (featureFlags.coats) availableModes.push('coats');
+        if (featureFlags.capitals) availableModes.push('capitals');
         if (featureFlags.animals) availableModes.push('mixed', 'animals');
         if (!input || !availableModes.includes(input.mode)) throw Error('Invalid mode');
         if (input.level && !['easy', 'medium', 'max'].includes(input.level)) throw Error('Invalid level');

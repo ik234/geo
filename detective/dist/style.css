@@ -420,6 +420,26 @@ a:focus-visible {
   font-size: 120px;
 }
 
+.capital-card {
+  width: min(100%, 340px);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.capital-card img {
+  width: 128px;
+  border-radius: 5px;
+  box-shadow: 0 5px 14px #14344018;
+}
+
+.capital-card strong {
+  font-size: 34px;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
 .visual small,
 .explore-map small {
   font-size: 14px;
@@ -850,6 +870,18 @@ button:hover:not(:disabled) {
 
   .animal {
     font-size: 90px;
+  }
+
+  .capital-card {
+    gap: 6px;
+  }
+
+  .capital-card img {
+    width: 78px;
+  }
+
+  .capital-card strong {
+    font-size: 25px;
   }
 
   .question {
