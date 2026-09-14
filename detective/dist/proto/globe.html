@@ -237,7 +237,8 @@
         // На далёкий перелёт отдаляемся до целого глобуса, на соседний — чуть-чуть.
         const lift = Math.min(1, distance / (60 * deg));
         const dip = Math.max(0, Math.log(Math.max(from.scale, to.scale)) - Math.log(whole));
-        const duration = 700 + 1100 * Math.min(1, distance / Math.PI);
+        // От 1.4 с к соседней стране до 3.6 с на другую сторону Земли.
+        const duration = 1400 + 2200 * Math.min(1, distance / Math.PI);
         flight = d3.timer(elapsed => {
           const t = Math.min(1, elapsed / duration);
           const e = d3.easeCubicInOut(t);
