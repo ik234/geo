@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#102d38">
+    <title>Прототип: страна на глобусе</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+      .proto-note {
+        font-size: 14px;
+        color: #b8d3d9;
+      }
+
+      /* Карте нужна колонка пошире, чем флагу. */
+      .globe-game {
+        grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      }
+
+      .globe-visual {
+        min-height: 0;
+        padding: 16px;
+        gap: 10px;
+      }
+
+      #globe {
+        display: block;
+        width: 100%;
+        height: 420px;
+      }
+
+      @media (max-width: 700px) {
+        .globe-game {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .globe-visual {
+          padding: 8px;
+        }
+
+        #globe {
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="../">ГЕО / ДЕТЕКТИВ</a>
+      <span class="proto-note">прототип: страна на глобусе</span>
+    </header>
+    <main>
+      <section class="game globe-game">
+        <div class="visual globe-visual">
+          <canvas id="globe" role="img" aria-label="Глобус с отмеченной страной"></canvas>
+          <small id="caption">Загружаем карту…</small>
+        </div>
+        <div class="question">
+          <span class="tag" id="tag"></span>
+          <h2>Какая страна отмечена?</h2>
+          <div class="choices" id="choices"></div>
+          <p class="message" id="message" role="status"></p>
+          <div class="actions"><button class="primary" id="next" disabled>Дальше →</button></div>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/d3.min.js"></script>
+    <script src="../assets/topojson.min.js"></script>
+    <script type="module">
+      import world110 from '../assets/world.mjs';
+
+      // Прототип режима «Какая страна отмечена?». Глобус поворачивается к стране
+      // и приближается, пока её не станет видно, но соседи остаются вокруг; на
+      // дальних перелётах по пути отдаляется до целого глобуса. Маленькие страны
+      // обведены кольцом. В полёте рисуются грубые контуры 110m, на месте —
+      // подробные 50m: перерисовывать 80 тысяч точек каждый кадр iPad не обязан.
+
+      const $ = selector => document.querySelector(selector);
+      const deg = Math.PI / 180;
+
+      // Пары кодов из app.js: alpha-2 нужен Intl для названий, alpha-3 — карте.
+      const pairs = [['af', 'AFG'], ['ao', 'AGO'], ['al', 'ALB'], ['ae', 'ARE'], ['ar', 'ARG'], ['am', 'ARM'], ['aq', 'ATA'], ['tf', 'ATF'], ['au', 'AUS'], ['at', 'AUT'], ['az', 'AZE'], ['bi', 'BDI'], ['be', 'BEL'], ['bj', 'BEN'], ['bf', 'BFA'], ['bd', 'BGD'], ['bg', 'BGR'], ['bs', 'BHS'], ['ba', 'BIH'], ['by', 'BLR'], ['bz', 'BLZ'], ['bo', 'BOL'], ['br', 'BRA'], ['bn', 'BRN'], ['bt', 'BTN'], ['bw', 'BWA'], ['cf', 'CAF'], ['ca', 'CAN'], ['ch', 'CHE'], ['cl', 'CHL'], ['cn', 'CHN'], ['ci', 'CIV'], ['cm', 'CMR'], ['cd', 'COD'], ['cg', 'COG'], ['co', 'COL'], ['cr', 'CRI'], ['cu', 'CUB'], ['cy', 'CYP'], ['cz', 'CZE'], ['de', 'DEU'], ['dj', 'DJI'], ['dk', 'DNK'], ['do', 'DOM'], ['dz', 'DZA'], ['ec', 'ECU'], ['eg', 'EGY'], ['er', 'ERI'], ['es', 'ESP'], ['ee', 'EST'], ['et', 'ETH'], ['fi', 'FIN'], ['fj', 'FJI'], ['fk', 'FLK'], ['fr', 'FRA'], ['ga', 'GAB'], ['gb', 'GBR'], ['ge', 'GEO'], ['gh', 'GHA'], ['gn', 'GIN'], ['gm', 'GMB'], ['gw', 'GNB'], ['gq', 'GNQ'], ['gr', 'GRC'], ['gl', 'GRL'], ['gt', 'GTM'], ['gy', 'GUY'], ['hn', 'HND'], ['hr', 'HRV'], ['ht', 'HTI'], ['hu', 'HUN'], ['id', 'IDN'], ['in', 'IND'], ['ie', 'IRL'], ['ir', 'IRN'], ['iq', 'IRQ'], ['is', 'ISL'], ['il', 'ISR'], ['it', 'ITA'], ['jm', 'JAM'], ['jo', 'JOR'], ['jp', 'JPN'], ['kz', 'KAZ'], ['ke', 'KEN'], ['kg', 'KGZ'], ['kh', 'KHM'], ['kr', 'KOR'], ['xk', 'KOS'], ['kw', 'KWT'], ['la', 'LAO'], ['lb', 'LBN'], ['lr', 'LBR'], ['ly', 'LBY'], ['lk', 'LKA'], ['ls', 'LSO'], ['lt', 'LTU'], ['lu', 'LUX'], ['lv', 'LVA'], ['ma', 'MAR'], ['mc', 'MCO'], ['md', 'MDA'], ['mg', 'MDG'], ['mx', 'MEX'], ['mk', 'MKD'], ['ml', 'MLI'], ['mm', 'MMR'], ['me', 'MNE'], ['mn', 'MNG'], ['mz', 'MOZ'], ['mr', 'MRT'], ['mw', 'MWI'], ['my', 'MYS'], ['na', 'NAM'], ['nc', 'NCL'], ['ne', 'NER'], ['ng', 'NGA'], ['ni', 'NIC'], ['nl', 'NLD'], ['no', 'NOR'], ['np', 'NPL'], ['nz', 'NZL'], ['om', 'OMN'], ['pk', 'PAK'], ['pa', 'PAN'], ['pe', 'PER'], ['ph', 'PHL'], ['pg', 'PNG'], ['pl', 'POL'], ['pr', 'PRI'], ['kp', 'PRK'], ['pt', 'PRT'], ['py', 'PRY'], ['ps', 'PSX'], ['qa', 'QAT'], ['ro', 'ROU'], ['ru', 'RUS'], ['rw', 'RWA'], ['eh', 'SAH'], ['sa', 'SAU'], ['sd', 'SDN'], ['ss', 'SDS'], ['sn', 'SEN'], ['sb', 'SLB'], ['sl', 'SLE'], ['sv', 'SLV'], ['so', 'SOM'], ['rs', 'SRB'], ['sr', 'SUR'], ['sk', 'SVK'], ['si', 'SVN'], ['se', 'SWE'], ['sz', 'SWZ'], ['sy', 'SYR'], ['td', 'TCD'], ['tg', 'TGO'], ['th', 'THA'], ['tj', 'TJK'], ['tm', 'TKM'], ['tl', 'TLS'], ['tt', 'TTO'], ['tn', 'TUN'], ['tr', 'TUR'], ['tw', 'TWN'], ['tz', 'TZA'], ['ug', 'UGA'], ['ua', 'UKR'], ['uy', 'URY'], ['us', 'USA'], ['uz', 'UZB'], ['ve', 'VEN'], ['vn', 'VNM'], ['vu', 'VUT'], ['ye', 'YEM'], ['za', 'ZAF'], ['zm', 'ZMB'], ['zw', 'ZWE'], ['va', 'VAT'], ['sm', 'SMR'], ['li', 'LIE'], ['ad', 'AND'], ['mt', 'MLT'], ['nr', 'NRU'], ['tv', 'TUV'], ['pw', 'PLW'], ['mh', 'MHL'], ['fm', 'FSM'], ['ws', 'WSM'], ['to', 'TON'], ['ki', 'KIR'], ['kn', 'KNA'], ['gd', 'GRD'], ['vc', 'VCT'], ['bb', 'BRB'], ['ag', 'ATG'], ['lc', 'LCA'], ['mv', 'MDV'], ['sc', 'SYC'], ['sg', 'SGP'], ['bh', 'BHR']];
+      const alpha2 = new Map(pairs.map(([a2, a3]) => [a3, a2]));
+      const game = new Set(pairs.map(([, a3]) => a3));
+      const regionNames = new Intl.DisplayNames(['ru'], { type: 'region' });
+      const overrides = { KOS: 'Косово', SAH: 'Западная Сахара', FLK: 'Фолклендские острова', NCL: 'Новая Каледония', GRL: 'Гренландия', PRI: 'Пуэрто-Рико' };
+      const nameOf = id => overrides[id] || regionNames.of(alpha2.get(id).toUpperCase());
+
+      // Страны разного размера и в разных концах света, вперемешку большие и
+      // крошечные, чтобы перелёты были и длинные, и короткие.
+      const tour = ['RUS', 'KWT', 'BRA', 'LUX', 'JPN', 'TUV', 'EGY', 'SGP', 'CHL', 'VAT', 'MDG', 'NPL', 'ISL', 'NZL', 'FRA'];
+
+      const canvas = $('#globe');
+      const ctx = canvas.getContext('2d');
+      const projection = d3.geoOrthographic().clipAngle(90).precision(0.3);
+      const path = d3.geoPath(projection, ctx);
+      const sphere = { type: 'Sphere' };
+      const graticule = d3.geoGraticule10();
+      let W = 0;
+      let H = 0;
+
+      function shuffle(items) {
+        const copy = [...items];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = rect.width;
+        H = rect.height;
+        canvas.width = Math.round(W * dpr);
+        canvas.height = Math.round(H * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      const world50 = await fetch('countries-50m.json').then(response => response.json());
+      const obj50 = world50.objects.features;
+      const obj110 = world110.objects.features;
+      const features50 = topojson.feature(world50, obj50).features;
+      const byId = new Map(features50.map(feature => [feature.properties.id, feature]));
+      const detail = { land: topojson.merge(world50, obj50.geometries), borders: topojson.mesh(world50, obj50, (a, b) => a !== b) };
+      const coarse = { land: topojson.merge(world110, obj110.geometries), borders: topojson.mesh(world110, obj110, (a, b) => a !== b) };
+      const neighborIndex = topojson.neighbors(obj50.geometries);
+
+      // У Франции есть Гвиана, у США — Аляска и Гавайи: целиться во всю страну
+      // значило бы показывать пол-океана. Берём самый большой кусок и то, что
+      // лежит не дальше 25° от него.
+      function focusOf(feature) {
+        const geometry = feature.geometry;
+        if (geometry.type !== 'MultiPolygon') return geometry;
+        const polygons = geometry.coordinates.map(coordinates => ({ type: 'Polygon', coordinates }));
+        const main = polygons.reduce((best, polygon) => (d3.geoArea(polygon) > d3.geoArea(best) ? polygon : best));
+        const center = d3.geoCentroid(main);
+        const near = polygons.filter(polygon => d3.geoDistance(d3.geoCentroid(polygon), center) < 25 * deg);
+        return { type: 'MultiPolygon', coordinates: near.map(polygon => polygon.coordinates) };
+      }
+
+      const focus = new Map([...game].map(id => [id, focusOf(byId.get(id))]));
+      const centroids = new Map([...game].map(id => [id, d3.geoCentroid(focus.get(id))]));
+
+      function wholeGlobeScale() {
+        return (Math.min(W, H) / 2) * 0.92;
+      }
+
+      // Страна занимает до половины окна, но ближе, чем 18° по короткой стороне,
+      // не подлетаем: без соседей непонятно, где это вообще. Совсем крошечным
+      // странам, которые и так будут в кольце, даём 30°: у Тувалу при 18° вокруг
+      // один океан и сориентироваться не по чему.
+      function viewFor(id) {
+        const shape = focus.get(id);
+        const center = centroids.get(id);
+        const probe = d3.geoOrthographic().rotate([-center[0], -center[1]]).scale(1).translate([0, 0]).clipAngle(90);
+        const [[x0, y0], [x1, y1]] = d3.geoPath(probe).bounds(shape);
+        const fit = Math.min((W * 0.5) / Math.max(x1 - x0, 1e-6), (H * 0.5) / Math.max(y1 - y0, 1e-6));
+        const near = Math.min(W, H) / (18 * deg);
+        const closest = Math.max(x1 - x0, y1 - y0) * near < 16 ? Math.min(W, H) / (30 * deg) : near;
+        const whole = wholeGlobeScale();
+        const scale = Math.min(fit, closest);
+        // Чуть обрезанный по краям глобус выглядит ошибкой, а не приближением:
+        // большим странам вроде России оставляем глобус целиком.
+        return { center, scale: scale < whole * 1.3 ? whole : scale };
+      }
+
+      function draw(view, target, detailed) {
+        projection.rotate([-view.center[0], -view.center[1]]).scale(view.scale).translate([W / 2, H / 2]);
+        const layers = detailed ? detail : coarse;
+        ctx.clearRect(0, 0, W, H);
+        ctx.beginPath();
+        path(sphere);
+        ctx.fillStyle = '#c7e4eb';
+        ctx.fill();
+        ctx.beginPath();
+        path(graticule);
+        ctx.strokeStyle = 'rgba(20, 52, 64, .08)';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.beginPath();
+        path(layers.land);
+        ctx.fillStyle = '#f6faf6';
+        ctx.fill();
+        ctx.beginPath();
+        path(layers.borders);
+        ctx.strokeStyle = '#9db4bb';
+        ctx.lineWidth = 0.7;
+        ctx.stroke();
+        const feature = byId.get(target);
+        ctx.beginPath();
+        path(feature);
+        ctx.fillStyle = '#f4b333';
+        ctx.fill();
+        ctx.strokeStyle = '#ca501b';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.beginPath();
+        path(sphere);
+        ctx.strokeStyle = 'rgba(20, 52, 64, .35)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        if (!detailed) return;
+        // Кольцо, как на картах в Википедии, — если страна меньше пятна 16×16px.
+        if (path.area(feature) < 250) {
+          const [cx, cy] = projection(centroids.get(target));
+          const [[x0, y0], [x1, y1]] = path.bounds(focus.get(target));
+          const radius = Math.min(60, Math.max(16, Math.hypot(x1 - x0, y1 - y0) / 2 + 8));
+          ctx.beginPath();
+          ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = 5;
+          ctx.stroke();
+          ctx.strokeStyle = '#ca501b';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+        }
+      }
+
+      let view = null;
+      let flight = null;
+
+      function flyTo(target) {
+        const to = viewFor(target);
+        flight?.stop();
+        if (!view || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          view = to;
+          draw(view, target, true);
+          return;
+        }
+        const from = view;
+        const distance = d3.geoDistance(from.center, to.center);
+        const route = d3.geoInterpolate(from.center, to.center);
+        const whole = wholeGlobeScale();
+        // На далёкий перелёт отдаляемся до целого глобуса, на соседний — чуть-чуть.
+        const lift = Math.min(1, distance / (60 * deg));
+        const dip = Math.max(0, Math.log(Math.max(from.scale, to.scale)) - Math.log(whole));
+        const duration = 700 + 1100 * Math.min(1, distance / Math.PI);
+        flight = d3.timer(elapsed => {
+          const t = Math.min(1, elapsed / duration);
+          const e = d3.easeCubicInOut(t);
+          const logScale = Math.log(from.scale) + (Math.log(to.scale) - Math.log(from.scale)) * e - lift * dip * Math.sin(Math.PI * e);
+          view = t < 1 ? { center: route(e), scale: Math.max(whole, Math.exp(logScale)) } : to;
+          draw(view, target, t === 1);
+          if (t === 1) {
+            flight.stop();
+            flight = null;
+          }
+        });
+      }
+
+      // Неправильные варианты — соседи по суше, как на сложном уровне игры.
+      // У островов соседей нет, их добираем ближайшими странами.
+      function distractors(id) {
+        const index = obj50.geometries.findIndex(geometry => geometry.properties.id === id);
+        const center = centroids.get(id);
+        const borders = neighborIndex[index]
+          .map(i => obj50.geometries[i].properties.id)
+          .filter(other => game.has(other) && d3.geoDistance(centroids.get(other), center) < 35 * deg);
+        const picked = shuffle(borders).slice(0, 3);
+        if (picked.length < 3) {
+          const nearest = [...game]
+            .filter(other => other !== id && !picked.includes(other))
+            .sort((a, b) => d3.geoDistance(centroids.get(a), center) - d3.geoDistance(centroids.get(b), center));
+          picked.push(...nearest.slice(0, 3 - picked.length));
+        }
+        return picked;
+      }
+
+      let step = 0;
+
+      function ask() {
+        const target = tour[step];
+        const options = shuffle([target, ...distractors(target)]);
+        $('#tag').textContent = `СТРАНА ${step + 1} / ${tour.length}`;
+        $('#message').textContent = '';
+        $('#choices').innerHTML = options.map(id => `<button data-id="${id}">${nameOf(id)}</button>`).join('');
+        document.querySelectorAll('[data-id]').forEach(button => {
+          button.onclick = () => {
+            if (button.dataset.id === target) {
+              document.querySelectorAll('[data-id]').forEach(other => { other.disabled = true; });
+              button.classList.add('correct');
+              button.textContent = `${nameOf(target)} ✓`;
+              $('#message').textContent = `Разгадано! Это ${nameOf(target)}.`;
+            } else {
+              button.disabled = true;
+              $('#message').textContent = 'Пока не совпало. Попробуй другой вариант.';
+            }
+          };
+        });
+        flyTo(target);
+      }
+
+      resize();
+      $('#caption').textContent = 'Прототип: 15 стран разного размера. Маленькие обведены кольцом.';
+      $('#next').disabled = false;
+      $('#next').onclick = () => {
+        step = (step + 1) % tour.length;
+        ask();
+      };
+      addEventListener('resize', () => {
+        resize();
+        if (view) {
+          flight?.stop();
+          view = viewFor(tour[step]);
+          draw(view, tour[step], true);
+        }
+      });
+      ask();
+    </script>
+  </body>
+</html>

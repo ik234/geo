@@ -627,7 +627,7 @@ const ASSETS = [
   "summer.html",
   "weekdays.html"
 ];
-const ONLINE_ONLY = ["/assets/coats-svg/"];
+const ONLINE_ONLY = ["/assets/coats-svg/", "/proto/"];
 
 // addAll падает целиком, если хоть один запрос не удался, поэтому кладём
 // по одному: пропущенный флаг не должен отменять весь офлайн.
