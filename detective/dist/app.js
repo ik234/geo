@@ -77,19 +77,16 @@ const ui = {
     reveal: 'Узнать ответ',
     next: 'Следующая загадка →',
     finishRound: 'Завершить раунд',
-    all: 'Всё',
-    flags: 'Флаги',
-    coats: 'Гербы',
-    capitals: 'Столицы',
+    countries: 'Страны',
     animals: 'Животные',
     country: 'СТРАНА / ТЕРРИТОРИЯ',
     animal: 'ЖИВОТНОЕ',
+    flag: 'Флаг',
+    coat: 'Герб',
     capital: 'Столица',
     currency: 'Валюта',
     officialLanguages: 'Официальные языки',
     flagStory: 'Что на флаге',
-    coatStory: 'О гербе',
-    coatStoryText: 'Герб — официальный символ страны {name}. Рассмотри щит, корону, животных, растения и цвета: в геральдике почти каждая деталь что-то значит.',
     funFact: 'Любопытный факт',
     infoLoading: 'Загружаем сведения…',
     animalPointNote: 'Точка — пример места, не весь ареал',
@@ -177,19 +174,16 @@ const ui = {
     reveal: 'Show answer',
     next: 'Next clue →',
     finishRound: 'Finish round',
-    all: 'All',
-    flags: 'Flags',
-    coats: 'Coats',
-    capitals: 'Capitals',
+    countries: 'Countries',
     animals: 'Animals',
     country: 'COUNTRY / TERRITORY',
     animal: 'ANIMAL',
+    flag: 'Flag',
+    coat: 'Coat of arms',
     capital: 'Capital',
     currency: 'Currency',
     officialLanguages: 'Official languages',
     flagStory: 'On the flag',
-    coatStory: 'About the coat of arms',
-    coatStoryText: 'The coat of arms is an official symbol of {name}. Look at the shield, crown, animals, plants and colors: in heraldry, almost every detail carries meaning.',
     funFact: 'Fun fact',
     infoLoading: 'Loading details…',
     animalPointNote: 'The point is one example place, not the whole range',
@@ -277,19 +271,16 @@ const ui = {
     reveal: 'Ver resposta',
     next: 'Próxima pista →',
     finishRound: 'Terminar rodada',
-    all: 'Tudo',
-    flags: 'Bandeiras',
-    coats: 'Brasões',
-    capitals: 'Capitais',
+    countries: 'Países',
     animals: 'Animais',
     country: 'PAÍS / TERRITÓRIO',
     animal: 'ANIMAL',
+    flag: 'Bandeira',
+    coat: 'Brasão',
     capital: 'Capital',
     currency: 'Moeda',
     officialLanguages: 'Línguas oficiais',
     flagStory: 'Na bandeira',
-    coatStory: 'Sobre o brasão',
-    coatStoryText: 'O brasão é um símbolo oficial de {name}. Observa o escudo, a coroa, os animais, as plantas e as cores: na heráldica, quase cada detalhe tem significado.',
     funFact: 'Facto curioso',
     infoLoading: 'A carregar detalhes…',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
@@ -377,19 +368,16 @@ const ui = {
     reveal: 'Ver respuesta',
     next: 'Siguiente pista →',
     finishRound: 'Terminar ronda',
-    all: 'Todo',
-    flags: 'Banderas',
-    coats: 'Escudos',
-    capitals: 'Capitales',
+    countries: 'Países',
     animals: 'Animales',
     country: 'PAÍS / TERRITORIO',
     animal: 'ANIMAL',
+    flag: 'Bandera',
+    coat: 'Escudo',
     capital: 'Capital',
     currency: 'Moneda',
     officialLanguages: 'Lenguas oficiales',
     flagStory: 'En la bandera',
-    coatStory: 'Sobre el escudo',
-    coatStoryText: 'El escudo es un símbolo oficial de {name}. Mira el escudo, la corona, los animales, las plantas y los colores: en heráldica casi cada detalle tiene significado.',
     funFact: 'Dato curioso',
     infoLoading: 'Cargando detalles…',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
@@ -477,19 +465,16 @@ const ui = {
     reveal: 'Antwort zeigen',
     next: 'Nächstes Rätsel →',
     finishRound: 'Runde beenden',
-    all: 'Alles',
-    flags: 'Flaggen',
-    coats: 'Wappen',
-    capitals: 'Hauptstädte',
+    countries: 'Länder',
     animals: 'Tiere',
     country: 'LAND / GEBIET',
     animal: 'TIER',
+    flag: 'Flagge',
+    coat: 'Wappen',
     capital: 'Hauptstadt',
     currency: 'Währung',
     officialLanguages: 'Amtssprachen',
     flagStory: 'Auf der Flagge',
-    coatStory: 'Über das Wappen',
-    coatStoryText: 'Das Wappen ist ein offizielles Symbol von {name}. Schau auf Schild, Krone, Tiere, Pflanzen und Farben: In der Heraldik hat fast jedes Detail eine Bedeutung.',
     funFact: 'Kurioses',
     infoLoading: 'Details werden geladen…',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
@@ -577,19 +562,16 @@ const ui = {
     reveal: 'Pokaż odpowiedź',
     next: 'Następna zagadka →',
     finishRound: 'Zakończ rundę',
-    all: 'Wszystko',
-    flags: 'Flagi',
-    coats: 'Herby',
-    capitals: 'Stolice',
+    countries: 'Kraje',
     animals: 'Zwierzęta',
     country: 'KRAJ / TERYTORIUM',
     animal: 'ZWIERZĘ',
+    flag: 'Flaga',
+    coat: 'Herb',
     capital: 'Stolica',
     currency: 'Waluta',
     officialLanguages: 'Języki urzędowe',
     flagStory: 'Na fladze',
-    coatStory: 'O herbie',
-    coatStoryText: 'Herb jest oficjalnym symbolem kraju {name}. Przyjrzyj się tarczy, koronie, zwierzętom, roślinom i kolorom: w heraldyce prawie każdy szczegół ma znaczenie.',
     funFact: 'Ciekawostka',
     infoLoading: 'Wczytywanie szczegółów…',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
@@ -667,8 +649,10 @@ const similarFlagGroups = [
   ['mv', 'sc', 'sg', 'bh'],
 ];
 
+// Антарктиды здесь нет намеренно: MainFacts отдаёт под кодом aq герб Британской
+// антарктической территории, а у самой Антарктиды герба нет.
 const coatIds = [
-  'af', 'ao', 'al', 'ae', 'ar', 'am', 'aq', 'tf', 'au', 'at', 'az', 'bi', 'be', 'bj', 'bf', 'bd', 'bg', 'bs', 'ba', 'by', 'bz', 'bo', 'br', 'bn', 'bt', 'bw', 'cf', 'ca', 'ch', 'cl', 'cn', 'ci', 'cm', 'cd', 'co', 'cr', 'cu', 'cy', 'cz', 'de', 'dj', 'dk', 'do', 'dz', 'ec', 'eg', 'er', 'es', 'ee', 'et', 'fi', 'fj', 'fk', 'fr', 'ga', 'gb', 'ge', 'gh', 'gn', 'gm', 'gw', 'gq', 'gr', 'gl', 'gt', 'gy', 'hn', 'hr', 'ht', 'hu', 'id', 'in', 'ie', 'ir', 'iq', 'is', 'il', 'it', 'jm', 'jo', 'jp', 'kz', 'ke', 'kg', 'kh', 'kr', 'xk', 'kw', 'la', 'lb', 'lr', 'ly', 'lk', 'ls', 'lt', 'lu', 'lv', 'ma', 'mc', 'md', 'mg', 'mx', 'mk', 'ml', 'mm', 'me', 'mn', 'mz', 'mr', 'mw', 'my', 'na', 'nc', 'ne', 'ng', 'ni', 'nl', 'no', 'np', 'nz', 'om', 'pk', 'pa', 'pe', 'ph', 'pg', 'pl', 'kp', 'pt', 'py', 'ps', 'qa', 'ro', 'ru', 'rw', 'sa', 'sd', 'ss', 'sn', 'sb', 'sl', 'sv', 'so', 'rs', 'sr', 'sk', 'si', 'se', 'sy', 'td', 'tg', 'th', 'tj', 'tm', 'tt', 'tn', 'tr', 'tw', 'tz', 'ug', 'ua', 'uy', 'us', 'uz', 've', 'vn', 'vu', 'ye', 'za', 'zm', 'zw', 'va', 'sm', 'li', 'ad', 'mt', 'nr', 'tv', 'pw', 'mh', 'fm', 'ws', 'to', 'ki', 'kn', 'gd', 'vc', 'bb', 'ag', 'lc', 'mv', 'sc', 'sg', 'bh',
+  'af', 'ao', 'al', 'ae', 'ar', 'am', 'tf', 'au', 'at', 'az', 'bi', 'be', 'bj', 'bf', 'bd', 'bg', 'bs', 'ba', 'by', 'bz', 'bo', 'br', 'bn', 'bt', 'bw', 'cf', 'ca', 'ch', 'cl', 'cn', 'ci', 'cm', 'cd', 'co', 'cr', 'cu', 'cy', 'cz', 'de', 'dj', 'dk', 'do', 'dz', 'ec', 'eg', 'er', 'es', 'ee', 'et', 'fi', 'fj', 'fk', 'fr', 'ga', 'gb', 'ge', 'gh', 'gn', 'gm', 'gw', 'gq', 'gr', 'gl', 'gt', 'gy', 'hn', 'hr', 'ht', 'hu', 'id', 'in', 'ie', 'ir', 'iq', 'is', 'il', 'it', 'jm', 'jo', 'jp', 'kz', 'ke', 'kg', 'kh', 'kr', 'xk', 'kw', 'la', 'lb', 'lr', 'ly', 'lk', 'ls', 'lt', 'lu', 'lv', 'ma', 'mc', 'md', 'mg', 'mx', 'mk', 'ml', 'mm', 'me', 'mn', 'mz', 'mr', 'mw', 'my', 'na', 'nc', 'ne', 'ng', 'ni', 'nl', 'no', 'np', 'nz', 'om', 'pk', 'pa', 'pe', 'ph', 'pg', 'pl', 'kp', 'pt', 'py', 'ps', 'qa', 'ro', 'ru', 'rw', 'sa', 'sd', 'ss', 'sn', 'sb', 'sl', 'sv', 'so', 'rs', 'sr', 'sk', 'si', 'se', 'sy', 'td', 'tg', 'th', 'tj', 'tm', 'tt', 'tn', 'tr', 'tw', 'tz', 'ug', 'ua', 'uy', 'us', 'uz', 've', 'vn', 'vu', 'ye', 'za', 'zm', 'zw', 'va', 'sm', 'li', 'ad', 'mt', 'nr', 'tv', 'pw', 'mh', 'fm', 'ws', 'to', 'ki', 'kn', 'gd', 'vc', 'bb', 'ag', 'lc', 'mv', 'sc', 'sg', 'bh',
 ];
 
 const similarCoatGroups = [
@@ -1008,7 +992,7 @@ let mode = 'flags';
 let level = 'max';
 let lengthMode = 'fixed';
 let view = 'quiz';
-let exploreKind = 'flags';
+let exploreKind = 'countries';
 let selectedKey = 'flag:pt';
 let exploreScroll = null; // { block, behavior } — отложенная прокрутка списка после перерисовки
 let round = [];
@@ -1402,24 +1386,17 @@ function languageNames(codes) {
   return codes.map(code => intlName('language', code, dataCache.countries?.fallback?.language)).join(', ');
 }
 
-function hasLore(item) {
-  return (item.type === 'flag' && Boolean(countryFlagText(item.id))) || item.type === 'coat' || item.type === 'capital';
-}
-
 function countryPanel(item) {
-  if (item.type !== 'flag' && item.type !== 'coat' && item.type !== 'capital') return '';
   const info = countryInfo(item.id);
-  const flagText = item.type === 'flag' ? countryFlagText(item.id) : '';
-  const coatText = item.type === 'coat' ? tr('coatStoryText', { name: name(item) }) : '';
+  const flagText = countryFlagText(item.id);
   const facts = countryFacts(item.id);
-  if (!info && !flagText && !coatText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
+  if (!info && !flagText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
   const rows = [];
   if (info?.capital) rows.push([tr('capital'), info.capital[lang] || info.capital.en]);
   if (info?.currency) rows.push([tr('currency'), currencyName(info.currency)]);
   if (info?.languages?.length) rows.push([tr('officialLanguages'), languageNames(info.languages)]);
   const notes = [];
   if (flagText) notes.push([tr('flagStory'), flagText]);
-  if (coatText) notes.push([tr('coatStory'), coatText]);
   const pick = chosenFact(item, facts);
   if (pick) notes.push([tr('funFact'), pick]);
   if (!rows.length && !notes.length) return '';
@@ -1627,13 +1604,11 @@ function sortedByName(items, kind) {
   return sortedCache.get(key);
 }
 
+// Атлас — один список стран: флаг, герб и столица одной страны живут в одной
+// карточке, а не в трёх вкладках с почти одинаковым содержимым. Вкладка
+// появляется, только если включат животных.
 function visibleItems() {
-  if (!featureFlags.animals && !featureFlags.coats && !featureFlags.capitals) return sortedByName(flags, 'flags');
-  if (exploreKind === 'flags') return sortedByName(flags, 'flags');
-  if (exploreKind === 'coats') return sortedByName(coats, 'coats');
-  if (exploreKind === 'capitals') return sortedByName(capitals, 'capitals');
-  if (exploreKind === 'animals') return sortedByName(animals, 'animals');
-  return sortedByName(allItems, 'all');
+  return featureFlags.animals && exploreKind === 'animals' ? sortedByName(animals, 'animals') : sortedByName(flags, 'countries');
 }
 
 function selectedItem() {
@@ -1875,11 +1850,9 @@ function renderExplore() {
   $('#game').innerHTML = `
     <div class="explore-map" id="exploreMap"></div>
     <div class="atlas">
-      ${featureFlags.animals || featureFlags.coats || featureFlags.capitals ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
-        <button data-kind="flags" class="${exploreKind === 'flags' ? 'active' : ''}">${tr('flags')}</button>
-        ${featureFlags.coats ? `<button data-kind="coats" class="${exploreKind === 'coats' ? 'active' : ''}">${tr('coats')}</button>` : ''}
-        ${featureFlags.capitals ? `<button data-kind="capitals" class="${exploreKind === 'capitals' ? 'active' : ''}">${tr('capitals')}</button>` : ''}
-        ${featureFlags.animals ? `<button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>` : ''}
+      ${featureFlags.animals ? `<div class="explore-tabs" aria-label="${escapeHtml(tr('exploreTitle'))}">
+        <button data-kind="countries" class="${exploreKind === 'countries' ? 'active' : ''}">${tr('countries')}</button>
+        <button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>
       </div>` : ''}
       <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
     </div>`;
@@ -1908,7 +1881,7 @@ function listItem(item) {
   return `
     <article class="item-row ${active ? 'active' : ''}" id="${rowId}">
       <button type="button" data-item="${escapeHtml(item.key)}" class="${active ? 'active' : ''}" aria-expanded="${active}" ${active ? `aria-controls="${rowId}-detail"` : ''}>
-        ${item.type === 'flag' || item.type === 'capital' ? `<img src="assets/flags/${item.id}.svg" alt="">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="">` : `<span aria-hidden="true">${item.emoji}</span>`}
+        ${item.type === 'animal' ? `<span aria-hidden="true">${item.emoji}</span>` : `<img src="assets/flags/${item.id}.svg" alt="">`}
         <span>${escapeHtml(name(item))}</span>
       </button>
       ${active ? itemDetail(item, rowId) : ''}
@@ -1916,17 +1889,30 @@ function listItem(item) {
 }
 
 function itemDetail(item, rowId) {
-  const plain = hasLore(item) ? '' : fact(item);
-  const region = item.type === 'animal' ? `${escapeHtml(regionName(item.region))}. ` : '';
-  return `
+  if (item.type === 'animal') {
+    return `
     <div class="item-detail" id="${rowId}-detail">
-      ${item.type === 'flag' || item.type === 'capital' ? `<img src="assets/flags/${item.id}.svg" alt="${escapeHtml(name(item))}">` : item.type === 'coat' ? `<img src="assets/coats/${item.id}.png" alt="${escapeHtml(name(item))}">` : `<span class="animal-mini" aria-hidden="true">${item.emoji}</span>`}
+      <span class="animal-mini" aria-hidden="true">${item.emoji}</span>
       <div>
-        <span class="tag">${item.type === 'flag' || item.type === 'coat' || item.type === 'capital' ? tr('country') : tr('animal')}</span>
+        <span class="tag">${tr('animal')}</span>
         <h2>${escapeHtml(name(item))}</h2>
-        ${plain ? `<p>${region}${escapeHtml(plain)}</p>` : ''}
-        ${countryPanel(item)}
+        <p>${escapeHtml(regionName(item.region))}. ${escapeHtml(fact(item))}</p>
       </div>
+    </div>`;
+  }
+  // Флаг и герб стоят рядом над текстом, а не колонкой слева: в узком атласе
+  // колонка картинки забирала у текста почти половину ширины.
+  return `
+    <div class="item-detail country-detail" id="${rowId}-detail">
+      <div>
+        <span class="tag">${tr('country')}</span>
+        <h2>${escapeHtml(name(item))}</h2>
+      </div>
+      <div class="country-symbols">
+        <figure><img class="symbol-flag" src="assets/flags/${item.id}.svg" alt=""><figcaption>${tr('flag')}</figcaption></figure>
+        ${coatById.has(item.id) ? `<figure><img src="assets/coats/${item.id}.png" alt=""><figcaption>${tr('coat')}</figcaption></figure>` : ''}
+      </div>
+      ${countryPanel(item)}
     </div>`;
 }
 
@@ -2001,7 +1987,7 @@ function drawResult(q) {
 }
 
 function drawExplore(current) {
-  const mapItems = exploreKind === 'coats' || current.type === 'coat' ? coats : exploreKind === 'capitals' || current.type === 'capital' ? capitals : flags;
+  const mapItems = flags;
   const itemIsos = new Set(mapItems.map(item => item.iso));
   const { features, projection, path, svg } = baseMap('#exploreMap', tr('mapLabel'));
   svg.selectAll('.land').data(features).join('path')

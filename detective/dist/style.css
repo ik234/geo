@@ -668,10 +668,55 @@ svg {
   padding: 14px;
 }
 
-.item-detail img {
-  width: 96px;
-  border-radius: 8px;
+.item-detail.country-detail {
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.country-symbols {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+
+.country-symbols figure {
+  margin: 0;
+  min-width: 0;
+  max-width: calc(50% - 9px);
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}
+
+/* Высота общая, ширина своя: флаги все 4:3, а гербы бывают и вытянутые,
+   и широкие со щитодержателями. */
+.country-symbols img {
+  display: block;
+  height: 88px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Тень только у флага: у герба прозрачный фон, и тень обвела бы пустой прямоугольник. */
+.country-symbols .symbol-flag {
+  border-radius: 6px;
   box-shadow: 0 5px 14px #14344018;
+}
+
+.country-symbols figcaption {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #506c75;
+}
+
+/* Отступы здесь задаёт сетка карточки; иначе .game .country-panel ниже по файлу
+   добавил бы к ним свои 14px. */
+.item-detail.country-detail > .country-panel,
+.item-detail.country-detail > .country-loading {
+  margin-top: 0;
 }
 
 .item-detail h2 {
@@ -987,8 +1032,8 @@ button:hover:not(:disabled) {
     grid-template-columns: 78px minmax(0, 1fr);
   }
 
-  .item-detail img {
-    width: 78px;
+  .country-symbols img {
+    height: 72px;
   }
 
   .country-facts {
