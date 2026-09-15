@@ -1,5 +1,5 @@
 // Файл собирается detective/tools/gen-sw.py — править руками бессмысленно.
-const VERSION = '3f53b5aca15c';
+const VERSION = '1f33ff71d16c';
 const CACHE = 'geo-' + VERSION;
 const ASSETS = [
   "./",
@@ -199,6 +199,7 @@ const ASSETS = [
   "assets/coats/za.webp",
   "assets/coats/zm.webp",
   "assets/coats/zw.webp",
+  "assets/countries-50m.json",
   "assets/d3.min.js",
   "assets/flags/LICENSE",
   "assets/flags/ad.svg",
@@ -616,6 +617,7 @@ const ASSETS = [
   "data/flags.ru.json",
   "favicon-32.png",
   "favicon.svg",
+  "globe.mjs",
   "icon-192.png",
   "icon-512-maskable.png",
   "icon-512.png",
