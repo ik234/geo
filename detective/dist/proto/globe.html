@@ -41,40 +41,6 @@
         height: 420px;
       }
 
-      .choices button.picked {
-        background: #e3eef1;
-        border-color: #143440;
-        box-shadow: inset 0 0 0 1px #143440;
-      }
-
-      .choices button.wrong-pick {
-        background: #fbe3d6;
-        border-color: #ca501b;
-      }
-
-      .choices button.missed {
-        border-style: dashed;
-        border-color: #138064;
-      }
-
-      .choices button.wrong-pick:disabled,
-      .choices button.missed:disabled {
-        opacity: 1;
-      }
-
-      /* «Все соседи»: до восьми вариантов. В сетке по два в ряд это четыре
-         ряда по 52px, и на телефоне последние уходили под панель кнопок на
-         130px. Плашками по ширине названия («Чад», «Нигер») выходит три ряда. */
-      .choices.chips {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      .choices.chips button {
-        flex: 1 1 auto;
-        min-height: 48px;
-      }
-
       .proto-controls[hidden],
       .atlas[hidden] {
         display: none;
@@ -210,15 +176,6 @@
           white-space: nowrap;
         }
 
-        .choices.chips {
-          gap: 5px;
-        }
-
-        .choices.chips button {
-          min-height: 36px;
-          padding: 4px 9px;
-          font-size: 15px;
-        }
       }
     </style>
   </head>

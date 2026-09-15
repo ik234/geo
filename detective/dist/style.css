@@ -517,6 +517,62 @@ h2 {
   opacity: 1;
 }
 
+/* Состояния вариантов «Всех соседей» (вопросы на глобусе): отмечен, отмечен
+   зря, пропущен. */
+.choices button.picked {
+  background: #e3eef1;
+  border-color: #143440;
+  box-shadow: inset 0 0 0 1px #143440;
+}
+
+.choices button.wrong-pick {
+  background: #fbe3d6;
+  border-color: #ca501b;
+}
+
+.choices button.missed {
+  border-style: dashed;
+  border-color: #138064;
+}
+
+.choices button.wrong-pick:disabled,
+.choices button.missed:disabled {
+  opacity: 1;
+}
+
+/* «Все соседи»: до восьми вариантов. В сетке по два в ряд это четыре ряда
+   по 52px, и на телефоне последние уходили под панель кнопок на 130px.
+   Плашками по ширине названия («Чад», «Нигер») выходит три ряда. */
+.choices.chips {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.choices.chips button {
+  flex: 1 1 auto;
+  min-height: 48px;
+}
+
+/* Вопросы на глобусе: глобусу нужна колонка пошире, чем флагу. */
+.globe-quiz {
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+}
+
+.visual.globe-visual {
+  min-height: 0;
+  padding: 16px;
+  gap: 10px;
+}
+
+/* «Нажми на страну или покрути глобус» — только в атласе. */
+.visual .explore-help {
+  display: none;
+}
+
+.round-badge {
+  display: none;
+}
+
 .actions {
   display: flex;
   gap: 10px;
@@ -1267,7 +1323,69 @@ button:hover:not(:disabled) {
   }
 
   .globe-canvas {
+    height: 170px;
+  }
+
+  .explore-map .globe-canvas {
     height: 240px;
+  }
+
+  .visual.globe-visual {
+    padding: 6px;
+  }
+
+  /* Номер загадки в темах с глобусом — на самом глобусе, а строка прогресса
+     над ним спрятана: она стоила 51px, и варианты с длинными названиями
+     уходили под панель кнопок. */
+  .globe-round #progress {
+    display: none;
+  }
+
+  .globe-round .question {
+    padding-top: 10px;
+  }
+
+  .visual .round-badge:not(:empty) {
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    padding: 1px 7px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .85);
+    color: #143440;
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  /* Подписи под картинкой на телефоне общие стили прячут. Легенда из одного
+     цвета («страна») и не нужна, а из нескольких (путь, цель) ложится на низ
+     глобуса. */
+  .visual .atlas-globe .legend.several {
+    display: flex;
+  }
+
+  .choices.chips {
+    gap: 5px;
+  }
+
+  .choices.chips button {
+    min-height: 36px;
+    padding: 4px 9px;
+    font-size: 15px;
+  }
+
+  /* В «Всех соседях» в панели три кнопки. С полями игры, 20px по бокам,
+     «Проверить» переносилась во второй ряд, а при равной ширине кнопок
+     «Antwort zeigen» ломалась на две строки. Ширина по надписи. */
+  .globe-quiz .question .actions {
+    flex-wrap: nowrap;
+  }
+
+  .globe-quiz .question .actions button {
+    flex: 1 1 auto;
+    padding: 8px 6px;
+    white-space: nowrap;
   }
 
   /* Подсказка «нажми или покрути» на телефоне стоила бы строки; легенда
