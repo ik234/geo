@@ -1471,13 +1471,15 @@
       };
 
       resize();
+      // Safari на iPhone шлёт resize всякий раз, когда прячет или показывает свою
+      // панель при прокрутке, а холст при этом того же размера. Раньше такой
+      // resize останавливал перелёт, и глобус замирал на полпути между странами.
+      // Идущий перелёт следующим кадром сам нарисует глобус в новом размере.
       addEventListener('resize', () => {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width === W && rect.height === H) return;
         resize();
-        if (view) {
-          flight?.stop();
-          flight = null;
-          draw(view, true);
-        }
+        if (view && !flight) draw(view, true);
       });
       newRound();
     </script>
