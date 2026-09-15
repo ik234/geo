@@ -2142,7 +2142,7 @@ function render() {
       ? (hideable ? tr(q.type === 'flag' ? 'flagHintOpen' : 'coatHintOpen') : tr('countryHint', { letter: firstLetter(name(q)) }))
       : escapeHtml(fact(q));
   const visualNote = solved
-    ? (wideScreen() ? '<div class="result-map" id="map"></div>' : '')
+    ? (wideScreen() ? `<div class="result-map" id="map"></div>` : '')
     : (prompt ? `<small>${prompt}</small>` : '');
   const solvedNote = q.type === 'flag' ? countryFlagText(q.id) : fact(q);
   const message = solved
@@ -2197,7 +2197,9 @@ function render() {
       // что к следующей загадке переходят не сходя с места. Съехавшая шапка
       // здесь дешевле прыжка страницы под пальцем.
     };
-    if (wideScreen()) drawResult(q);
+    if (wideScreen()) {
+      if (q.type === 'animal') drawResult(q); else showResultGlobe(q);
+    }
     revealSolvedNote();
   } else {
     $('#hint').onclick = () => {
@@ -2872,6 +2874,21 @@ function renderGlobeQuestion(q) {
     render();
   };
   if (q.kind === 'all') $('#check').onclick = () => checkAllNeighbours(q);
+}
+
+// После ответа на широком экране под флагом, гербом или столицей — тот же
+// глобус, что в атласе: подлетает к стране и закрашивает соседей. Плоская
+// карта осталась только животным (там точка, а не страна).
+function showResultGlobe(q) {
+  const place = () => {
+    const container = $('#map');
+    if (!container || round[pos] !== q || !solved || view !== 'quiz') return;
+    container.classList.add('result-globe');
+    if (mountGlobe(container, false)) globe.showNeighbours(q.iso);
+  };
+  // Сразу — пусть хоть «Загружаем глобус…», а когда контуры придут, ещё раз.
+  place();
+  if (!globe) ensureGeography().then(place).catch(() => {});
 }
 
 function baseMap(container, label) {

@@ -606,6 +606,10 @@ svg {
   width: 100%;
 }
 
+.result-globe .globe-canvas {
+  height: 260px;
+}
+
 .finish {
   grid-column: 1 / -1;
   padding: 50px;
