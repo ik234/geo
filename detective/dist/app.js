@@ -2877,14 +2877,15 @@ function renderGlobeQuestion(q) {
 }
 
 // После ответа на широком экране под флагом, гербом или столицей — тот же
-// глобус, что в атласе: подлетает к стране и закрашивает соседей. Плоская
-// карта осталась только животным (там точка, а не страна).
+// глобус, что в атласе: подлетает к стране. Соседей здесь не закрашиваем —
+// загадка была не про них. Плоская карта осталась только животным (там
+// точка, а не страна).
 function showResultGlobe(q) {
   const place = () => {
     const container = $('#map');
     if (!container || round[pos] !== q || !solved || view !== 'quiz') return;
     container.classList.add('result-globe');
-    if (mountGlobe(container, false)) globe.showNeighbours(q.iso);
+    if (mountGlobe(container, false)) globe.show({ primary: [q.iso] }, [q.iso]);
   };
   // Сразу — пусть хоть «Загружаем глобус…», а когда контуры придут, ещё раз.
   place();
