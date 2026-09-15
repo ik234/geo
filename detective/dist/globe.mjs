@@ -355,10 +355,15 @@ export function createGlobe(canvas, geo, { onMarks = () => {}, onSelect = () => 
     }
   }
 
+  // Перелёт — часть задания: только по нему видно, где на Земле страна, к
+  // которой глобус приближен. Поэтому летим и при «Уменьшении движения» в
+  // настройках системы (prefers-reduced-motion): на Mac с этой настройкой
+  // глобус прыгал сразу к стране. Переходы кнопок и увеличение герба в
+  // style.css эту настройку по-прежнему слушают.
   function flyTo(to) {
     flight?.stop();
     flight = null;
-    if (!view || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!view) {
       view = to;
       draw(view, true);
       return;
