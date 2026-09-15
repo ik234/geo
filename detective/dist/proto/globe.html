@@ -94,7 +94,107 @@
         min-height: 48px;
       }
 
+      /* Переключатель «Вопросы / Атлас» стоит в тёмной шапке: в строке
+         переключателей вопросов он съел бы на телефоне место над ответами. */
+      header .view-switch {
+        background: rgba(255, 255, 255, .1);
+        border-color: rgba(255, 255, 255, .22);
+      }
+
+      header .view-switch button {
+        color: #d9ecef;
+      }
+
+      header .view-switch .active {
+        background: white;
+        border-color: white;
+        color: #102d38;
+      }
+
+      .proto-controls[hidden],
+      .atlas[hidden] {
+        display: none;
+      }
+
+      /* В атласе глобус крутят пальцем, а нажатие открывает страну. */
+      .atlas-mode #globe {
+        touch-action: none;
+        cursor: grab;
+      }
+
+      .country-facts .neighbours {
+        grid-column: 1 / -1;
+      }
+
+      .neighbour-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+      }
+
+      .neighbour-chips button {
+        min-height: 34px;
+        padding: 4px 11px;
+        border-radius: 17px;
+        font-size: 15px;
+      }
+
+      @media (max-width: 900px) {
+        .proto-note {
+          display: none;
+        }
+      }
+
       @media (max-width: 700px) {
+        header .brand-tail {
+          display: none;
+        }
+
+        header .view-switch {
+          padding: 2px;
+        }
+
+        header .view-switch button {
+          min-height: 28px;
+          padding: 2px 10px;
+        }
+
+        /* В атласе глобус выше и прилипает к верху экрана: список стран едет
+           под ним, и перелёт к выбранной стране видно всегда. overflow: clip,
+           а не hidden из стилей игры: hidden отменил бы прилипание. */
+        .globe-game.atlas-mode {
+          overflow: visible;
+          overflow: clip;
+        }
+
+        /* Шапка в атласе тоже прилипает: иначе, чтобы вернуться к вопросам,
+           пришлось бы листать вверх две сотни стран. Высота задана явно — от
+           неё отсчитывается глобус. */
+        .atlas-screen header {
+          position: sticky;
+          top: 0;
+          z-index: 6;
+          height: 50px;
+          box-sizing: border-box;
+        }
+
+        .atlas-mode .globe-visual {
+          position: sticky;
+          top: 50px;
+          z-index: 5;
+        }
+
+        .atlas-mode #globe {
+          height: 240px;
+        }
+
+        /* Под шапку (50), глобус (240 и поля 12) и промежуток списка (8): так
+           край предыдущей строки прячется под глобусом. */
+        .atlas-mode .item-row {
+          scroll-margin-top: 310px;
+        }
+
         /* На телефоне шапка должна остаться в одну строку. */
         .proto-note {
           display: none;
@@ -191,8 +291,9 @@
   </head>
   <body>
     <header>
-      <a class="brand" href="../">ГЕО / ДЕТЕКТИВ</a>
+      <a class="brand" href="../">ГЕО<span class="brand-tail"> / ДЕТЕКТИВ</span></a>
       <span class="proto-note" id="note"></span>
+      <div class="modes view-switch" id="views"></div>
       <label class="lang-pick">
         <span id="langLabel">Язык</span>
         <select id="lang">
@@ -216,7 +317,7 @@
           <span class="round-badge" id="badge"></span>
           <small class="legend" id="legend"></small>
         </div>
-        <div class="question">
+        <div class="question" id="question">
           <span class="tag" id="tag"></span>
           <h2 id="title"></h2>
           <div class="choices" id="choices"></div>
@@ -228,6 +329,7 @@
             <button class="primary" id="next" hidden></button>
           </div>
         </div>
+        <div class="atlas" id="atlas" hidden></div>
       </section>
     </main>
     <script src="../assets/d3.min.js"></script>
@@ -246,6 +348,9 @@
       // известные страны, на среднем 15 про 123, на сложном 30 про все, у
       // эксперта раунд идёт через все подходящие страны подряд. Отдельного
       // переключателя длины раунда нет: он стоил бы на телефоне целую строку.
+      //
+      // Второй раздел — атлас: список стран с карточками, как в игре, и глобус,
+      // который можно крутить пальцем (см. «Атлас» ниже).
 
       const $ = selector => document.querySelector(selector);
       const deg = Math.PI / 180;
@@ -258,6 +363,26 @@
           pageTitle: 'Прототип: страны на глобусе',
           note: 'прототип: страны на глобусе',
           language: 'Язык',
+          viewsLabel: 'Раздел',
+          view_quiz: 'Вопросы',
+          view_atlas: 'Атлас',
+          atlasList: 'Страны',
+          countryTag: 'СТРАНА / ТЕРРИТОРИЯ',
+          flag: 'Флаг',
+          coat: 'Герб',
+          zoomFlag: 'Рассмотреть флаг',
+          zoomCoat: 'Рассмотреть герб',
+          close: 'Закрыть',
+          capital: 'Столица',
+          currency: 'Валюта',
+          officialLanguages: 'Официальные языки',
+          flagStory: 'Что на флаге',
+          funFact: 'Любопытный факт',
+          infoLoading: 'Загружаем сведения…',
+          neighboursCount: 'Соседи ({count})',
+          noNeighbours: 'Соседей по суше нет: вокруг только море.',
+          byLand: 'По суше',
+          landReach: 'Стран, до которых можно дойти: {count}. Дальше всего — {list}, по пути границ: {hops}.',
           globe: 'Глобус',
           modesLabel: 'Вопрос',
           levelsLabel: 'Сложность',
@@ -330,6 +455,26 @@
           pageTitle: 'Prototype: countries on the globe',
           note: 'prototype: countries on the globe',
           language: 'Language',
+          viewsLabel: 'Section',
+          view_quiz: 'Questions',
+          view_atlas: 'Atlas',
+          atlasList: 'Countries',
+          countryTag: 'COUNTRY / TERRITORY',
+          flag: 'Flag',
+          coat: 'Coat of arms',
+          zoomFlag: 'Zoom in on the flag',
+          zoomCoat: 'Zoom in on the coat of arms',
+          close: 'Close',
+          capital: 'Capital',
+          currency: 'Currency',
+          officialLanguages: 'Official languages',
+          flagStory: 'On the flag',
+          funFact: 'Fun fact',
+          infoLoading: 'Loading details…',
+          neighboursCount: 'Neighbours ({count})',
+          noNeighbours: 'No land neighbours: nothing but sea around.',
+          byLand: 'Over land',
+          landReach: 'Countries you can reach: {count}. The farthest: {list}, borders on the way: {hops}.',
           globe: 'Globe',
           modesLabel: 'Question',
           levelsLabel: 'Difficulty',
@@ -402,6 +547,26 @@
           pageTitle: 'Protótipo: países no globo',
           note: 'protótipo: países no globo',
           language: 'Idioma',
+          viewsLabel: 'Secção',
+          view_quiz: 'Perguntas',
+          view_atlas: 'Atlas',
+          atlasList: 'Países',
+          countryTag: 'PAÍS / TERRITÓRIO',
+          flag: 'Bandeira',
+          coat: 'Brasão',
+          zoomFlag: 'Ampliar a bandeira',
+          zoomCoat: 'Ampliar o brasão',
+          close: 'Fechar',
+          capital: 'Capital',
+          currency: 'Moeda',
+          officialLanguages: 'Línguas oficiais',
+          flagStory: 'Na bandeira',
+          funFact: 'Facto curioso',
+          infoLoading: 'A carregar detalhes…',
+          neighboursCount: 'Vizinhos ({count})',
+          noNeighbours: 'Sem vizinhos por terra: à volta só há mar.',
+          byLand: 'Por terra',
+          landReach: 'Países a que se pode chegar: {count}. Mais longe: {list}, fronteiras pelo caminho: {hops}.',
           globe: 'Globo',
           modesLabel: 'Pergunta',
           levelsLabel: 'Dificuldade',
@@ -474,6 +639,26 @@
           pageTitle: 'Prototipo: países en el globo',
           note: 'prototipo: países en el globo',
           language: 'Idioma',
+          viewsLabel: 'Sección',
+          view_quiz: 'Preguntas',
+          view_atlas: 'Atlas',
+          atlasList: 'Países',
+          countryTag: 'PAÍS / TERRITORIO',
+          flag: 'Bandera',
+          coat: 'Escudo',
+          zoomFlag: 'Ampliar la bandera',
+          zoomCoat: 'Ampliar el escudo',
+          close: 'Cerrar',
+          capital: 'Capital',
+          currency: 'Moneda',
+          officialLanguages: 'Lenguas oficiales',
+          flagStory: 'En la bandera',
+          funFact: 'Dato curioso',
+          infoLoading: 'Cargando detalles…',
+          neighboursCount: 'Vecinos ({count})',
+          noNeighbours: 'Sin vecinos por tierra: alrededor solo hay mar.',
+          byLand: 'Por tierra',
+          landReach: 'Países a los que se puede llegar: {count}. Más lejos: {list}, fronteras por el camino: {hops}.',
           globe: 'Globo',
           modesLabel: 'Pregunta',
           levelsLabel: 'Dificultad',
@@ -546,6 +731,26 @@
           pageTitle: 'Prototyp: Länder auf dem Globus',
           note: 'Prototyp: Länder auf dem Globus',
           language: 'Sprache',
+          viewsLabel: 'Bereich',
+          view_quiz: 'Fragen',
+          view_atlas: 'Atlas',
+          atlasList: 'Länder',
+          countryTag: 'LAND / GEBIET',
+          flag: 'Flagge',
+          coat: 'Wappen',
+          zoomFlag: 'Flagge vergrößern',
+          zoomCoat: 'Wappen vergrößern',
+          close: 'Schließen',
+          capital: 'Hauptstadt',
+          currency: 'Währung',
+          officialLanguages: 'Amtssprachen',
+          flagStory: 'Auf der Flagge',
+          funFact: 'Kurioses',
+          infoLoading: 'Details werden geladen…',
+          neighboursCount: 'Nachbarn ({count})',
+          noNeighbours: 'Keine Nachbarn an Land: ringsum nur Meer.',
+          byLand: 'Über Land',
+          landReach: 'Erreichbare Länder: {count}. Am weitesten: {list}, Grenzen unterwegs: {hops}.',
           globe: 'Globus',
           modesLabel: 'Frage',
           levelsLabel: 'Schwierigkeit',
@@ -618,6 +823,26 @@
           pageTitle: 'Prototyp: kraje na globusie',
           note: 'prototyp: kraje na globusie',
           language: 'Język',
+          viewsLabel: 'Dział',
+          view_quiz: 'Pytania',
+          view_atlas: 'Atlas',
+          atlasList: 'Kraje',
+          countryTag: 'KRAJ / TERYTORIUM',
+          flag: 'Flaga',
+          coat: 'Herb',
+          zoomFlag: 'Powiększ flagę',
+          zoomCoat: 'Powiększ herb',
+          close: 'Zamknij',
+          capital: 'Stolica',
+          currency: 'Waluta',
+          officialLanguages: 'Języki urzędowe',
+          flagStory: 'Na fladze',
+          funFact: 'Ciekawostka',
+          infoLoading: 'Wczytywanie szczegółów…',
+          neighboursCount: 'Sąsiedzi ({count})',
+          noNeighbours: 'Brak sąsiadów na lądzie: dookoła tylko morze.',
+          byLand: 'Lądem',
+          landReach: 'Kraje, do których można dojść: {count}. Najdalej: {list}, granic po drodze: {hops}.',
           globe: 'Globus',
           modesLabel: 'Pytanie',
           levelsLabel: 'Poziom',
@@ -899,6 +1124,81 @@
         return hopsCache.get(from);
       }
 
+      // Суша по кускам. У страны в контурах бывает несколько многоугольников, и
+      // пешком из одного в другой не попасть: Гвиана — это Франция, но из Европы
+      // до неё не дойти; Калининград отрезан от остальной России; Малайзия и
+      // Индонезия разделены морем. Путешествие и «По суше» в атласе считаются
+      // по кускам: кусок — сросшиеся многоугольники одной страны, соседи — куски
+      // разных стран с общей линией границы. Заморских границ из extraBorders
+      // здесь нет вовсе: общей линии в контурах у них нет. Без этого выходил
+      // маршрут по суше из Бразилии в Марокко — через Гвиану и Сеуту.
+      const landPolygons = [];
+      for (const geometry of obj50.geometries) {
+        const id = owner(geometry);
+        if (!game.has(id) || !geometry.arcs) continue;
+        const shape = byId.get(geometry.properties.id).geometry;
+        const arcs = geometry.type === 'Polygon' ? [geometry.arcs] : geometry.arcs;
+        const coordinates = shape.type === 'Polygon' ? [shape.coordinates] : shape.coordinates;
+        arcs.forEach((polygonArcs, i) => landPolygons.push({ id, geometry: { type: 'Polygon', arcs: polygonArcs }, coordinates: coordinates[i] }));
+      }
+      const polygonLinks = topojson.neighbors(landPolygons.map(polygon => polygon.geometry));
+      const pieceRoot = landPolygons.map((_, i) => i);
+      const findPiece = i => (pieceRoot[i] === i ? i : (pieceRoot[i] = findPiece(pieceRoot[i])));
+      polygonLinks.forEach((list, i) => {
+        for (const j of list) if (landPolygons[i].id === landPolygons[j].id) pieceRoot[findPiece(i)] = findPiece(j);
+      });
+      const pieceOf = landPolygons.map((_, i) => findPiece(i));
+      const pieceCountry = new Map(pieceOf.map((piece, i) => [piece, landPolygons[i].id]));
+      const pieceLinks = new Map([...pieceCountry.keys()].map(piece => [piece, new Set()]));
+      polygonLinks.forEach((list, i) => {
+        for (const j of list) if (landPolygons[i].id !== landPolygons[j].id) pieceLinks.get(pieceOf[i]).add(pieceOf[j]);
+      });
+
+      // «Сама страна» — куски с многоугольниками из её прицела (focusOf): отсюда
+      // путешествие начинается и сюда приходит. Из Литвы в Россию попадают в
+      // Калининград, но цель «Россия» этим ещё не достигнута.
+      const homePieces = new Map([...game].map(id => [id, new Set()]));
+      const focusParts = new Map([...game].map(id => [id, new Set(focus.get(id).coordinates)]));
+      landPolygons.forEach((polygon, i) => {
+        if (focusParts.get(polygon.id).has(polygon.coordinates)) homePieces.get(polygon.id).add(pieceOf[i]);
+      });
+
+      // Сколько границ до каждого куска суши от «самой страны».
+      const landCache = new Map();
+      function landFrom(id) {
+        if (!landCache.has(id)) {
+          const distance = new Map([...homePieces.get(id)].map(piece => [piece, 0]));
+          const queue = [...distance.keys()];
+          for (let i = 0; i < queue.length; i++) {
+            for (const next of pieceLinks.get(queue[i])) {
+              if (distance.has(next)) continue;
+              distance.set(next, distance.get(queue[i]) + 1);
+              queue.push(next);
+            }
+          }
+          landCache.set(id, distance);
+        }
+        return landCache.get(id);
+      }
+
+      const nearest = (pieces, distance) => Math.min(...[...pieces].map(piece => distance.get(piece) ?? Infinity));
+      const landDistance = (from, to) => nearest(homePieces.get(to), landFrom(from));
+
+      // Куда шагнуть из кусков at: страна → куски, на которые попадёшь. В страну
+      // цели — только в «саму страну», иначе заголовок «Россия → Россия».
+      function landSteps(at, goal) {
+        const steps = new Map();
+        for (const piece of at) {
+          for (const next of pieceLinks.get(piece)) {
+            const id = pieceCountry.get(next);
+            if (id === goal && !homePieces.get(goal).has(next)) continue;
+            if (!steps.has(id)) steps.set(id, new Set());
+            steps.get(id).add(next);
+          }
+        }
+        return steps;
+      }
+
       const withNeighbours = [...game].filter(id => adj.get(id).size > 0);
       const islands = [...game].filter(id => adj.get(id).size === 0 && id !== 'ATA');
 
@@ -1038,6 +1338,14 @@
 
       const sameView = (a, b) => Boolean(a && b) && Math.abs(a.scale - b.scale) < 0.5 && d3.geoDistance(a.center, b.center) < 1e-6;
 
+      function renderLegend() {
+        const kinds = paintOrder.filter(kind => (marks[kind] || []).length);
+        $('#legend').innerHTML = kinds
+          .map(kind => `<span style="--swatch: ${palette[kind].fill}; --edge: ${palette[kind].stroke}">${escapeHtml(t(`legend_${kind}`))}</span>`)
+          .join('');
+        $('#legend').classList.toggle('several', kinds.length > 1);
+      }
+
       // Перерисовка (ответ, смена языка) не должна заново запускать полёт туда,
       // куда глобус уже летит или где уже стоит: тогда только перекрашиваем, а
       // если и краски те же — не трогаем вовсе. Подробный кадр стоит около 0,1 с,
@@ -1045,11 +1353,7 @@
       function show(nextMarks, ids, center, around) {
         const repaint = JSON.stringify(nextMarks) !== JSON.stringify(marks);
         marks = nextMarks;
-        const kinds = paintOrder.filter(kind => (marks[kind] || []).length);
-        $('#legend').innerHTML = kinds
-          .map(kind => `<span style="--swatch: ${palette[kind].fill}; --edge: ${palette[kind].stroke}">${escapeHtml(t(`legend_${kind}`))}</span>`)
-          .join('');
-        $('#legend').classList.toggle('several', kinds.length > 1);
+        renderLegend();
         const target = viewFor(ids, center, around);
         if (flight && sameView(flightTarget, target)) return;
         if (!flight && sameView(view, target)) {
@@ -1115,21 +1419,24 @@
         show({ primary: [x], neighbour: neighbours }, [x], centroids.get(x), neighbours.filter(id => away(id, x) < 35));
       }
 
-      function stepOptions(here, goal) {
-        if (here === goal) return [];
-        const toGoal = hops(goal);
-        const neighbours = [...adj.get(here)];
-        if (neighbours.length <= 4) return shuffle(neighbours);
-        // До четырёх соседей, и хотя бы один из них ближе к цели.
-        const helper = pick(neighbours.filter(id => toGoal.get(id) < toGoal.get(here)));
-        return shuffle([helper, ...shuffle(neighbours.filter(id => id !== helper)).slice(0, 3)]);
+      // До четырёх соседей по суше, и хотя бы один из них ближе к цели.
+      function stepOptions(at, goal) {
+        const toGoal = landFrom(goal);
+        const steps = landSteps(at, goal);
+        const ids = [...steps.keys()];
+        if (ids.length <= 4) return shuffle(ids);
+        const helper = pick(ids.filter(id => nearest(steps.get(id), toGoal) < nearest(at, toGoal)));
+        return shuffle([helper, ...shuffle(ids.filter(id => id !== helper)).slice(0, 3)]);
       }
 
       const tripLengths = { easy: [2, 3], medium: [3, 5], hard: [5, 8], expert: [5, 8] };
 
       function goalsFrom(start) {
         const [min, max] = tripLengths[level];
-        return [...hops(start)].filter(([id, distance]) => distance >= min && distance <= max && known(id)).map(([id]) => id);
+        return [...game].filter(id => {
+          const distance = landDistance(start, id);
+          return id !== start && known(id) && distance >= min && distance <= max;
+        });
       }
 
       // Каждый вопрос — состояние и перерисовка по нему, как в игре: смена
@@ -1291,25 +1598,29 @@
           pool: () => [...game].filter(id => known(id) && goalsFrom(id).length),
           create(start) {
             const goal = pick(goalsFrom(start));
-            return { goal, best: hops(start).get(goal), path: [start], options: stepOptions(start, goal) };
+            const at = homePieces.get(start);
+            return { goal, best: landDistance(start, goal), path: [start], at, options: stepOptions(at, goal) };
           },
           // Подсказка на один шаг: какой из вариантов ближе к цели. Такой среди
           // вариантов есть всегда, об этом заботится stepOptions.
           hint(s) {
-            const toGoal = hops(s.goal);
-            const here = lastOf(s.path);
-            return t('tripHint', { name: nameOf(s.options.find(id => toGoal.get(id) < toGoal.get(here))) });
+            const toGoal = landFrom(s.goal);
+            const steps = landSteps(s.at, s.goal);
+            return t('tripHint', { name: nameOf(s.options.find(id => nearest(steps.get(id), toGoal) < nearest(s.at, toGoal))) });
           },
           // Ответ — кратчайший путь отсюда. Первый шаг — из показанных
           // вариантов, дальше из равных по длине путей — через знакомые страны.
           reveal(s) {
-            const toGoal = hops(s.goal);
+            const toGoal = landFrom(s.goal);
             const route = [lastOf(s.path)];
+            let at = s.at;
             while (lastOf(route) !== s.goal) {
-              const at = lastOf(route);
-              const closer = id => toGoal.get(id) === toGoal.get(at) - 1;
-              const steps = route.length === 1 ? s.options.filter(closer) : byName([...adj.get(at)].filter(closer)).sort((a, b) => Number(!known(a)) - Number(!known(b)));
-              route.push(steps[0]);
+              const here = nearest(at, toGoal);
+              const steps = landSteps(at, s.goal);
+              const closer = id => nearest(steps.get(id), toGoal) === here - 1;
+              const next = route.length === 1 ? s.options.filter(closer) : byName([...steps.keys()].filter(closer)).sort((a, b) => Number(!known(a)) - Number(!known(b)));
+              route.push(next[0]);
+              at = new Set([...steps.get(next[0])].filter(piece => toGoal.get(piece) === here - 1));
             }
             s.route = route;
           },
@@ -1333,10 +1644,11 @@
               return;
             }
             setTitle(t('tripTitle', { from: nameOf(here), to: nameOf(s.goal) }));
-            setMessage(crossed, t('tripLeft', { count: hops(s.goal).get(here) }), s.hintStep === s.path.length && this.hint(s));
+            setMessage(crossed, t('tripLeft', { count: nearest(s.at, landFrom(s.goal)) }), s.hintStep === s.path.length && this.hint(s));
             setChoices(s.options, () => ({}), id => {
+              s.at = landSteps(s.at, s.goal).get(id);
               s.path.push(id);
-              s.options = stepOptions(id, s.goal);
+              s.options = id === s.goal ? [] : stepOptions(s.at, s.goal);
               answered();
             });
             show({ trail: s.path.slice(0, -1), primary: [here], goal: [s.goal] }, [here, s.goal], middle);
@@ -1403,7 +1715,297 @@
         $('#next').hidden = !done;
       }
 
+      // Атлас: список всех стран, под выбранной раскрывается карточка — как в
+      // игре, со стилями и данными игры (style.css, data/, assets/). Сверх игры
+      // в карточке соседи из графа границ: на каждого можно нажать, и глобус
+      // летит к нему. Глобус в атласе крутится пальцем, нажатие открывает страну.
+      let screen = 'quiz';
+      let selected = 'PRT';
+      let factIndex = 0;
+      // Гербов нет у шести стран каталога, см. README.
+      const withoutCoat = new Set(['aq', 'cg', 'pr', 'eh', 'sz', 'tl']);
+      const lore = { countries: null, flags: {}, facts: {} };
+      const loading = new Set();
+      const magnifierIcon = '<svg viewBox="0 0 24 24" width="14" height="14"><circle cx="10.5" cy="10.5" r="6" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M15 15l5 5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+
+      // Пришедшие данные дорисовывают только карточку, а не весь список: на
+      // широком экране у списка своя прокрутка, и она бы сбросилась.
+      function loadJson(url, done) {
+        if (loading.has(url)) return;
+        loading.add(url);
+        fetch(url)
+          .then(response => (response.ok ? response.json() : {}))
+          .catch(() => ({}))
+          .then(value => {
+            done(value);
+            if (screen === 'atlas') renderCard();
+          });
+      }
+
+      function countryInfo(id) {
+        if (!lore.countries) {
+          loadJson('../data/countries.json', value => { lore.countries = value; });
+          return null;
+        }
+        return lore.countries.countries?.[alpha2.get(id)] || null;
+      }
+
+      // Текст на языке интерфейса, а если страны там нет — английский, как в игре.
+      function loreText(cache, file, id) {
+        for (const key of lang === 'en' ? ['en'] : [lang, 'en']) {
+          if (!cache[key]) {
+            loadJson(`../data/${file}.${key}.json`, value => { cache[key] = value; });
+            return null;
+          }
+          if (cache[key][alpha2.get(id)]) return cache[key][alpha2.get(id)];
+        }
+        return null;
+      }
+
+      // Intl отдаёт сам код, если названия нет в наборе движка (в Safari он
+      // другой, чем в Chrome); тогда запасная таблица из countries.json.
+      function intlName(type, code, table) {
+        try {
+          const value = new Intl.DisplayNames([intlLocale(lang)], { type }).of(code);
+          if (value && value !== code) return value;
+        } catch {}
+        return table?.[code]?.[lang] || table?.[code]?.en || code;
+      }
+
+      // По суше, по кускам: сколько стран достижимо и какие дальше всех.
+      function landReach(id) {
+        const reached = [...game].filter(other => other !== id).map(other => [other, landDistance(id, other)]).filter(([, count]) => count < Infinity);
+        if (!reached.length) return '';
+        const farthest = Math.max(...reached.map(([, count]) => count));
+        const ids = byName(reached.filter(([, count]) => count === farthest).map(([other]) => other));
+        const list = ids.slice(0, 3).map(nameOf).join(', ') + (ids.length > 3 ? '…' : '');
+        return t('landReach', { count: reached.length, list, hops: farthest });
+      }
+
+      function cardHtml(id) {
+        const code = alpha2.get(id);
+        const info = countryInfo(id);
+        const flagText = loreText(lore.flags, 'flags', id);
+        const facts = loreText(lore.facts, 'facts', id) || [];
+        const pending = !lore.countries || !lore.flags[lang] || !lore.facts[lang];
+        const row = (term, value, extra = '') => `<div${extra}><dt>${escapeHtml(term)}</dt><dd>${value}</dd></div>`;
+        const note = (term, value) => `<p class="country-note">${term ? `<b>${escapeHtml(term)}</b> ` : ''}${escapeHtml(value)}</p>`;
+        const rows = [];
+        if (info?.capital) rows.push(row(t('capital'), escapeHtml(info.capital[lang] || info.capital.en)));
+        if (info?.currency) rows.push(row(t('currency'), escapeHtml(intlName('currency', info.currency, lore.countries?.fallback?.currency))));
+        if (info?.languages?.length) rows.push(row(t('officialLanguages'), escapeHtml(info.languages.map(language => intlName('language', language, lore.countries?.fallback?.language)).join(', '))));
+        const neighbours = byName(adj.get(id));
+        rows.push(row(t('neighboursCount', { count: neighbours.length }), neighbours.length
+          ? `<span class="neighbour-chips">${neighbours.map(other => `<button type="button" data-select="${other}">${escapeHtml(nameOf(other))}</button>`).join('')}</span>`
+          : escapeHtml(t('noNeighbours')), ' class="neighbours"'));
+        const notes = neighbours.map(other => text[lang][`note_${[id, other].sort().join('|')}`]).filter(Boolean).map(value => note('', value));
+        const reach = landReach(id);
+        if (reach) notes.push(note(t('byLand'), reach));
+        if (flagText) notes.push(note(t('flagStory'), flagText));
+        if (facts.length) notes.push(note(t('funFact'), facts[factIndex % facts.length]));
+        const symbol = kind => `
+          <figure>
+            <button type="button" class="symbol-zoom" data-zoom="${kind}" aria-label="${escapeHtml(`${t(kind === 'flag' ? 'zoomFlag' : 'zoomCoat')}: ${nameOf(id)}`)}"><img class="symbol-${kind}" src="${kind === 'flag' ? `../assets/flags/${code}.svg` : `../assets/coats/${code}.webp`}" alt=""><span class="zoom-badge" aria-hidden="true">${magnifierIcon}</span></button>
+            <figcaption>${escapeHtml(t(kind))}</figcaption>
+          </figure>`;
+        return `
+          <div class="item-detail country-detail">
+            <div><span class="tag">${escapeHtml(t('countryTag'))}</span><h2>${escapeHtml(nameOf(id))}</h2></div>
+            <div class="country-symbols">${symbol('flag')}${withoutCoat.has(code) ? '' : symbol('coat')}</div>
+            <div class="country-panel"><dl class="country-facts">${rows.join('')}</dl>${notes.join('')}${pending ? `<p class="country-loading">${escapeHtml(t('infoLoading'))}</p>` : ''}</div>
+          </div>`;
+      }
+
+      function renderAtlas() {
+        $('#atlas').innerHTML = `<div class="item-list" aria-label="${escapeHtml(t('atlasList'))}">${byName(game).map(id => `
+          <article class="item-row" id="row-${id}">
+            <button type="button" data-row="${id}" aria-expanded="false"><img src="../assets/flags/${alpha2.get(id)}.svg" alt=""><span>${escapeHtml(nameOf(id))}</span></button>
+          </article>`).join('')}</div>`;
+        document.querySelectorAll('[data-row]').forEach(button => {
+          button.onclick = () => select(button.dataset.row);
+        });
+        renderCard();
+      }
+
+      // Карточка живёт в строке выбранной страны. Остальные строки не трогаем,
+      // чтобы не сбивать прокрутку.
+      function renderCard() {
+        document.querySelectorAll('.item-row.active').forEach(row => {
+          row.classList.remove('active');
+          row.querySelector('button').classList.remove('active');
+          row.querySelector('button').setAttribute('aria-expanded', 'false');
+          row.querySelector('.item-detail')?.remove();
+        });
+        const row = document.getElementById(`row-${selected}`);
+        if (!row) return;
+        const button = row.querySelector('button');
+        row.classList.add('active');
+        button.classList.add('active');
+        button.setAttribute('aria-expanded', 'true');
+        row.insertAdjacentHTML('beforeend', cardHtml(selected));
+        row.querySelectorAll('[data-select]').forEach(chip => {
+          chip.onclick = () => select(chip.dataset.select);
+        });
+        row.querySelectorAll('[data-zoom]').forEach(zoom => {
+          zoom.onclick = () => {
+            // Пропорции — у миниатюры, чтобы окно облегало герб, а не стояло квадратом.
+            const thumb = zoom.querySelector('img');
+            openZoom(zoom.dataset.zoom, selected, thumb.naturalWidth / thumb.naturalHeight || (zoom.dataset.zoom === 'flag' ? 4 / 3 : 1));
+          };
+        });
+      }
+
+      // Выбранная строка уезжает к верху списка, под глобус: откуда бы ни пришёл
+      // выбор — из списка, с глобуса или от соседа в карточке.
+      function scrollToSelected(behavior) {
+        document.getElementById(`row-${selected}`)?.scrollIntoView({ block: 'start', behavior });
+      }
+
+      function select(id) {
+        if (id !== selected) factIndex = Math.floor(Math.random() * 5);
+        selected = id;
+        renderCard();
+        showNeighbours(id);
+        scrollToSelected(matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+      }
+
+      let zoomOpener = null;
+
+      // Окно увеличения — как в атласе игры: закрывается нажатием где угодно,
+      // векторный герб подменяет маленький, когда догрузится.
+      function openZoom(kind, id, ratio) {
+        closeZoom();
+        zoomOpener = document.activeElement;
+        const code = alpha2.get(id);
+        const label = `${t(kind)}: ${nameOf(id)}`;
+        const overlay = document.createElement('div');
+        overlay.className = 'zoom';
+        overlay.setAttribute('role', 'dialog');
+        overlay.setAttribute('aria-modal', 'true');
+        overlay.setAttribute('aria-label', label);
+        overlay.innerHTML = `
+          <figure class="zoom-card">
+            <img class="zoom-${kind}" src="${kind === 'flag' ? `../assets/flags/${code}.svg` : `../assets/coats/${code}.webp`}" alt="${escapeHtml(label)}" style="--ratio: ${Number(ratio).toFixed(4)}">
+            <figcaption><span class="tag">${escapeHtml(t(kind))}</span><strong>${escapeHtml(nameOf(id))}</strong></figcaption>
+            <button type="button" class="zoom-close" aria-label="${escapeHtml(t('close'))}">×</button>
+          </figure>`;
+        overlay.onclick = closeZoom;
+        document.body.append(overlay);
+        overlay.querySelector('.zoom-close').focus();
+        if (kind === 'coat' && navigator.onLine !== false) {
+          const vector = new Image();
+          vector.onload = () => {
+            if (overlay.isConnected) overlay.querySelector('img').src = vector.src;
+          };
+          vector.src = `../assets/coats-svg/${code}.svg`;
+        }
+      }
+
+      function closeZoom() {
+        const overlay = document.querySelector('.zoom');
+        if (!overlay) return;
+        overlay.remove();
+        if (zoomOpener?.isConnected) zoomOpener.focus({ preventScroll: true });
+        zoomOpener = null;
+      }
+
+      addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeZoom();
+      });
+
+      // Страна под пальцем. Если под ним море, берём ближайшую по центру не
+      // дальше 18px: иначе в Ватикан или Тувалу не попасть.
+      function countryAt(x, y) {
+        if (!view || Math.hypot(x - W / 2, y - H / 2) > view.scale) return null;
+        const point = projection.invert([x, y]);
+        if (!point || point.some(Number.isNaN)) return null;
+        for (const id of game) {
+          if (partsById.get(id).some(part => d3.geoContains(byId.get(part), point))) return id;
+        }
+        let nearest = null;
+        let best = 18;
+        for (const id of game) {
+          if (d3.geoDistance(centroids.get(id), view.center) > 80 * deg) continue;
+          const [cx, cy] = projection(centroids.get(id));
+          const distance = Math.hypot(cx - x, cy - y);
+          if (distance < best) [nearest, best] = [id, distance];
+        }
+        return nearest;
+      }
+
+      let drag = null;
+      let dragFrame = 0;
+
+      canvas.addEventListener('pointerdown', event => {
+        if (screen !== 'atlas' || !view) return;
+        drag = { x: event.clientX, y: event.clientY, from: view, moved: false };
+        canvas.setPointerCapture(event.pointerId);
+      });
+
+      canvas.addEventListener('pointermove', event => {
+        if (!drag) return;
+        const dx = event.clientX - drag.x;
+        const dy = event.clientY - drag.y;
+        if (!drag.moved && Math.hypot(dx, dy) < 6) return;
+        drag.moved = true;
+        flight?.stop();
+        flight = null;
+        // Пиксели сдвига — в градусы на текущем масштабе: точка под пальцем
+        // едет вместе с ним. В кадре — грубые контуры, как в полёте.
+        const k = 180 / Math.PI / drag.from.scale;
+        view = { center: [drag.from.center[0] - dx * k, Math.max(-85, Math.min(85, drag.from.center[1] + dy * k))], scale: drag.from.scale };
+        if (!dragFrame) {
+          dragFrame = requestAnimationFrame(() => {
+            dragFrame = 0;
+            draw(view, false);
+          });
+        }
+      });
+
+      canvas.addEventListener('pointerup', event => {
+        if (!drag) return;
+        const { moved } = drag;
+        drag = null;
+        if (moved) {
+          cancelAnimationFrame(dragFrame);
+          dragFrame = 0;
+          draw(view, true);
+          return;
+        }
+        const rect = canvas.getBoundingClientRect();
+        const id = countryAt(event.clientX - rect.left, event.clientY - rect.top);
+        if (id) select(id);
+      });
+
+      canvas.addEventListener('pointercancel', () => {
+        if (drag?.moved) draw(view, true);
+        drag = null;
+      });
+
+      function setScreen(next) {
+        closeZoom();
+        screen = next;
+        const atlas = screen === 'atlas';
+        document.body.classList.toggle('atlas-screen', atlas);
+        $('.globe-game').classList.toggle('atlas-mode', atlas);
+        $('.proto-controls').hidden = atlas;
+        $('#question').hidden = atlas;
+        $('#atlas').hidden = !atlas;
+        // Высота глобуса в атласе другая: сначала холст, потом вид под него.
+        resize();
+        render();
+        if (atlas) showNeighbours(selected);
+      }
+
       function renderSwitches() {
+        $('#views').innerHTML = ['quiz', 'atlas']
+          .map(key => `<button data-screen="${key}" class="${key === screen ? 'active' : ''}">${escapeHtml(t(`view_${key}`))}</button>`)
+          .join('');
+        document.querySelectorAll('[data-screen]').forEach(button => {
+          button.onclick = () => {
+            if (button.dataset.screen !== screen) setScreen(button.dataset.screen);
+          };
+        });
         $('#modes').innerHTML = Object.keys(questions)
           .map(key => `<button data-mode="${key}" class="${key === mode ? 'active' : ''}">${escapeHtml(t(`mode_${key}`))}</button>`)
           .join('');
@@ -1431,9 +2033,19 @@
         $('#langLabel').textContent = t('language');
         $('#lang').value = lang;
         canvas.setAttribute('aria-label', t('globe'));
+        $('#views').setAttribute('aria-label', t('viewsLabel'));
         $('#modes').setAttribute('aria-label', t('modesLabel'));
         $('#levels').setAttribute('aria-label', t('levelsLabel'));
         renderSwitches();
+        // Атлас перерисовывается целиком (смена языка пересортирует список), но
+        // глобус не трогает: страну могли повернуть пальцем.
+        if (screen === 'atlas') {
+          $('#badge').textContent = '';
+          renderAtlas();
+          renderLegend();
+          scrollToSelected('auto');
+          return;
+        }
         $('#badge').textContent = state ? `${round.index + 1} / ${round.deck.length}` : '';
         if (state) {
           $('#tag').textContent = t('tagQuestion', { n: round.index + 1, total: round.deck.length });
