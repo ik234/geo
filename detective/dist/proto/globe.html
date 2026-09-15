@@ -23,9 +23,16 @@
       }
 
       .globe-visual {
+        position: relative;
         min-height: 0;
         padding: 16px;
         gap: 10px;
+      }
+
+      /* Номер вопроса на широком экране написан над заголовком, а на телефоне
+         эта строка скрыта общими стилями игры: там он лежит на глобусе. */
+      .round-badge {
+        display: none;
       }
 
       #globe {
@@ -74,6 +81,19 @@
         opacity: 1;
       }
 
+      /* «Все соседи»: до восьми вариантов. В сетке по два в ряд это четыре
+         ряда по 52px, и на телефоне последние уходили под панель кнопок на
+         130px. Плашками по ширине названия («Чад», «Нигер») выходит три ряда. */
+      .choices.chips {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .choices.chips button {
+        flex: 1 1 auto;
+        min-height: 48px;
+      }
+
       @media (max-width: 700px) {
         /* На телефоне шапка должна остаться в одну строку. */
         .proto-note {
@@ -84,12 +104,87 @@
           grid-template-columns: minmax(0, 1fr);
         }
 
+        .proto-controls {
+          margin-bottom: 10px;
+        }
+
+        /* Шесть видов вопросов должны вставать в две строки на всех языках. С
+           полями игры по-немецки и по-португальски выходило три, а строка
+           здесь стоит 34px высоты над ответами. */
+        .proto-controls .modes button {
+          padding-left: 6px;
+          padding-right: 6px;
+        }
+
         .globe-visual {
-          padding: 8px;
+          padding: 6px;
         }
 
         #globe {
-          height: 200px;
+          height: 170px;
+        }
+
+        .round-badge:not(:empty),
+        .globe-visual .legend.several {
+          position: absolute;
+          border-radius: 8px;
+          background: rgba(255, 255, 255, .85);
+          color: #143440;
+          pointer-events: none;
+        }
+
+        .round-badge:not(:empty) {
+          display: block;
+          top: 10px;
+          left: 10px;
+          padding: 1px 7px;
+          font-size: 13px;
+        }
+
+        /* Подписи под картинкой на телефоне общие стили прячут. Легенда с одним
+           цветом («страна») и не нужна, а с несколькими ложится на низ глобуса. */
+        .globe-visual .legend.several {
+          display: flex;
+          left: 10px;
+          right: 10px;
+          bottom: 10px;
+          gap: 0 8px;
+          padding: 1px 6px;
+          font-size: 11px;
+        }
+
+        .globe-visual .legend span::before {
+          width: 9px;
+          height: 9px;
+          margin-right: 3px;
+        }
+
+        .question {
+          padding-top: 10px;
+        }
+
+        /* В «Всех соседях» в панели три кнопки. С полями игры, 20px по бокам,
+           «Проверить» переносилась во второй ряд и панель вырастала вдвое, а при
+           равной ширине кнопок «Antwort zeigen» ломалась на две строки. Ширина
+           по надписи, лишнее место делится поровну. */
+        .question .actions {
+          flex-wrap: nowrap;
+        }
+
+        .question .actions button {
+          flex: 1 1 auto;
+          padding: 8px 6px;
+          white-space: nowrap;
+        }
+
+        .choices.chips {
+          gap: 5px;
+        }
+
+        .choices.chips button {
+          min-height: 36px;
+          padding: 4px 9px;
+          font-size: 15px;
         }
       }
     </style>
@@ -118,6 +213,7 @@
       <section class="game globe-game">
         <div class="visual globe-visual">
           <canvas id="globe" role="img"></canvas>
+          <span class="round-badge" id="badge"></span>
           <small class="legend" id="legend"></small>
         </div>
         <div class="question">
@@ -126,8 +222,10 @@
           <div class="choices" id="choices"></div>
           <p class="message" id="message" role="status"></p>
           <div class="actions">
-            <button id="check" hidden></button>
-            <button class="primary" id="next" disabled></button>
+            <button id="hint" hidden></button>
+            <button id="reveal" hidden></button>
+            <button class="primary" id="check" hidden></button>
+            <button class="primary" id="next" hidden></button>
           </div>
         </div>
       </section>
@@ -143,6 +241,11 @@
       // дальних перелётах по пути отдаляется до целого глобуса. Маленькие страны
       // обведены кольцом. В полёте рисуются грубые контуры 110m, на месте —
       // подробные 50m: перерисовывать 80 тысяч точек каждый кадр незачем.
+      //
+      // Уровни и раунды — как в игре: на простом 5 вопросов про 24 самые
+      // известные страны, на среднем 15 про 123, на сложном 30 про все, у
+      // эксперта раунд идёт через все подходящие страны подряд. Отдельного
+      // переключателя длины раунда нет: он стоил бы на телефоне целую строку.
 
       const $ = selector => document.querySelector(selector);
       const deg = Math.PI / 180;
@@ -168,22 +271,36 @@
           level_easy: 'Простой',
           level_medium: 'Средний',
           level_hard: 'Сложный',
+          level_expert: 'Эксперт',
           legend_primary: 'страна',
           legend_neighbour: 'соседи',
           legend_goal: 'цель',
           legend_trail: 'пройденный путь',
+          legend_route: 'кратчайший путь',
+          legend_solved: 'разгадано',
+          legend_unsolved: 'не разгадано',
           check: 'Проверить',
           next: 'Следующая загадка →',
-          tagQuestion: 'ВОПРОС {n}',
+          hint: 'Подсказка',
+          reveal: 'Узнать ответ',
+          finishRound: 'Завершить раунд',
+          playAgain: 'Новый раунд',
+          tagQuestion: 'ВОПРОС {n} / {total}',
+          finishTag: 'ЭКСПЕДИЦИЯ ЗАВЕРШЕНА',
+          finishTitle: 'Раунд завершён!',
+          scoreBreakdown: '{correct}/{total} правильных · ошибок: {mistakes} · подсказок: {hints}',
           whichTitle: 'Какая страна отмечена?',
           solvedIs: 'Разгадано! Это {name}.',
           tryAgain: 'Пока не совпало. Попробуй другой вариант — спешить не нужно.',
+          countryHint: 'Страна начинается на «{letter}».',
+          answerIs: 'Ответ: {name}.',
           borderTitle: 'С какой страной граничит {name}?',
           notNeighbour: '{name} — не сосед.',
           isNeighbour: 'Верно: {name} — сосед.',
           allNeighbours: 'Все соседи ({count}): {list}.',
           allTitle: '{name}: отметь всех соседей',
           allHint: 'Отметь нужные страны и нажми «Проверить».',
+          allCount: 'Соседей: {count}. Они закрашены на глобусе.',
           allFound: 'Все соседи найдены!',
           allPartial: 'Найдено {found} из {total}.',
           allWrong: 'Не соседи: {list}.',
@@ -192,14 +309,17 @@
           oddWrong: '{name} — сосед, ищи дальше.',
           islandTitle: 'У какой страны нет соседей по суше?',
           islandRight: 'Верно! {name}: вокруг только море. У остальных соседи есть.',
+          islandNote: '{name}: вокруг только море. У остальных соседи есть.',
           islandWrong: '{name} не подходит: соседи — {list}.',
-          tripTag: 'ГРАНИЦ ПРОЙДЕНО: {count}',
+          tripCrossed: 'Границ пройдено: {count}.',
           tripTitle: '{from} → {to}: куда дальше?',
           tripLeft: 'До цели осталось границ: {count}.',
           tripDone: 'Цель достигнута: {name}!',
           tripPath: 'Путь: {path}. Границ: {count}.',
           tripBest: 'Самый короткий путь: {best}.',
           tripShortest: 'Это самый короткий путь!',
+          tripHint: '{name} — ближе к цели.',
+          tripRoute: 'Кратчайший путь отсюда: {path}.',
           'note_BRA|FRA': 'С Бразилией Франция граничит через Французскую Гвиану в Южной Америке.',
           'note_FRA|SUR': 'С Суринамом Франция граничит через Французскую Гвиану.',
           'note_FRA|NLD': 'С Нидерландами Франция граничит на острове Сен-Мартен в Карибском море.',
@@ -223,22 +343,36 @@
           level_easy: 'Easy',
           level_medium: 'Medium',
           level_hard: 'Hard',
+          level_expert: 'Expert',
           legend_primary: 'country',
           legend_neighbour: 'neighbours',
           legend_goal: 'goal',
           legend_trail: 'route so far',
+          legend_route: 'shortest route',
+          legend_solved: 'solved',
+          legend_unsolved: 'not solved',
           check: 'Check',
           next: 'Next clue →',
-          tagQuestion: 'QUESTION {n}',
+          hint: 'Hint',
+          reveal: 'Show answer',
+          finishRound: 'Finish round',
+          playAgain: 'New round',
+          tagQuestion: 'QUESTION {n} / {total}',
+          finishTag: 'EXPEDITION COMPLETE',
+          finishTitle: 'Round complete!',
+          scoreBreakdown: '{correct}/{total} correct · mistakes: {mistakes} · hints: {hints}',
           whichTitle: 'Which country is highlighted?',
           solvedIs: 'Solved! It is {name}.',
           tryAgain: 'Not quite. Try another answer; there is no rush.',
+          countryHint: 'The country starts with “{letter}”.',
+          answerIs: 'Answer: {name}.',
           borderTitle: 'Which country borders {name}?',
           notNeighbour: '{name} is not a neighbour.',
           isNeighbour: 'Right: {name} is a neighbour.',
           allNeighbours: 'All neighbours ({count}): {list}.',
           allTitle: '{name}: mark all the neighbours',
           allHint: 'Mark the countries and press “Check”.',
+          allCount: 'Neighbours: {count}. They are shaded on the globe.',
           allFound: 'You found all the neighbours!',
           allPartial: 'Found {found} of {total}.',
           allWrong: 'Not neighbours: {list}.',
@@ -247,14 +381,17 @@
           oddWrong: '{name} is a neighbour, keep looking.',
           islandTitle: 'Which country has no land neighbours?',
           islandRight: 'Right! {name}: nothing but sea around it. The others have neighbours.',
+          islandNote: '{name}: nothing but sea around it. The others have neighbours.',
           islandWrong: 'Not {name}: it borders {list}.',
-          tripTag: 'BORDERS CROSSED: {count}',
+          tripCrossed: 'Borders crossed: {count}.',
           tripTitle: '{from} → {to}: where next?',
           tripLeft: 'Borders left to the goal: {count}.',
           tripDone: 'You made it: {name}!',
           tripPath: 'Route: {path}. Borders: {count}.',
           tripBest: 'Shortest route: {best}.',
           tripShortest: 'That is the shortest route!',
+          tripHint: '{name} gets you closer to the goal.',
+          tripRoute: 'Shortest route from here: {path}.',
           'note_BRA|FRA': 'France borders Brazil through French Guiana in South America.',
           'note_FRA|SUR': 'France borders Suriname through French Guiana.',
           'note_FRA|NLD': 'France borders the Netherlands on the island of Saint Martin in the Caribbean.',
@@ -270,7 +407,7 @@
           levelsLabel: 'Dificuldade',
           loading: 'A carregar o mapa…',
           mode_which: 'Que país?',
-          mode_border: 'Com quem faz fronteira?',
+          mode_border: 'Quem faz fronteira?',
           mode_all: 'Todos os vizinhos',
           mode_odd: 'O intruso',
           mode_island: 'Sem vizinhos',
@@ -278,22 +415,36 @@
           level_easy: 'Fácil',
           level_medium: 'Médio',
           level_hard: 'Difícil',
+          level_expert: 'Especialista',
           legend_primary: 'país',
           legend_neighbour: 'vizinhos',
           legend_goal: 'destino',
           legend_trail: 'caminho feito',
+          legend_route: 'caminho mais curto',
+          legend_solved: 'descoberto',
+          legend_unsolved: 'por descobrir',
           check: 'Verificar',
           next: 'Próxima pista →',
-          tagQuestion: 'PERGUNTA {n}',
+          hint: 'Dica',
+          reveal: 'Ver resposta',
+          finishRound: 'Terminar rodada',
+          playAgain: 'Nova rodada',
+          tagQuestion: 'PERGUNTA {n} / {total}',
+          finishTag: 'EXPEDIÇÃO CONCLUÍDA',
+          finishTitle: 'Rodada concluída!',
+          scoreBreakdown: '{correct}/{total} certas · erros: {mistakes} · dicas: {hints}',
           whichTitle: 'Que país está assinalado?',
           solvedIs: 'Descoberto! É {name}.',
           tryAgain: 'Ainda não. Tenta outra resposta; não há pressa.',
+          countryHint: 'O país começa por “{letter}”.',
+          answerIs: 'Resposta: {name}.',
           borderTitle: 'Com que país faz fronteira {name}?',
           notNeighbour: '{name} não é vizinho.',
           isNeighbour: 'Certo: {name} é vizinho.',
           allNeighbours: 'Todos os vizinhos ({count}): {list}.',
           allTitle: '{name}: marca todos os vizinhos',
           allHint: 'Marca os países e carrega em «Verificar».',
+          allCount: 'Vizinhos: {count}. Estão pintados no globo.',
           allFound: 'Encontraste todos os vizinhos!',
           allPartial: 'Encontrados {found} de {total}.',
           allWrong: 'Não são vizinhos: {list}.',
@@ -302,14 +453,17 @@
           oddWrong: '{name} é vizinho, continua a procurar.',
           islandTitle: 'Que país não tem vizinhos por terra?',
           islandRight: 'Certo! {name}: à volta só há mar. Os outros têm vizinhos.',
+          islandNote: '{name}: à volta só há mar. Os outros têm vizinhos.',
           islandWrong: '{name} não serve: faz fronteira com {list}.',
-          tripTag: 'FRONTEIRAS PASSADAS: {count}',
+          tripCrossed: 'Fronteiras passadas: {count}.',
           tripTitle: '{from} → {to}: para onde agora?',
           tripLeft: 'Fronteiras até ao destino: {count}.',
           tripDone: 'Chegaste: {name}!',
           tripPath: 'Caminho: {path}. Fronteiras: {count}.',
           tripBest: 'Caminho mais curto: {best}.',
           tripShortest: 'É o caminho mais curto!',
+          tripHint: '{name} fica mais perto do destino.',
+          tripRoute: 'Caminho mais curto a partir daqui: {path}.',
           'note_BRA|FRA': 'A França faz fronteira com o Brasil através da Guiana Francesa, na América do Sul.',
           'note_FRA|SUR': 'A França faz fronteira com o Suriname através da Guiana Francesa.',
           'note_FRA|NLD': 'A França faz fronteira com os Países Baixos na ilha de São Martinho, nas Caraíbas.',
@@ -333,22 +487,36 @@
           level_easy: 'Fácil',
           level_medium: 'Medio',
           level_hard: 'Difícil',
+          level_expert: 'Experto',
           legend_primary: 'país',
           legend_neighbour: 'vecinos',
           legend_goal: 'destino',
           legend_trail: 'camino recorrido',
+          legend_route: 'camino más corto',
+          legend_solved: 'resuelto',
+          legend_unsolved: 'sin resolver',
           check: 'Comprobar',
           next: 'Siguiente pista →',
-          tagQuestion: 'PREGUNTA {n}',
+          hint: 'Pista',
+          reveal: 'Ver respuesta',
+          finishRound: 'Terminar ronda',
+          playAgain: 'Nueva ronda',
+          tagQuestion: 'PREGUNTA {n} / {total}',
+          finishTag: 'EXPEDICIÓN COMPLETA',
+          finishTitle: '¡Ronda terminada!',
+          scoreBreakdown: '{correct}/{total} correctas · errores: {mistakes} · pistas: {hints}',
           whichTitle: '¿Qué país está marcado?',
           solvedIs: '¡Resuelto! Es {name}.',
           tryAgain: 'Todavía no. Prueba otra respuesta; no hay prisa.',
+          countryHint: 'El país empieza por “{letter}”.',
+          answerIs: 'Respuesta: {name}.',
           borderTitle: '¿Con qué país limita {name}?',
           notNeighbour: '{name} no es vecino.',
           isNeighbour: 'Correcto: {name} es vecino.',
           allNeighbours: 'Todos los vecinos ({count}): {list}.',
           allTitle: '{name}: marca todos los vecinos',
           allHint: 'Marca los países y pulsa «Comprobar».',
+          allCount: 'Vecinos: {count}. Están coloreados en el globo.',
           allFound: '¡Has encontrado todos los vecinos!',
           allPartial: 'Encontrados {found} de {total}.',
           allWrong: 'No son vecinos: {list}.',
@@ -357,14 +525,17 @@
           oddWrong: '{name} es vecino, sigue buscando.',
           islandTitle: '¿Qué país no tiene vecinos por tierra?',
           islandRight: '¡Correcto! {name}: alrededor solo hay mar. Los demás tienen vecinos.',
+          islandNote: '{name}: alrededor solo hay mar. Los demás tienen vecinos.',
           islandWrong: '{name} no: limita con {list}.',
-          tripTag: 'FRONTERAS CRUZADAS: {count}',
+          tripCrossed: 'Fronteras cruzadas: {count}.',
           tripTitle: '{from} → {to}: ¿adónde ahora?',
           tripLeft: 'Fronteras hasta el destino: {count}.',
           tripDone: '¡Has llegado: {name}!',
           tripPath: 'Camino: {path}. Fronteras: {count}.',
           tripBest: 'Camino más corto: {best}.',
           tripShortest: '¡Es el camino más corto!',
+          tripHint: '{name} está más cerca del destino.',
+          tripRoute: 'Camino más corto desde aquí: {path}.',
           'note_BRA|FRA': 'Francia limita con Brasil a través de la Guayana Francesa, en Sudamérica.',
           'note_FRA|SUR': 'Francia limita con Surinam a través de la Guayana Francesa.',
           'note_FRA|NLD': 'Francia limita con los Países Bajos en la isla de San Martín, en el Caribe.',
@@ -388,22 +559,36 @@
           level_easy: 'Einfach',
           level_medium: 'Mittel',
           level_hard: 'Schwer',
+          level_expert: 'Experte',
           legend_primary: 'Land',
           legend_neighbour: 'Nachbarn',
           legend_goal: 'Ziel',
           legend_trail: 'bisheriger Weg',
+          legend_route: 'kürzester Weg',
+          legend_solved: 'gelöst',
+          legend_unsolved: 'nicht gelöst',
           check: 'Prüfen',
           next: 'Nächstes Rätsel →',
-          tagQuestion: 'FRAGE {n}',
+          hint: 'Hinweis',
+          reveal: 'Antwort zeigen',
+          finishRound: 'Runde beenden',
+          playAgain: 'Neue Runde',
+          tagQuestion: 'FRAGE {n} / {total}',
+          finishTag: 'EXPEDITION BEENDET',
+          finishTitle: 'Runde beendet!',
+          scoreBreakdown: '{correct}/{total} richtig · Fehler: {mistakes} · Hinweise: {hints}',
           whichTitle: 'Welches Land ist markiert?',
           solvedIs: 'Gelöst! Das ist {name}.',
           tryAgain: 'Noch nicht ganz. Probiere eine andere Antwort; keine Eile.',
+          countryHint: 'Das Land beginnt mit „{letter}“.',
+          answerIs: 'Antwort: {name}.',
           borderTitle: 'Welches Land grenzt an {name}?',
           notNeighbour: '{name} ist kein Nachbar.',
           isNeighbour: 'Richtig: {name} ist ein Nachbar.',
           allNeighbours: 'Alle Nachbarn ({count}): {list}.',
           allTitle: '{name}: Markiere alle Nachbarn',
           allHint: 'Markiere die Länder und tippe auf „Prüfen“.',
+          allCount: 'Nachbarn: {count}. Sie sind auf dem Globus eingefärbt.',
           allFound: 'Du hast alle Nachbarn gefunden!',
           allPartial: '{found} von {total} gefunden.',
           allWrong: 'Keine Nachbarn: {list}.',
@@ -412,14 +597,17 @@
           oddWrong: '{name} ist ein Nachbar, such weiter.',
           islandTitle: 'Welches Land hat keine Nachbarn an Land?',
           islandRight: 'Richtig! {name}: ringsum nur Meer. Die anderen haben Nachbarn.',
+          islandNote: '{name}: ringsum nur Meer. Die anderen haben Nachbarn.',
           islandWrong: '{name} nicht: Es grenzt an {list}.',
-          tripTag: 'GRENZEN ÜBERQUERT: {count}',
+          tripCrossed: 'Grenzen überquert: {count}.',
           tripTitle: '{from} → {to}: Wohin jetzt?',
           tripLeft: 'Grenzen bis zum Ziel: {count}.',
           tripDone: 'Angekommen: {name}!',
           tripPath: 'Weg: {path}. Grenzen: {count}.',
           tripBest: 'Kürzester Weg: {best}.',
           tripShortest: 'Das ist der kürzeste Weg!',
+          tripHint: '{name} bringt dich näher ans Ziel.',
+          tripRoute: 'Kürzester Weg von hier: {path}.',
           'note_BRA|FRA': 'An Brasilien grenzt Frankreich über Französisch-Guayana in Südamerika.',
           'note_FRA|SUR': 'An Suriname grenzt Frankreich über Französisch-Guayana.',
           'note_FRA|NLD': 'An die Niederlande grenzt Frankreich auf der Insel Saint-Martin in der Karibik.',
@@ -443,22 +631,36 @@
           level_easy: 'Łatwy',
           level_medium: 'Średni',
           level_hard: 'Trudny',
+          level_expert: 'Ekspert',
           legend_primary: 'kraj',
           legend_neighbour: 'sąsiedzi',
           legend_goal: 'cel',
           legend_trail: 'przebyta droga',
+          legend_route: 'najkrótsza droga',
+          legend_solved: 'rozwiązane',
+          legend_unsolved: 'nierozwiązane',
           check: 'Sprawdź',
           next: 'Następna zagadka →',
-          tagQuestion: 'PYTANIE {n}',
+          hint: 'Podpowiedź',
+          reveal: 'Pokaż odpowiedź',
+          finishRound: 'Zakończ rundę',
+          playAgain: 'Nowa runda',
+          tagQuestion: 'PYTANIE {n} / {total}',
+          finishTag: 'WYPRAWA ZAKOŃCZONA',
+          finishTitle: 'Runda zakończona!',
+          scoreBreakdown: '{correct}/{total} poprawnych · błędy: {mistakes} · podpowiedzi: {hints}',
           whichTitle: 'Który kraj jest zaznaczony?',
           solvedIs: 'Rozwiązane! To {name}.',
           tryAgain: 'Jeszcze nie. Spróbuj innej odpowiedzi; nie trzeba się spieszyć.',
+          countryHint: 'Nazwa kraju zaczyna się od „{letter}”.',
+          answerIs: 'Odpowiedź: {name}.',
           borderTitle: 'Z jakim krajem graniczy {name}?',
           notNeighbour: '{name} to nie sąsiad.',
           isNeighbour: 'Dobrze: {name} to sąsiad.',
           allNeighbours: 'Wszyscy sąsiedzi ({count}): {list}.',
           allTitle: '{name}: zaznacz wszystkich sąsiadów',
           allHint: 'Zaznacz kraje i naciśnij „Sprawdź”.',
+          allCount: 'Sąsiadów: {count}. Widać ich na globusie.',
           allFound: 'Znalezieni wszyscy sąsiedzi!',
           allPartial: 'Znaleziono {found} z {total}.',
           allWrong: 'To nie sąsiedzi: {list}.',
@@ -467,14 +669,17 @@
           oddWrong: '{name} to sąsiad, szukaj dalej.',
           islandTitle: 'Który kraj nie ma sąsiadów na lądzie?',
           islandRight: 'Dobrze! {name}: dookoła tylko morze. Pozostałe mają sąsiadów.',
+          islandNote: '{name}: dookoła tylko morze. Pozostałe mają sąsiadów.',
           islandWrong: '{name} nie: sąsiedzi to {list}.',
-          tripTag: 'PRZEKROCZONE GRANICE: {count}',
+          tripCrossed: 'Przekroczone granice: {count}.',
           tripTitle: '{from} → {to}: dokąd teraz?',
           tripLeft: 'Granic do celu: {count}.',
           tripDone: 'Cel osiągnięty: {name}!',
           tripPath: 'Droga: {path}. Granic: {count}.',
           tripBest: 'Najkrótsza droga: {best}.',
           tripShortest: 'To najkrótsza droga!',
+          tripHint: '{name} jest bliżej celu.',
+          tripRoute: 'Najkrótsza droga stąd: {path}.',
           'note_BRA|FRA': 'Z Brazylią Francja graniczy przez Gujanę Francuską w Ameryce Południowej.',
           'note_FRA|SUR': 'Z Surinamem Francja graniczy przez Gujanę Francuską.',
           'note_FRA|NLD': 'Z Holandią Francja graniczy na wyspie Saint-Martin na Karaibach.',
@@ -527,6 +732,26 @@
       };
       const alpha2 = new Map(pairs.map(([a2, a3]) => [a3, a2]));
       const game = new Set(pairs.map(([, a3]) => a3));
+
+      // Страны по уровням — те же, что у флагов в игре (easyFlagFacts и
+      // mediumFlagIds в app.js): 24 на простом, ещё 99 на среднем, дальше все.
+      const easyIds = new Set(['pt', 'es', 'fr', 'it', 'de', 'gb', 'ie', 'se', 'no', 'fi', 'ch', 'gr', 'pl', 'ua', 'br', 'ar', 'ca', 'us', 'mx', 'jp', 'cn', 'in', 'au', 'za']);
+      const mediumIds = new Set([
+        'at', 'be', 'nl', 'dk', 'is', 'cz', 'sk', 'hu', 'ro', 'bg', 'hr', 'si', 'rs', 'ba', 'me', 'mk', 'al', 'tr', 'cy', 'ru',
+        'ee', 'lv', 'lt', 'by', 'md', 'ge', 'am', 'az', 'kz', 'uz', 'kg', 'tj', 'tm',
+        'ir', 'iq', 'il', 'jo', 'sa', 'ae', 'qa', 'kw', 'om', 'ye',
+        'eg', 'ma', 'dz', 'tn', 'ly', 'et', 'ke', 'ug', 'tz', 'rw', 'gh', 'ng', 'sn', 'ci', 'cm', 'cd', 'mz', 'mg', 'zw', 'zm', 'bw', 'na',
+        'cl', 'pe', 'co', 've', 'uy', 'py', 'bo', 'ec', 'pa', 'cr', 'cu', 'jm', 'ht', 'do', 'bs',
+        'id', 'my', 'th', 'vn', 'kh', 'la', 'mm', 'ph', 'kr', 'kp', 'pk', 'bd', 'lk', 'np', 'bt', 'mn', 'nz', 'fj', 'pg',
+      ]);
+      const tierOf = id => (easyIds.has(alpha2.get(id)) ? 0 : mediumIds.has(alpha2.get(id)) ? 1 : 2);
+
+      const levels = ['easy', 'medium', 'hard', 'expert'];
+      const levelTier = { easy: 0, medium: 1, hard: 2, expert: 2 };
+      const roundSizes = { easy: 5, medium: 15, hard: 30 };
+      let level = 'medium';
+      // Какие страны называются в вопросах и вариантах на текущем уровне.
+      const known = id => tierOf(id) <= levelTier[level];
       let regionNames = new Intl.DisplayNames([intlLocale(lang)], { type: 'region' });
       let collator = new Intl.Collator(intlLocale(lang));
       const nameOf = id => nameOverrides[lang]?.[alpha2.get(id)] || regionNames.of(alpha2.get(id).toUpperCase());
@@ -542,11 +767,17 @@
 
       const palette = {
         trail: { fill: '#f9dfa6', stroke: '#d9a441' },
+        route: { fill: '#b9d3f0', stroke: '#3f6fb5' },
         neighbour: { fill: '#9ed8c9', stroke: '#2f7f8a' },
+        unsolved: { fill: '#f6c3a6', stroke: '#ca501b' },
+        solved: { fill: '#b7d85a', stroke: '#5b7d17' },
         goal: { fill: '#b7d85a', stroke: '#5b7d17' },
         primary: { fill: '#f4b333', stroke: '#ca501b' },
       };
-      const paintOrder = ['trail', 'neighbour', 'goal', 'primary'];
+      const paintOrder = ['trail', 'route', 'neighbour', 'solved', 'unsolved', 'goal', 'primary'];
+      // Пройденному пути колец не нужно: на Балканах они сливались в кучу. Итогам
+      // раунда тоже: у эксперта это полторы сотни стран, и кольца закрыли бы глобус.
+      const ringless = new Set(['trail', 'solved', 'unsolved']);
 
       const canvas = $('#globe');
       const ctx = canvas.getContext('2d');
@@ -720,8 +951,7 @@
         ctx.stroke();
         if (!detailed) return;
         // Кольцо, как на картах в Википедии, — если страна меньше пятна 16×16px.
-        // Пройденному пути колец не нужно: на Балканах они сливались в кучу.
-        for (const kind of paintOrder.filter(kind => kind !== 'trail')) {
+        for (const kind of paintOrder.filter(kind => !ringless.has(kind))) {
           for (const id of marks[kind] || []) {
             const area = partsById.get(id).reduce((sum, part) => sum + path.area(byId.get(part)), 0);
             if (area >= 250 || d3.geoDistance(centroids.get(id), view.center) > 85 * deg) continue;
@@ -779,35 +1009,38 @@
       const sameView = (a, b) => Boolean(a && b) && Math.abs(a.scale - b.scale) < 0.5 && d3.geoDistance(a.center, b.center) < 1e-6;
 
       // Перерисовка (ответ, смена языка) не должна заново запускать полёт туда,
-      // куда глобус уже летит или где уже стоит: тогда только перекрашиваем.
+      // куда глобус уже летит или где уже стоит: тогда только перекрашиваем, а
+      // если и краски те же — не трогаем вовсе. Подробный кадр стоит около 0,1 с,
+      // а в «Всех соседях» перерисовка идёт на каждое нажатие варианта.
       function show(nextMarks, ids, center) {
+        const repaint = JSON.stringify(nextMarks) !== JSON.stringify(marks);
         marks = nextMarks;
-        $('#legend').innerHTML = paintOrder
-          .filter(kind => (marks[kind] || []).length)
+        const kinds = paintOrder.filter(kind => (marks[kind] || []).length);
+        $('#legend').innerHTML = kinds
           .map(kind => `<span style="--swatch: ${palette[kind].fill}; --edge: ${palette[kind].stroke}">${escapeHtml(t(`legend_${kind}`))}</span>`)
           .join('');
+        $('#legend').classList.toggle('several', kinds.length > 1);
         const target = viewFor(ids, center);
         if (flight && sameView(flightTarget, target)) return;
         if (!flight && sameView(view, target)) {
-          draw(view, true);
+          if (repaint) draw(view, true);
           return;
         }
         flyTo(target);
       }
 
       // Неправильные варианты по сложности: на простом — страны за полсвета,
-      // на среднем — с того же края света, на сложном — через одну границу
-      // (для Германии это Венгрия, а соседка — Австрия).
-      let level = 'medium';
-
+      // на среднем — с того же края света, на сложном и у эксперта — через одну
+      // границу (для Германии это Венгрия, а соседка — Австрия). Варианты берутся
+      // из стран своего уровня: на простом среди них не бывает Буркина-Фасо.
       function distractors(x, count, { exclude = new Set(), neighboursToo = false } = {}) {
-        const pool = [...game].filter(id => id !== x && !exclude.has(id));
-        const tiers = {
-          easy: pool.filter(id => away(id, x) > 50),
-          medium: pool.filter(id => away(id, x) > 12 && away(id, x) < 45),
-          hard: pool.filter(id => hops(x).get(id) === 2 || (neighboursToo && adj.get(x).has(id))),
+        const pool = [...game].filter(id => id !== x && !exclude.has(id) && known(id));
+        const rules = {
+          easy: id => away(id, x) > 50,
+          medium: id => away(id, x) > 12 && away(id, x) < 45,
+          hard: id => hops(x).get(id) === 2 || (neighboursToo && adj.get(x).has(id)),
         };
-        const picked = shuffle(tiers[level]).slice(0, count);
+        const picked = shuffle(pool.filter(rules[level === 'expert' ? 'hard' : level])).slice(0, count);
         if (picked.length < count) {
           const rest = pool.filter(id => !picked.includes(id)).sort((a, b) => away(a, x) - away(b, x));
           picked.push(...rest.slice(0, count - picked.length));
@@ -815,15 +1048,21 @@
         return picked;
       }
 
+      const lastOf = items => items[items.length - 1];
+      const firstLetter = value => [...String(value).trim()][0]?.toLocaleUpperCase(lang) || '';
+
       function setTitle(value) {
         $('#title').textContent = value;
       }
 
-      function setMessage(value) {
-        $('#message').textContent = value;
+      // Подсказка остаётся в сообщении и после ошибки: иначе, спросив первую
+      // букву и промахнувшись, ребёнок терял бы её.
+      function setMessage(...parts) {
+        $('#message').textContent = parts.filter(Boolean).join(' ');
       }
 
-      function setChoices(ids, stateOf, onPick) {
+      function setChoices(ids, stateOf, onPick, layout = 'grid') {
+        $('#choices').className = layout === 'chips' ? 'choices chips' : 'choices';
         $('#choices').innerHTML = ids.map(id => {
           const state = stateOf(id);
           const classes = [state.correct && 'correct', state.picked && 'picked', state.missed && 'missed', state.wrongPick && 'wrong-pick'].filter(Boolean).join(' ');
@@ -841,7 +1080,7 @@
         return [t('allNeighbours', { count: neighbours.length, list: listOf(neighbours) }), ...notes].join(' ');
       }
 
-      function reveal(x) {
+      function showNeighbours(x) {
         show({ primary: [x], neighbour: [...adj.get(x)] }, [x, ...[...adj.get(x)].filter(id => away(id, x) < 35)], centroids.get(x));
       }
 
@@ -855,181 +1094,301 @@
         return shuffle([helper, ...shuffle(neighbours.filter(id => id !== helper)).slice(0, 3)]);
       }
 
+      const tripLengths = { easy: [2, 3], medium: [3, 5], hard: [5, 8], expert: [5, 8] };
+
+      function goalsFrom(start) {
+        const [min, max] = tripLengths[level];
+        return [...hops(start)].filter(([id, distance]) => distance >= min && distance <= max && known(id)).map(([id]) => id);
+      }
+
       // Каждый вопрос — состояние и перерисовка по нему, как в игре: смена
       // языка перерисовывает тот же вопрос, а не сбрасывает путешествие.
+      // pool — про какие страны спрашивать на текущем уровне, create — вопрос
+      // про одну из них, hint и reveal — «Подсказка» и «Узнать ответ», result —
+      // что записать в итоги раунда.
       const questions = {
         which: {
-          create() {
-            const x = pick([...game]);
+          pool: () => [...game].filter(known),
+          create(x) {
             return { x, options: shuffle([x, ...distractors(x, 3, { neighboursToo: true })]), wrong: [], solved: false };
+          },
+          hint: s => t('countryHint', { letter: firstLetter(nameOf(s.x)) }),
+          reveal(s) {
+            s.solved = true;
           },
           render(s) {
             setTitle(t('whichTitle'));
             setChoices(s.options, id => ({ correct: s.solved && id === s.x, disabled: s.solved || s.wrong.includes(id) }), id => {
               if (id === s.x) s.solved = true; else s.wrong.push(id);
-              render();
+              answered();
             });
-            setMessage(s.solved ? t('solvedIs', { name: nameOf(s.x) }) : s.wrong.length ? t('tryAgain') : '');
+            if (s.solved) setMessage(t(s.revealed ? 'answerIs' : 'solvedIs', { name: nameOf(s.x) }));
+            else setMessage(s.wrong.length && t('tryAgain'), s.hinted && this.hint(s));
             show({ primary: [s.x] }, [s.x]);
           },
+          result: s => ({ correct: !s.revealed, mistakes: s.wrong.length }),
         },
         border: {
-          create() {
-            const x = pick(withNeighbours);
-            const answer = pick([...adj.get(x)]);
-            return { x, options: shuffle([answer, ...distractors(x, 3, { exclude: adj.get(x) })]), wrong: [], solved: null };
+          pool: () => [...game].filter(id => known(id) && [...adj.get(id)].some(known)),
+          create(x) {
+            const answer = pick([...adj.get(x)].filter(known));
+            return { x, answer, options: shuffle([answer, ...distractors(x, 3, { exclude: adj.get(x) })]), wrong: [], solved: false };
+          },
+          hint: s => t('countryHint', { letter: firstLetter(nameOf(s.answer)) }),
+          reveal(s) {
+            s.solved = true;
           },
           render(s) {
             setTitle(t('borderTitle', { name: nameOf(s.x) }));
-            setChoices(s.options, id => ({ correct: s.solved === id, disabled: Boolean(s.solved) || s.wrong.includes(id) }), id => {
-              if (adj.get(s.x).has(id)) s.solved = id; else s.wrong.push(id);
-              render();
+            setChoices(s.options, id => ({ correct: s.solved && id === s.answer, disabled: s.solved || s.wrong.includes(id) }), id => {
+              if (id === s.answer) s.solved = true; else s.wrong.push(id);
+              answered();
             });
             if (s.solved) {
-              setMessage(`${t('isNeighbour', { name: nameOf(s.solved) })} ${neighboursText(s.x)}`);
-              reveal(s.x);
+              setMessage(t(s.revealed ? 'answerIs' : 'isNeighbour', { name: nameOf(s.answer) }), neighboursText(s.x));
+              showNeighbours(s.x);
             } else {
-              const last = s.wrong[s.wrong.length - 1];
-              setMessage(last ? t('notNeighbour', { name: nameOf(last) }) : '');
+              setMessage(s.wrong.length && t('notNeighbour', { name: nameOf(lastOf(s.wrong)) }), s.hinted && this.hint(s));
               show({ primary: [s.x] }, [s.x]);
             }
           },
+          result: s => ({ correct: !s.revealed, mistakes: s.wrong.length }),
         },
         all: {
-          create() {
-            const x = pick(withNeighbours.filter(id => adj.get(id).size >= 2 && adj.get(id).size <= 6));
+          pool: () => [...game].filter(id => known(id) && adj.get(id).size >= 2 && adj.get(id).size <= 6),
+          create(x) {
             const neighbours = adj.get(x);
-            return { x, options: shuffle([...neighbours, ...distractors(x, Math.max(2, 8 - neighbours.size), { exclude: neighbours })]), picked: new Set(), checked: false };
+            // Чем проще уровень, тем меньше лишних вариантов, но не меньше двух.
+            const size = { easy: 5, medium: 6, hard: 8, expert: 8 }[level];
+            return { x, options: shuffle([...neighbours, ...distractors(x, Math.max(2, size - neighbours.size), { exclude: neighbours })]), picked: new Set(), checked: false };
+          },
+          // Подсказка — сколько соседей, и они закрашены на глобусе без
+          // названий: какая форма какому варианту соответствует, решать самому.
+          hint: s => t('allCount', { count: adj.get(s.x).size }),
+          reveal(s) {
+            s.checked = true;
           },
           render(s) {
             const neighbours = adj.get(s.x);
             setTitle(t('allTitle', { name: nameOf(s.x) }));
-            setChoices(s.options, id => (s.checked
-              ? { disabled: true, correct: neighbours.has(id) && s.picked.has(id), missed: neighbours.has(id) && !s.picked.has(id), wrongPick: !neighbours.has(id) && s.picked.has(id) }
-              : { picked: s.picked.has(id) }), id => {
+            setChoices(s.options, id => {
+              if (!s.checked) return { picked: s.picked.has(id) };
+              const neighbour = neighbours.has(id);
+              const picked = s.picked.has(id);
+              return { disabled: true, correct: neighbour && (picked || s.revealed), missed: neighbour && !picked && !s.revealed, wrongPick: !neighbour && picked };
+            }, id => {
               if (s.checked) return;
               if (s.picked.has(id)) s.picked.delete(id); else s.picked.add(id);
               render();
-            });
-            const check = $('#check');
-            check.hidden = false;
-            check.disabled = s.checked;
-            check.onclick = () => {
-              s.checked = true;
-              render();
-            };
+            }, 'chips');
             if (!s.checked) {
-              setMessage(t('allHint'));
-              show({ primary: [s.x] }, [s.x]);
+              setMessage(s.hinted ? this.hint(s) : t('allHint'));
+              if (s.hinted) showNeighbours(s.x); else show({ primary: [s.x] }, [s.x]);
               return;
             }
             const found = [...neighbours].filter(id => s.picked.has(id)).length;
             const wrong = [...s.picked].filter(id => !neighbours.has(id));
-            const lead = found === neighbours.size && !wrong.length
-              ? t('allFound')
-              : [t('allPartial', { found, total: neighbours.size }), wrong.length ? t('allWrong', { list: listOf(wrong) }) : ''].filter(Boolean).join(' ');
-            setMessage(`${lead} ${neighboursText(s.x)}`);
-            reveal(s.x);
+            const lead = s.revealed
+              ? ''
+              : found === neighbours.size && !wrong.length
+                ? t('allFound')
+                : [t('allPartial', { found, total: neighbours.size }), wrong.length && t('allWrong', { list: listOf(wrong) })].filter(Boolean).join(' ');
+            setMessage(lead, neighboursText(s.x));
+            showNeighbours(s.x);
+          },
+          result(s) {
+            const neighbours = adj.get(s.x);
+            const missed = [...neighbours].filter(id => !s.picked.has(id)).length;
+            const wrong = [...s.picked].filter(id => !neighbours.has(id)).length;
+            return { correct: !s.revealed && !missed && !wrong, mistakes: s.revealed ? 0 : missed + wrong };
           },
         },
         odd: {
-          create() {
-            const x = pick(withNeighbours.filter(id => adj.get(id).size >= 3));
+          pool: () => [...game].filter(id => known(id) && adj.get(id).size >= 3),
+          create(x) {
+            // Соседи своего уровня идут вперёд, незнакомые — только если своих не хватает.
+            const shown = shuffle([...adj.get(x)]).sort((a, b) => Number(!known(a)) - Number(!known(b))).slice(0, 3);
             const [intruder] = distractors(x, 1, { exclude: adj.get(x) });
-            return { x, intruder, options: shuffle([...shuffle([...adj.get(x)]).slice(0, 3), intruder]), wrong: [], solved: false };
+            return { x, intruder, options: shuffle([...shown, intruder]), wrong: [], solved: false };
+          },
+          hint: s => t('countryHint', { letter: firstLetter(nameOf(s.intruder)) }),
+          reveal(s) {
+            s.solved = true;
           },
           render(s) {
             setTitle(t('oddTitle', { name: nameOf(s.x) }));
             setChoices(s.options, id => ({ correct: s.solved && id === s.intruder, disabled: s.solved || s.wrong.includes(id) }), id => {
               if (id === s.intruder) s.solved = true; else s.wrong.push(id);
-              render();
+              answered();
             });
             if (s.solved) {
-              setMessage(`${t('oddRight', { name: nameOf(s.intruder) })} ${neighboursText(s.x)}`);
-              reveal(s.x);
+              setMessage(t(s.revealed ? 'notNeighbour' : 'oddRight', { name: nameOf(s.intruder) }), neighboursText(s.x));
+              showNeighbours(s.x);
             } else {
-              const last = s.wrong[s.wrong.length - 1];
-              setMessage(last ? t('oddWrong', { name: nameOf(last) }) : '');
+              setMessage(s.wrong.length && t('oddWrong', { name: nameOf(lastOf(s.wrong)) }), s.hinted && this.hint(s));
               show({ primary: [s.x] }, [s.x]);
             }
           },
+          result: s => ({ correct: !s.revealed, mistakes: s.wrong.length }),
         },
         island: {
-          create() {
-            const island = pick(islands);
-            const others = withNeighbours.filter(id => id !== island).sort((a, b) => away(a, island) - away(b, island)).slice(0, 3);
+          // Среди 24 простых стран островных всего две, Австралия и Япония,
+          // поэтому простому уровню достаются островные страны среднего.
+          pool: () => islands.filter(id => tierOf(id) <= Math.max(1, levelTier[level])),
+          create(island) {
+            const others = withNeighbours.filter(known).sort((a, b) => away(a, island) - away(b, island)).slice(0, 3);
             return { island, others, options: shuffle([island, ...others]), wrong: [], solved: false };
+          },
+          hint: s => t('countryHint', { letter: firstLetter(nameOf(s.island)) }),
+          reveal(s) {
+            s.solved = true;
           },
           render(s) {
             setTitle(t('islandTitle'));
             setChoices(s.options, id => ({ correct: s.solved && id === s.island, disabled: s.solved || s.wrong.includes(id) }), id => {
               if (id === s.island) s.solved = true; else s.wrong.push(id);
-              render();
+              answered();
             });
-            const last = s.wrong[s.wrong.length - 1];
-            setMessage(s.solved
-              ? t('islandRight', { name: nameOf(s.island) })
-              : last ? t('islandWrong', { name: nameOf(last), list: byName(adj.get(last)).slice(0, 3).map(nameOf).join(', ') }) : '');
+            const last = lastOf(s.wrong);
+            if (s.solved) setMessage(t(s.revealed ? 'islandNote' : 'islandRight', { name: nameOf(s.island) }));
+            else setMessage(last && t('islandWrong', { name: nameOf(last), list: byName(adj.get(last)).slice(0, 3).map(nameOf).join(', ') }), s.hinted && this.hint(s));
             show(s.solved ? { primary: [s.island], neighbour: s.others } : {}, [s.island, ...s.others]);
           },
+          result: s => ({ correct: !s.revealed, mistakes: s.wrong.length }),
         },
         journey: {
-          create() {
-            const [min, max] = { easy: [2, 3], medium: [3, 5], hard: [5, 8] }[level];
-            for (let attempt = 0; attempt < 300; attempt++) {
-              const start = pick(withNeighbours);
-              const goals = [...hops(start)].filter(([, distance]) => distance >= min && distance <= max).map(([id]) => id);
-              if (goals.length) {
-                const goal = pick(goals);
-                return { goal, best: hops(start).get(goal), path: [start], options: stepOptions(start, goal) };
-              }
+          pool: () => [...game].filter(id => known(id) && goalsFrom(id).length),
+          create(start) {
+            const goal = pick(goalsFrom(start));
+            return { goal, best: hops(start).get(goal), path: [start], options: stepOptions(start, goal) };
+          },
+          // Подсказка на один шаг: какой из вариантов ближе к цели. Такой среди
+          // вариантов есть всегда, об этом заботится stepOptions.
+          hint(s) {
+            const toGoal = hops(s.goal);
+            const here = lastOf(s.path);
+            return t('tripHint', { name: nameOf(s.options.find(id => toGoal.get(id) < toGoal.get(here))) });
+          },
+          // Ответ — кратчайший путь отсюда. Первый шаг — из показанных
+          // вариантов, дальше из равных по длине путей — через знакомые страны.
+          reveal(s) {
+            const toGoal = hops(s.goal);
+            const route = [lastOf(s.path)];
+            while (lastOf(route) !== s.goal) {
+              const at = lastOf(route);
+              const closer = id => toGoal.get(id) === toGoal.get(at) - 1;
+              const steps = route.length === 1 ? s.options.filter(closer) : byName([...adj.get(at)].filter(closer)).sort((a, b) => Number(!known(a)) - Number(!known(b)));
+              route.push(steps[0]);
             }
-            return null;
+            s.route = route;
           },
           render(s) {
-            const here = s.path[s.path.length - 1];
-            $('#tag').textContent = t('tripTag', { count: s.path.length - 1 });
+            const here = lastOf(s.path);
+            const middle = d3.geoInterpolate(centroids.get(here), centroids.get(s.goal))(0.5);
+            const crossed = s.path.length > 1 && t('tripCrossed', { count: s.path.length - 1 });
+            if (s.route) {
+              setTitle(`${nameOf(here)} → ${nameOf(s.goal)}`);
+              setChoices([], () => ({}), () => {});
+              setMessage(crossed, t('tripRoute', { path: s.route.map(nameOf).join(' → ') }));
+              show({ trail: s.path.slice(0, -1), route: s.route.slice(1, -1), primary: [here], goal: [s.goal] }, [here, s.goal], middle);
+              return;
+            }
             if (here === s.goal) {
               const count = s.path.length - 1;
               setTitle(t('tripDone', { name: nameOf(s.goal) }));
               setChoices([], () => ({}), () => {});
-              setMessage(`${t('tripPath', { path: s.path.map(nameOf).join(' → '), count })} ${count === s.best ? t('tripShortest') : t('tripBest', { best: s.best })}`);
+              setMessage(t('tripPath', { path: s.path.map(nameOf).join(' → '), count }), count === s.best ? t('tripShortest') : t('tripBest', { best: s.best }));
               show({ trail: s.path.slice(0, -1), goal: [s.goal] }, [s.path[0], s.goal]);
               return;
             }
             setTitle(t('tripTitle', { from: nameOf(here), to: nameOf(s.goal) }));
-            setMessage(t('tripLeft', { count: hops(s.goal).get(here) }));
+            setMessage(crossed, t('tripLeft', { count: hops(s.goal).get(here) }), s.hintStep === s.path.length && this.hint(s));
             setChoices(s.options, () => ({}), id => {
               s.path.push(id);
               s.options = stepOptions(id, s.goal);
-              render();
+              answered();
             });
-            show({ trail: s.path.slice(0, -1), primary: [here], goal: [s.goal] }, [here, s.goal], d3.geoInterpolate(centroids.get(here), centroids.get(s.goal))(0.5));
+            show({ trail: s.path.slice(0, -1), primary: [here], goal: [s.goal] }, [here, s.goal], middle);
           },
+          result: s => ({ correct: !s.route, mistakes: s.route ? 0 : s.path.length - 1 - s.best }),
         },
       };
 
+      const isDone = s => Boolean(s.solved || s.checked || s.route || (s.path && lastOf(s.path) === s.goal));
+      // Про какую страну был вопрос — её и закрашиваем в итогах раунда.
+      const subjectOf = s => s.x || s.island || s.goal;
+
       let mode = 'which';
-      let count = 0;
+      let round = null;
       let state = null;
+
+      function newRound() {
+        const deck = shuffle(questions[mode].pool());
+        round = { deck: level === 'expert' ? deck : deck.slice(0, roundSizes[level]), index: 0, correct: 0, mistakes: 0, hints: 0, results: new Map() };
+        state = round.deck.length ? questions[mode].create(round.deck[0]) : null;
+        render();
+      }
+
+      function nextQuestion() {
+        const { correct, mistakes } = questions[mode].result(state);
+        round.correct += Number(correct);
+        round.mistakes += mistakes;
+        round.hints += Number(Boolean(state.hinted));
+        round.results.set(subjectOf(state), correct);
+        round.index++;
+        state = round.index < round.deck.length ? questions[mode].create(round.deck[round.index]) : null;
+        render();
+      }
+
+      // Ответ на телефоне может оказаться под закреплённой панелью кнопок. Тогда
+      // докручиваем ровно на нехватку, как revealSolvedNote() в игре.
+      function answered() {
+        render();
+        if (!isDone(state)) return;
+        const actions = $('.question .actions');
+        const floor = getComputedStyle(actions).position === 'fixed' ? actions.getBoundingClientRect().top : innerHeight;
+        const hidden = Math.round($('#message').getBoundingClientRect().bottom + 8 - floor);
+        if (hidden > 0) scrollBy({ top: hidden, behavior: 'smooth' });
+      }
+
+      function renderFinish() {
+        $('#tag').textContent = t('finishTag');
+        setTitle(t('finishTitle'));
+        setChoices([], () => ({}), () => {});
+        setMessage(t('scoreBreakdown', { correct: round.correct, total: round.deck.length, mistakes: round.mistakes, hints: round.hints }));
+        const asked = [...round.results.keys()];
+        if (asked.length) show({ solved: asked.filter(id => round.results.get(id)), unsolved: asked.filter(id => !round.results.get(id)) }, asked);
+      }
+
+      function renderActions() {
+        const done = !state || isDone(state);
+        $('#hint').textContent = t('hint');
+        $('#reveal').textContent = t('reveal');
+        $('#check').textContent = t('check');
+        $('#next').textContent = !state ? t('playAgain') : round.index + 1 < round.deck.length ? t('next') : t('finishRound');
+        $('#hint').hidden = done;
+        $('#reveal').hidden = done;
+        $('#check').hidden = done || mode !== 'all';
+        $('#next').hidden = !done;
+      }
 
       function renderSwitches() {
         $('#modes').innerHTML = Object.keys(questions)
           .map(key => `<button data-mode="${key}" class="${key === mode ? 'active' : ''}">${escapeHtml(t(`mode_${key}`))}</button>`)
           .join('');
-        $('#levels').innerHTML = ['easy', 'medium', 'hard']
+        $('#levels').innerHTML = levels
           .map(key => `<button data-level="${key}" class="${key === level ? 'active' : ''}">${escapeHtml(t(`level_${key}`))}</button>`)
           .join('');
         document.querySelectorAll('[data-mode]').forEach(button => {
           button.onclick = () => {
             mode = button.dataset.mode;
-            newQuestion();
+            newRound();
           };
         });
         document.querySelectorAll('[data-level]').forEach(button => {
           button.onclick = () => {
             level = button.dataset.level;
-            newQuestion();
+            newRound();
           };
         });
       }
@@ -1044,18 +1403,31 @@
         $('#modes').setAttribute('aria-label', t('modesLabel'));
         $('#levels').setAttribute('aria-label', t('levelsLabel'));
         renderSwitches();
-        $('#check').textContent = t('check');
-        $('#check').hidden = mode !== 'all';
-        $('#next').textContent = t('next');
-        $('#tag').textContent = t('tagQuestion', { n: count });
-        questions[mode].render(state);
+        $('#badge').textContent = state ? `${round.index + 1} / ${round.deck.length}` : '';
+        if (state) {
+          $('#tag').textContent = t('tagQuestion', { n: round.index + 1, total: round.deck.length });
+          questions[mode].render(state);
+        } else {
+          renderFinish();
+        }
+        renderActions();
       }
 
-      function newQuestion() {
-        count++;
-        state = questions[mode].create();
+      $('#hint').onclick = () => {
+        state.hinted = true;
+        if (state.path) state.hintStep = state.path.length;
         render();
-      }
+      };
+      $('#reveal').onclick = () => {
+        state.revealed = true;
+        questions[mode].reveal(state);
+        answered();
+      };
+      $('#check').onclick = () => {
+        state.checked = true;
+        answered();
+      };
+      $('#next').onclick = () => (state ? nextQuestion() : newRound());
 
       $('#lang').onchange = event => {
         lang = event.target.value;
@@ -1068,8 +1440,6 @@
       };
 
       resize();
-      $('#next').disabled = false;
-      $('#next').onclick = newQuestion;
       addEventListener('resize', () => {
         resize();
         if (view) {
@@ -1078,7 +1448,7 @@
           draw(view, true);
         }
       });
-      newQuestion();
+      newRound();
     </script>
   </body>
 </html>
