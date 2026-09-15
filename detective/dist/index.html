@@ -17,7 +17,11 @@
   </head>
   <body>
     <header>
-      <a class="brand" href="./" data-i18n="brand">ГЕО / ДЕТЕКТИВ</a>
+      <a class="brand" href="./" id="brand">ГЕО<span class="brand-tail"> / ДЕТЕКТИВ</span></a>
+      <div class="modes view-modes view-switch" aria-label="Режим">
+        <button data-view="quiz" class="active">Загадки</button>
+        <button data-view="explore">Атлас</button>
+      </div>
       <label class="lang-pick">
         <span data-i18n="language">Язык</span>
         <select id="lang">
@@ -37,10 +41,6 @@
       </div>
 
       <div class="controls">
-        <div class="modes view-modes" aria-label="Режим">
-          <button data-view="quiz" class="active">Загадки</button>
-          <button data-view="explore">Карта</button>
-        </div>
         <div class="modes topic-modes" aria-label="Тема" hidden>
           <button data-mode="mixed">Всё вперемешку</button>
           <button data-mode="flags" class="active">Флаги</button>

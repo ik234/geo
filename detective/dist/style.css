@@ -54,6 +54,23 @@ header a {
   color: white;
 }
 
+/* Переключатель «Загадки / Атлас» стоит в тёмной шапке, а не в строке тем и
+   уровней: там он стоил бы на телефоне целой строки над ответами. */
+header .view-switch {
+  background: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .22);
+}
+
+header .view-switch button {
+  color: #d9ecef;
+}
+
+header .view-switch .active {
+  background: white;
+  border-color: white;
+  color: #102d38;
+}
+
 .toolbar {
   display: block;
 }
@@ -598,6 +615,51 @@ svg {
   gap: 12px;
 }
 
+/* Глобус атласа (globe.mjs). Холст один на всю жизнь страницы и переносится
+   в каждую новую разметку атласа. */
+.atlas-globe {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.globe-canvas {
+  display: block;
+  width: 100%;
+  height: 420px;
+}
+
+/* В атласе глобус крутят пальцем, а нажатие открывает страну. */
+.explore-screen .globe-canvas {
+  touch-action: none;
+  cursor: grab;
+}
+
+.atlas-globe small {
+  text-align: center;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 14px;
+}
+
+.legend span::before {
+  content: '';
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  margin-right: 5px;
+  border-radius: 3px;
+  vertical-align: -1px;
+  background: var(--swatch);
+  border: 1px solid var(--edge);
+}
+
 .map-click {
   cursor: pointer;
 }
@@ -899,6 +961,25 @@ svg {
   line-height: 1.35;
 }
 
+/* Соседи из графа границ: на каждого можно нажать, и глобус летит к нему. */
+.country-facts .neighbours {
+  grid-column: 1 / -1;
+}
+
+.neighbour-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.neighbour-chips button {
+  min-height: 34px;
+  padding: 4px 11px;
+  border-radius: 17px;
+  font-size: 15px;
+}
+
 .country-note {
   margin: 0;
   line-height: 1.45;
@@ -1147,9 +1228,78 @@ button:hover:not(:disabled) {
     max-width: 420px;
   }
 
+  header .brand-tail {
+    display: none;
+  }
+
+  header .view-switch {
+    padding: 2px;
+  }
+
+  header .view-switch button {
+    min-height: 28px;
+    padding: 2px 10px;
+  }
+
+  /* Атлас на телефоне: шапка и глобус прилипают к верху экрана, список стран
+     едет под ними, и перелёт к выбранной стране видно всегда. Высота шапки
+     задана явно — от неё отсчитывается глобус. overflow: clip, а не hidden
+     из общих стилей .game: hidden отменил бы прилипание. */
+  .explore-screen header {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    height: 50px;
+    box-sizing: border-box;
+  }
+
+  .game.explore {
+    overflow: visible;
+    overflow: clip;
+  }
+
   .explore-map {
-    min-height: 280px;
-    padding: 18px;
+    position: sticky;
+    top: 50px;
+    z-index: 5;
+    min-height: 0;
+    padding: 6px;
+  }
+
+  .globe-canvas {
+    height: 240px;
+  }
+
+  /* Подсказка «нажми или покрути» на телефоне стоила бы строки; легенда
+     ложится на низ глобуса, чтобы высота прилипшего блока не прыгала. */
+  .explore-map .explore-help {
+    display: none;
+  }
+
+  .atlas-globe .legend {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    gap: 0 8px;
+    padding: 1px 6px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .85);
+    color: #143440;
+    font-size: 11px;
+    pointer-events: none;
+  }
+
+  .atlas-globe .legend span::before {
+    width: 9px;
+    height: 9px;
+    margin-right: 3px;
+  }
+
+  /* Под шапку (50), глобус (240 и поля 12) и промежуток списка (8): так край
+     предыдущей строки прячется под глобусом. */
+  .explore .item-row {
+    scroll-margin-top: 310px;
   }
 
   .atlas {

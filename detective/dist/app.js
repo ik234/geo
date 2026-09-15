@@ -1,4 +1,5 @@
 import world from './assets/world.mjs';
+import { loadGeography, createGlobe, palette, borderKey } from './globe.mjs';
 
 const $ = selector => document.querySelector(selector);
 const langs = ['ru', 'en', 'pt', 'es', 'de', 'pl'];
@@ -14,7 +15,7 @@ const ui = {
     levelGroup: 'Сложность',
     language: 'Язык',
     viewQuiz: 'Загадки',
-    viewExplore: 'Карта',
+    viewExplore: 'Атлас',
     modeMixed: 'Всё вперемешку',
     modeFlags: 'Флаги',
     modeCoats: 'Гербы',
@@ -91,9 +92,20 @@ const ui = {
     funFact: 'Любопытный факт',
     infoLoading: 'Загружаем сведения…',
     animalPointNote: 'Точка — пример места, не весь ареал',
-    mapLabel: 'Карта стран и флагов',
-    exploreHelp: 'Нажми на выделенную страну',
-    exploreHelpAnimals: 'Нажми на выделенную страну или точку животного',
+    exploreHelp: 'Нажми на страну или покрути глобус',
+    globeLabel: 'Глобус',
+    globeLoading: 'Загружаем глобус…',
+    legend_primary: 'страна',
+    legend_neighbour: 'соседи',
+    neighboursCount: 'Соседи ({count})',
+    noNeighbours: 'Соседей по суше нет: вокруг только море.',
+    byLand: 'По суше',
+    landReach: 'Стран, до которых можно дойти: {count}. Дальше всего — {list}, по пути границ: {hops}.',
+    'note_BRA|FRA': 'С Бразилией Франция граничит через Французскую Гвиану в Южной Америке.',
+    'note_FRA|SUR': 'С Суринамом Франция граничит через Французскую Гвиану.',
+    'note_FRA|NLD': 'С Нидерландами Франция граничит на острове Сен-Мартен в Карибском море.',
+    'note_ESP|MAR': 'С Марокко Испания граничит в Сеуте и Мелилье, испанских городах в Африке.',
+    'note_ESP|GBR': 'С Великобританией Испания граничит у Гибралтара.',
     resultMapLabel: '{name} на карте',
     footerLead: 'Без спешки. Подсказки разрешены — играйте вместе.',
     sourcesTitle: 'Об игре и источниках',
@@ -112,7 +124,7 @@ const ui = {
     levelGroup: 'Difficulty',
     language: 'Language',
     viewQuiz: 'Clues',
-    viewExplore: 'Map',
+    viewExplore: 'Atlas',
     modeMixed: 'Mixed',
     modeFlags: 'Flags',
     modeCoats: 'Coats of arms',
@@ -189,9 +201,20 @@ const ui = {
     funFact: 'Fun fact',
     infoLoading: 'Loading details…',
     animalPointNote: 'The point is one example place, not the whole range',
-    mapLabel: 'Map of countries and flags',
-    exploreHelp: 'Tap a highlighted country',
-    exploreHelpAnimals: 'Tap a highlighted country or animal point',
+    exploreHelp: 'Tap a country or spin the globe',
+    globeLabel: 'Globe',
+    globeLoading: 'Loading the globe…',
+    legend_primary: 'country',
+    legend_neighbour: 'neighbours',
+    neighboursCount: 'Neighbours ({count})',
+    noNeighbours: 'No land neighbours: nothing but sea around.',
+    byLand: 'Over land',
+    landReach: 'Countries you can reach: {count}. The farthest: {list}, borders on the way: {hops}.',
+    'note_BRA|FRA': 'France borders Brazil through French Guiana in South America.',
+    'note_FRA|SUR': 'France borders Suriname through French Guiana.',
+    'note_FRA|NLD': 'France borders the Netherlands on the island of Saint Martin in the Caribbean.',
+    'note_ESP|MAR': 'Spain borders Morocco at Ceuta and Melilla, Spanish cities in Africa.',
+    'note_ESP|GBR': 'Spain borders the United Kingdom at Gibraltar.',
     resultMapLabel: '{name} on the map',
     footerLead: 'Take your time. Hints are allowed; play together.',
     sourcesTitle: 'About the game and sources',
@@ -210,7 +233,7 @@ const ui = {
     levelGroup: 'Dificuldade',
     language: 'Idioma',
     viewQuiz: 'Pistas',
-    viewExplore: 'Mapa',
+    viewExplore: 'Atlas',
     modeMixed: 'Misturado',
     modeFlags: 'Bandeiras',
     modeCoats: 'Brasões',
@@ -287,9 +310,20 @@ const ui = {
     funFact: 'Facto curioso',
     infoLoading: 'A carregar detalhes…',
     animalPointNote: 'O ponto é um exemplo de lugar, não toda a área',
-    mapLabel: 'Mapa de países e bandeiras',
-    exploreHelp: 'Toca num país marcado',
-    exploreHelpAnimals: 'Toca num país marcado ou num ponto de animal',
+    exploreHelp: 'Toca num país ou roda o globo',
+    globeLabel: 'Globo',
+    globeLoading: 'A carregar o globo…',
+    legend_primary: 'país',
+    legend_neighbour: 'vizinhos',
+    neighboursCount: 'Vizinhos ({count})',
+    noNeighbours: 'Sem vizinhos por terra: à volta só há mar.',
+    byLand: 'Por terra',
+    landReach: 'Países a que se pode chegar: {count}. Mais longe: {list}, fronteiras pelo caminho: {hops}.',
+    'note_BRA|FRA': 'A França faz fronteira com o Brasil através da Guiana Francesa, na América do Sul.',
+    'note_FRA|SUR': 'A França faz fronteira com o Suriname através da Guiana Francesa.',
+    'note_FRA|NLD': 'A França faz fronteira com os Países Baixos na ilha de São Martinho, nas Caraíbas.',
+    'note_ESP|MAR': 'A Espanha faz fronteira com Marrocos em Ceuta e Melilha, cidades espanholas em África.',
+    'note_ESP|GBR': 'A Espanha faz fronteira com o Reino Unido em Gibraltar.',
     resultMapLabel: '{name} no mapa',
     footerLead: 'Sem pressa. As dicas são permitidas; joguem juntos.',
     sourcesTitle: 'Sobre o jogo e as fontes',
@@ -308,7 +342,7 @@ const ui = {
     levelGroup: 'Dificultad',
     language: 'Idioma',
     viewQuiz: 'Pistas',
-    viewExplore: 'Mapa',
+    viewExplore: 'Atlas',
     modeMixed: 'Mezclado',
     modeFlags: 'Banderas',
     modeCoats: 'Escudos',
@@ -385,9 +419,20 @@ const ui = {
     funFact: 'Dato curioso',
     infoLoading: 'Cargando detalles…',
     animalPointNote: 'El punto es un lugar de ejemplo, no toda el área',
-    mapLabel: 'Mapa de países y banderas',
-    exploreHelp: 'Toca un país marcado',
-    exploreHelpAnimals: 'Toca un país marcado o un punto de animal',
+    exploreHelp: 'Toca un país o gira el globo',
+    globeLabel: 'Globo',
+    globeLoading: 'Cargando el globo…',
+    legend_primary: 'país',
+    legend_neighbour: 'vecinos',
+    neighboursCount: 'Vecinos ({count})',
+    noNeighbours: 'Sin vecinos por tierra: alrededor solo hay mar.',
+    byLand: 'Por tierra',
+    landReach: 'Países a los que se puede llegar: {count}. Más lejos: {list}, fronteras por el camino: {hops}.',
+    'note_BRA|FRA': 'Francia limita con Brasil a través de la Guayana Francesa, en Sudamérica.',
+    'note_FRA|SUR': 'Francia limita con Surinam a través de la Guayana Francesa.',
+    'note_FRA|NLD': 'Francia limita con los Países Bajos en la isla de San Martín, en el Caribe.',
+    'note_ESP|MAR': 'España limita con Marruecos en Ceuta y Melilla, ciudades españolas en África.',
+    'note_ESP|GBR': 'España limita con el Reino Unido en Gibraltar.',
     resultMapLabel: '{name} en el mapa',
     footerLead: 'Sin prisa. Las pistas valen; jugad juntos.',
     sourcesTitle: 'Sobre el juego y las fuentes',
@@ -406,7 +451,7 @@ const ui = {
     levelGroup: 'Schwierigkeit',
     language: 'Sprache',
     viewQuiz: 'Rätsel',
-    viewExplore: 'Karte',
+    viewExplore: 'Atlas',
     modeMixed: 'Gemischt',
     modeFlags: 'Flaggen',
     modeCoats: 'Wappen',
@@ -483,9 +528,20 @@ const ui = {
     funFact: 'Kurioses',
     infoLoading: 'Details werden geladen…',
     animalPointNote: 'Der Punkt ist ein Beispielort, nicht das ganze Verbreitungsgebiet',
-    mapLabel: 'Karte der Länder und Flaggen',
-    exploreHelp: 'Tippe auf ein markiertes Land',
-    exploreHelpAnimals: 'Tippe auf ein markiertes Land oder einen Tierpunkt',
+    exploreHelp: 'Tippe auf ein Land oder dreh den Globus',
+    globeLabel: 'Globus',
+    globeLoading: 'Globus wird geladen…',
+    legend_primary: 'Land',
+    legend_neighbour: 'Nachbarn',
+    neighboursCount: 'Nachbarn ({count})',
+    noNeighbours: 'Keine Nachbarn an Land: ringsum nur Meer.',
+    byLand: 'Über Land',
+    landReach: 'Erreichbare Länder: {count}. Am weitesten: {list}, Grenzen unterwegs: {hops}.',
+    'note_BRA|FRA': 'An Brasilien grenzt Frankreich über Französisch-Guayana in Südamerika.',
+    'note_FRA|SUR': 'An Suriname grenzt Frankreich über Französisch-Guayana.',
+    'note_FRA|NLD': 'An die Niederlande grenzt Frankreich auf der Insel Saint-Martin in der Karibik.',
+    'note_ESP|MAR': 'An Marokko grenzt Spanien in Ceuta und Melilla, spanischen Städten in Afrika.',
+    'note_ESP|GBR': 'An das Vereinigte Königreich grenzt Spanien bei Gibraltar.',
     resultMapLabel: '{name} auf der Karte',
     footerLead: 'Ganz ohne Eile. Hinweise sind erlaubt; spielt zusammen.',
     sourcesTitle: 'Über das Spiel und die Quellen',
@@ -504,7 +560,7 @@ const ui = {
     levelGroup: 'Poziom trudności',
     language: 'Język',
     viewQuiz: 'Zagadki',
-    viewExplore: 'Mapa',
+    viewExplore: 'Atlas',
     modeMixed: 'Mieszane',
     modeFlags: 'Flagi',
     modeCoats: 'Herby',
@@ -581,9 +637,20 @@ const ui = {
     funFact: 'Ciekawostka',
     infoLoading: 'Wczytywanie szczegółów…',
     animalPointNote: 'Punkt pokazuje przykładowe miejsce, nie cały zasięg',
-    mapLabel: 'Mapa krajów i flag',
-    exploreHelp: 'Dotknij zaznaczonego kraju',
-    exploreHelpAnimals: 'Dotknij zaznaczonego kraju albo punktu zwierzęcia',
+    exploreHelp: 'Dotknij kraju albo obróć globus',
+    globeLabel: 'Globus',
+    globeLoading: 'Wczytywanie globusa…',
+    legend_primary: 'kraj',
+    legend_neighbour: 'sąsiedzi',
+    neighboursCount: 'Sąsiedzi ({count})',
+    noNeighbours: 'Brak sąsiadów na lądzie: dookoła tylko morze.',
+    byLand: 'Lądem',
+    landReach: 'Kraje, do których można dojść: {count}. Najdalej: {list}, granic po drodze: {hops}.',
+    'note_BRA|FRA': 'Z Brazylią Francja graniczy przez Gujanę Francuską w Ameryce Południowej.',
+    'note_FRA|SUR': 'Z Surinamem Francja graniczy przez Gujanę Francuską.',
+    'note_FRA|NLD': 'Z Holandią Francja graniczy na wyspie Saint-Martin na Karaibach.',
+    'note_ESP|MAR': 'Z Marokiem Hiszpania graniczy w Ceucie i Melilli, hiszpańskich miastach w Afryce.',
+    'note_ESP|GBR': 'Z Wielką Brytanią Hiszpania graniczy przy Gibraltarze.',
     resultMapLabel: '{name} na mapie',
     footerLead: 'Bez pośpiechu. Podpowiedzi są dozwolone; grajcie razem.',
     sourcesTitle: 'O grze i źródłach',
@@ -1277,20 +1344,24 @@ function loadJson(url, key, assign) {
     .then(value => {
       assign(value);
       dataPending.delete(key);
-      // Перерисовка по приходу данных пересобирает список атласа и сбрасывает
-      // его прокрутку. Пользователь в этот момент ничего не нажимал, поэтому
-      // позицию надо вернуть на место.
-      const list = document.querySelector('.item-list');
-      const keepTop = list && list.scrollHeight > list.clientHeight + 1 ? list.scrollTop : null;
-      render();
-      const nextList = document.querySelector('.item-list');
-      if (nextList && keepTop !== null) {
-        const behavior = nextList.style.scrollBehavior;
-        nextList.style.scrollBehavior = 'auto';
-        nextList.scrollTop = keepTop;
-        nextList.style.scrollBehavior = behavior;
-      }
+      rerenderKeepingList();
     });
+}
+
+// Перерисовка по приходу данных (или контуров глобуса) пересобирает список
+// атласа и сбрасывает его прокрутку. Пользователь в этот момент ничего не
+// нажимал, поэтому позицию надо вернуть на место.
+function rerenderKeepingList() {
+  const list = document.querySelector('.item-list');
+  const keepTop = list && list.scrollHeight > list.clientHeight + 1 ? list.scrollTop : null;
+  render();
+  const nextList = document.querySelector('.item-list');
+  if (nextList && keepTop !== null) {
+    const behavior = nextList.style.scrollBehavior;
+    nextList.style.scrollBehavior = 'auto';
+    nextList.scrollTop = keepTop;
+    nextList.style.scrollBehavior = behavior;
+  }
 }
 
 // Тексты есть на всех шести языках, но факты переведены не для всех стран.
@@ -1396,25 +1467,53 @@ function languageNames(codes) {
   return codes.map(code => intlName('language', code, dataCache.countries?.fallback?.language)).join(', ');
 }
 
+// Соседи и путь по суше — из графа границ globe.mjs. Пока контуры не
+// пришли, этих строк нет: атлас перерисуется, когда они придут.
+function borderInfo(item) {
+  if (!geo || !item.iso || !geo.adj.has(item.iso)) return null;
+  const collator = new Intl.Collator(intlLocale());
+  const title = iso => countryName(isoToId.get(iso));
+  const byTitle = isos => [...isos].sort((a, b) => collator.compare(title(a), title(b)));
+  const neighbours = byTitle(geo.adj.get(item.iso));
+  const chips = neighbours.length
+    ? `<span class="neighbour-chips">${neighbours.map(iso => `<button type="button" data-neighbour="${isoToId.get(iso)}">${escapeHtml(title(iso))}</button>`).join('')}</span>`
+    : escapeHtml(tr('noNeighbours'));
+  const row = `<div class="neighbours"><dt>${escapeHtml(tr('neighboursCount', { count: neighbours.length }))}</dt><dd>${chips}</dd></div>`;
+  // Пояснения к заморским границам: с Бразилией Франция граничит через Гвиану.
+  const notes = neighbours
+    .map(iso => ui[lang][`note_${borderKey(item.iso, iso)}`] || ui.en[`note_${borderKey(item.iso, iso)}`])
+    .filter(Boolean)
+    .map(note => ['', note]);
+  const reached = geo.landReach(item.iso);
+  if (reached.length) {
+    const farthest = Math.max(...reached.map(([, count]) => count));
+    const ids = byTitle(reached.filter(([, count]) => count === farthest).map(([iso]) => iso));
+    const list = ids.slice(0, 3).map(title).join(', ') + (ids.length > 3 ? '…' : '');
+    notes.push([tr('byLand'), tr('landReach', { count: reached.length, list, hops: farthest })]);
+  }
+  return { row, notes };
+}
+
 function countryPanel(item) {
   const info = countryInfo(item.id);
   const flagText = countryFlagText(item.id);
   const facts = countryFacts(item.id);
-  if (!info && !flagText && !facts.length) return `<p class="country-loading">${tr('infoLoading')}</p>`;
+  const border = borderInfo(item);
+  if (!info && !flagText && !facts.length && !border) return `<p class="country-loading">${tr('infoLoading')}</p>`;
   const rows = [];
   if (info?.capital) rows.push([tr('capital'), info.capital[lang] || info.capital.en]);
   if (info?.currency) rows.push([tr('currency'), currencyName(info.currency)]);
   if (info?.languages?.length) rows.push([tr('officialLanguages'), languageNames(info.languages)]);
-  const notes = [];
+  const notes = [...(border?.notes || [])];
   if (flagText) notes.push([tr('flagStory'), flagText]);
   const pick = chosenFact(item, facts);
   if (pick) notes.push([tr('funFact'), pick]);
-  if (!rows.length && !notes.length) return '';
-  return `<div class="country-panel">${rows.length ? `<dl class="country-facts">${rows
-    .map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`)
-    .join('')}</dl>` : ''}${notes
-    .map(([term, value]) => `<p class="country-note"><b>${escapeHtml(term)}</b> ${escapeHtml(value)}</p>`)
-    .join('')}</div>`;
+  const factRows = rows.map(([term, value]) => `<div><dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('') + (border?.row || '');
+  if (!factRows && !notes.length) return '';
+  const pending = !info || (!flagText && !facts.length);
+  return `<div class="country-panel">${factRows ? `<dl class="country-facts">${factRows}</dl>` : ''}${notes
+    .map(([term, value]) => `<p class="country-note">${term ? `<b>${escapeHtml(term)}</b> ` : ''}${escapeHtml(value)}</p>`)
+    .join('')}${pending ? `<p class="country-loading">${tr('infoLoading')}</p>` : ''}</div>`;
 }
 
 function countryName(id, locale = lang) {
@@ -1640,6 +1739,10 @@ function setStaticText() {
   document.querySelectorAll('[data-i18n]').forEach(node => {
     node.textContent = tr(node.dataset.i18n);
   });
+  // На телефоне от названия остаётся «ГЕО»: в шапке рядом переключатель
+  // «Загадки / Атлас» и выбор языка.
+  const [brandShort, brandTail] = tr('brand').split(' / ');
+  $('#brand').innerHTML = `${escapeHtml(brandShort)}${brandTail ? `<span class="brand-tail"> / ${escapeHtml(brandTail)}</span>` : ''}`;
   document.querySelector('.view-modes').setAttribute('aria-label', tr('viewGroup'));
   document.querySelector('.topic-modes').setAttribute('aria-label', tr('topicGroup'));
   document.querySelector('.level-modes').setAttribute('aria-label', tr('levelGroup'));
@@ -1674,6 +1777,12 @@ function setChrome() {
   document.querySelector('.level-modes').hidden = !quiz;
   document.querySelector('.player-board').hidden = !isRoundFinished();
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
+  document.body.classList.toggle('explore-screen', !quiz);
+  if (quiz && atlasGlobe) {
+    // Вне атласа глобус не крутится, а при возвращении снова летит к стране.
+    atlasGlobe.setInteractive(false);
+    atlasShownKey = null;
+  }
 }
 
 // Собирает до count вопросов из текущих пулов, пропуская уже сыгранные.
@@ -1963,7 +2072,7 @@ function renderExplore() {
         <button data-kind="countries" class="${exploreKind === 'countries' ? 'active' : ''}">${tr('countries')}</button>
         <button data-kind="animals" class="${exploreKind === 'animals' ? 'active' : ''}">${tr('animals')}</button>
       </div>` : ''}
-      <div class="item-list" aria-label="${escapeHtml(tr('mapLabel'))}">${items.map(listItem).join('')}</div>
+      <div class="item-list" aria-label="${escapeHtml(tr('countries'))}">${items.map(listItem).join('')}</div>
     </div>`;
 
   document.querySelectorAll('[data-kind]').forEach(button => {
@@ -1989,7 +2098,10 @@ function renderExplore() {
       openSymbolZoom(kind, id, thumb.naturalWidth / thumb.naturalHeight || (kind === 'flag' ? 4 / 3 : 1));
     };
   });
-  drawExplore(current);
+  document.querySelectorAll('[data-neighbour]').forEach(button => {
+    button.onclick = () => selectExploreItem(`flag:${button.dataset.neighbour}`, 'start');
+  });
+  mountAtlasGlobe(current);
   scrollSelectedExploreItem();
 }
 
@@ -2147,6 +2259,57 @@ function scrollSelectedExploreItem() {
   document.getElementById(itemDomId(selectedKey))?.scrollIntoView({ behavior, block });
 }
 
+// Глобус атласа — из globe.mjs, общего с прототипом. Контуры (750 КБ)
+// грузятся при первом заходе в атлас. Холст один на всю жизнь страницы и при
+// каждой перерисовке атласа переносится в свежую разметку: пересоздай его —
+// глобус рисовался бы заново и терял поворот пальцем.
+const isoToId = new Map(countries.map(([id, iso]) => [iso, id]));
+const atlasGlobeNode = document.createElement('div');
+atlasGlobeNode.className = 'atlas-globe';
+atlasGlobeNode.innerHTML = '<canvas class="globe-canvas" role="img"></canvas><small class="legend"></small><small class="explore-help"></small>';
+let geo = null;
+let atlasGlobe = null;
+let atlasShownKey = null;
+let legendKinds = [];
+
+function renderLegend(kinds = legendKinds) {
+  legendKinds = kinds;
+  const legend = atlasGlobeNode.querySelector('.legend');
+  legend.innerHTML = atlasGlobe
+    ? kinds.map(kind => `<span style="--swatch: ${palette[kind].fill}; --edge: ${palette[kind].stroke}">${escapeHtml(tr(`legend_${kind}`))}</span>`).join('')
+    : escapeHtml(tr('globeLoading'));
+}
+
+function mountAtlasGlobe(current) {
+  $('#exploreMap').append(atlasGlobeNode);
+  atlasGlobeNode.querySelector('canvas').setAttribute('aria-label', tr('globeLabel'));
+  atlasGlobeNode.querySelector('.explore-help').textContent = tr('exploreHelp');
+  renderLegend();
+  if (!atlasGlobe) {
+    loadGeography(countries.map(([, iso]) => iso))
+      .then(value => {
+        if (atlasGlobe) return;
+        geo = value;
+        atlasGlobe = createGlobe(atlasGlobeNode.querySelector('canvas'), geo, {
+          onMarks: renderLegend,
+          onSelect: iso => selectExploreItem(`flag:${isoToId.get(iso)}`, 'start'),
+        });
+        // Карточке нужны соседи, глобусу — выбранная страна.
+        if (view === 'explore') rerenderKeepingList();
+      })
+      .catch(() => {});
+    return;
+  }
+  atlasGlobe.setInteractive(true);
+  atlasGlobe.refit();
+  // Перерисовка атласа (пришли данные, сменился язык) глобус не трогает:
+  // его могли повернуть пальцем. Летим, только если сменилась страна.
+  if (current.type === 'flag' && atlasShownKey !== current.key) {
+    atlasShownKey = current.key;
+    atlasGlobe.showNeighbours(current.iso);
+  }
+}
+
 function baseMap(container, label) {
   const features = topojson.feature(world, world.objects.features).features;
   const projection = d3.geoNaturalEarth1().fitExtent([[8, 8], [412, 225]], { type: 'Sphere' });
@@ -2167,46 +2330,6 @@ function drawResult(q) {
   $('#map').insertAdjacentHTML('beforeend', `<small>${countrySymbol ? escapeHtml(name(q)) : tr('animalPointNote')}</small>`);
 }
 
-function drawExplore(current) {
-  const mapItems = flags;
-  const itemIsos = new Set(mapItems.map(item => item.iso));
-  const { features, projection, path, svg } = baseMap('#exploreMap', tr('mapLabel'));
-  svg.selectAll('.land').data(features).join('path')
-    .attr('d', path)
-    .attr('fill', feature => current.iso === featureId(feature) ? '#f4b333' : itemIsos.has(featureId(feature)) ? '#dff0df' : '#f6faf6')
-    .attr('stroke', '#86a5af')
-    .attr('stroke-width', 0.4)
-    .attr('class', feature => itemIsos.has(featureId(feature)) ? 'map-click land' : 'land')
-    .on('click', (_, feature) => {
-      const found = mapItems.find(item => item.iso === featureId(feature));
-      if (found) {
-        selectExploreItem(found.key, 'start');
-      }
-    });
-  mapItems.filter(item => item.point).forEach(item => {
-    const [x, y] = projection(item.point);
-    svg.append('circle')
-      .attr('cx', x)
-      .attr('cy', y)
-      .attr('r', current.key === item.key ? 5.5 : 4)
-      .attr('fill', current.key === item.key ? '#ca501b' : '#2f7f8a')
-      .attr('stroke', 'white')
-      .attr('stroke-width', 1.8)
-      .attr('class', 'map-click')
-      .on('click', () => {
-        selectExploreItem(item.key, 'start');
-      });
-  });
-  if (featureFlags.animals) {
-    animals.forEach(animal => {
-      const [x, y] = projection(animal.point);
-      svg.append('circle').attr('cx', x).attr('cy', y).attr('r', current.key === animal.key ? 7 : 5).attr('fill', current.key === animal.key ? '#ca501b' : '#2f7f8a').attr('stroke', 'white').attr('stroke-width', 2).attr('class', 'map-click').on('click', () => {
-        selectExploreItem(animal.key, 'start');
-      });
-    });
-  }
-  $('#exploreMap').insertAdjacentHTML('beforeend', `<small>${tr(featureFlags.animals ? 'exploreHelpAnimals' : 'exploreHelp')}</small>`);
-}
 
 $('#lang').onchange = event => {
   lang = event.target.value;
@@ -2226,6 +2349,9 @@ $('#clearScores').onclick = () => {
 };
 document.querySelectorAll('[data-view]').forEach(button => {
   button.onclick = () => {
+    // В атласе выбранная страна сразу под глобусом, а не где-то в середине
+    // списка из двух сотен строк.
+    if (button.dataset.view === 'explore' && view !== 'explore') exploreScroll = { block: 'start', behavior: 'instant' };
     view = button.dataset.view;
     render();
   };

@@ -41,25 +41,6 @@
         height: 420px;
       }
 
-      .legend {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4px 14px;
-      }
-
-      .legend span::before {
-        content: '';
-        display: inline-block;
-        width: 11px;
-        height: 11px;
-        margin-right: 5px;
-        border-radius: 3px;
-        vertical-align: -1px;
-        background: var(--swatch);
-        border: 1px solid var(--edge);
-      }
-
       .choices button.picked {
         background: #e3eef1;
         border-color: #143440;
@@ -94,23 +75,6 @@
         min-height: 48px;
       }
 
-      /* Переключатель «Вопросы / Атлас» стоит в тёмной шапке: в строке
-         переключателей вопросов он съел бы на телефоне место над ответами. */
-      header .view-switch {
-        background: rgba(255, 255, 255, .1);
-        border-color: rgba(255, 255, 255, .22);
-      }
-
-      header .view-switch button {
-        color: #d9ecef;
-      }
-
-      header .view-switch .active {
-        background: white;
-        border-color: white;
-        color: #102d38;
-      }
-
       .proto-controls[hidden],
       .atlas[hidden] {
         display: none;
@@ -122,24 +86,6 @@
         cursor: grab;
       }
 
-      .country-facts .neighbours {
-        grid-column: 1 / -1;
-      }
-
-      .neighbour-chips {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        margin-top: 4px;
-      }
-
-      .neighbour-chips button {
-        min-height: 34px;
-        padding: 4px 11px;
-        border-radius: 17px;
-        font-size: 15px;
-      }
-
       @media (max-width: 900px) {
         .proto-note {
           display: none;
@@ -147,19 +93,6 @@
       }
 
       @media (max-width: 700px) {
-        header .brand-tail {
-          display: none;
-        }
-
-        header .view-switch {
-          padding: 2px;
-        }
-
-        header .view-switch button {
-          min-height: 28px;
-          padding: 2px 10px;
-        }
-
         /* В атласе глобус выше и прилипает к верху экрана: список стран едет
            под ним, и перелёт к выбранной стране видно всегда. overflow: clip,
            а не hidden из стилей игры: hidden отменил бы прилипание. */

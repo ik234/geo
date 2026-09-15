@@ -397,6 +397,9 @@ export function createGlobe(canvas, geo, { onMarks = () => {}, onSelect = () => 
     const repaint = JSON.stringify(nextMarks) !== JSON.stringify(marks);
     marks = nextMarks;
     onMarks(paintOrder.filter(kind => (marks[kind] || []).length));
+    // Холста нет на странице (другой раздел игры): вид под нулевой размер
+    // считать нельзя, глобус покажут заново, когда холст вернётся.
+    if (!W || !H) return;
     const target = viewFor(ids, center, around);
     if (flight && sameView(flightTarget, target)) return;
     if (!flight && sameView(view, target)) {
@@ -486,7 +489,7 @@ export function createGlobe(canvas, geo, { onMarks = () => {}, onSelect = () => 
   // Идущий перелёт следующим кадром сам нарисует глобус в новом размере.
   function refit() {
     const rect = canvas.getBoundingClientRect();
-    if (rect.width === W && rect.height === H) return;
+    if (!rect.width || !rect.height || (rect.width === W && rect.height === H)) return;
     resize();
     if (view && !flight) draw(view, true);
   }
