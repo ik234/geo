@@ -990,11 +990,6 @@ button:hover:not(:disabled) {
     clip-path: inset(50%);
   }
 
-  /* Сложность уходит в конец, чтобы режим и длина встали в одну строку */
-  .level-modes {
-    order: 1;
-  }
-
   main {
     padding: 10px 14px;
   }
@@ -1119,13 +1114,16 @@ button:hover:not(:disabled) {
     gap: 8px;
   }
 
+  /* Поля ужаты до пикселя: при 9px и промежутке 6px режим с темой не
+     вставали в одну строку по-испански и по-немецки (не хватало 2 и 10px на
+     ширине 390). */
   .controls {
-    gap: 6px;
+    gap: 6px 4px;
   }
 
   .modes button {
     font-size: 14px;
-    padding: 4px 9px;
+    padding: 4px 8px;
     min-height: 32px;
   }
 

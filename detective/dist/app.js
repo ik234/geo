@@ -23,9 +23,7 @@ const ui = {
     levelEasy: 'Простой',
     levelMedium: 'Средний',
     levelMax: 'Сложный',
-    lengthGroup: 'Длина',
-    lengthFixed: 'Раунд',
-    lengthEndless: 'Бесконечно',
+    levelExpert: 'Эксперт',
     playerBoard: 'Игрок и результаты',
     playerName: 'Имя для рекорда',
     playerPlaceholder: 'Игрок1',
@@ -34,7 +32,7 @@ const ui = {
     playerPrompt: 'Введи имя, чтобы попасть в таблицу рекордов.',
     playerRejected: 'Такое имя не подойдёт. Выбери другое.',
     scoreboardTitle: 'Рекорды',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'В этой категории пока нет рекордов.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Очистить категорию',
@@ -123,9 +121,7 @@ const ui = {
     levelEasy: 'Easy',
     levelMedium: 'Medium',
     levelMax: 'Hard',
-    lengthGroup: 'Length',
-    lengthFixed: 'Round',
-    lengthEndless: 'Endless',
+    levelExpert: 'Expert',
     playerBoard: 'Player and scores',
     playerName: 'Name for the record',
     playerPlaceholder: 'Player1',
@@ -134,7 +130,7 @@ const ui = {
     playerPrompt: 'Enter a name to join the high-score table.',
     playerRejected: 'That name will not work. Choose another one.',
     scoreboardTitle: 'High score',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'No records in this category yet.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Clear category',
@@ -223,9 +219,7 @@ const ui = {
     levelEasy: 'Fácil',
     levelMedium: 'Médio',
     levelMax: 'Difícil',
-    lengthGroup: 'Duração',
-    lengthFixed: 'Rodada',
-    lengthEndless: 'Sem fim',
+    levelExpert: 'Especialista',
     playerBoard: 'Jogador e pontuações',
     playerName: 'Nome para o recorde',
     playerPlaceholder: 'Jogador1',
@@ -234,7 +228,7 @@ const ui = {
     playerPrompt: 'Escreve um nome para entrar na tabela de recordes.',
     playerRejected: 'Esse nome não serve. Escolhe outro.',
     scoreboardTitle: 'Recordes',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'Ainda não há recordes nesta categoria.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Limpar categoria',
@@ -323,9 +317,7 @@ const ui = {
     levelEasy: 'Fácil',
     levelMedium: 'Medio',
     levelMax: 'Difícil',
-    lengthGroup: 'Duración',
-    lengthFixed: 'Ronda',
-    lengthEndless: 'Sin fin',
+    levelExpert: 'Experto',
     playerBoard: 'Jugador y puntuaciones',
     playerName: 'Nombre para el récord',
     playerPlaceholder: 'Jugador1',
@@ -334,7 +326,7 @@ const ui = {
     playerPrompt: 'Escribe un nombre para entrar en la tabla de récords.',
     playerRejected: 'Ese nombre no sirve. Elige otro.',
     scoreboardTitle: 'Récords',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'Todavía no hay récords en esta categoría.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Borrar categoría',
@@ -423,9 +415,7 @@ const ui = {
     levelEasy: 'Einfach',
     levelMedium: 'Mittel',
     levelMax: 'Schwer',
-    lengthGroup: 'Länge',
-    lengthFixed: 'Runde',
-    lengthEndless: 'Endlos',
+    levelExpert: 'Experte',
     playerBoard: 'Spieler und Punkte',
     playerName: 'Name für den Rekord',
     playerPlaceholder: 'Spieler1',
@@ -434,7 +424,7 @@ const ui = {
     playerPrompt: 'Gib einen Namen ein, um in die Bestenliste zu kommen.',
     playerRejected: 'Dieser Name passt nicht. Wähle einen anderen.',
     scoreboardTitle: 'Bestenliste',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'In dieser Kategorie gibt es noch keine Rekorde.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Kategorie löschen',
@@ -466,8 +456,8 @@ const ui = {
     capitalPrompt: 'Wähle die Hauptstadt des Landes.',
     flagHintOpen: 'Jetzt ist die ganze Flagge sichtbar.',
     coatHintOpen: 'Jetzt ist das ganze Wappen sichtbar.',
-    capitalHint: 'Die Hauptstadt beginnt mit „{letter}”.',
-    countryHint: 'Das Land beginnt mit „{letter}”.',
+    capitalHint: 'Die Hauptstadt beginnt mit „{letter}“.',
+    countryHint: 'Das Land beginnt mit „{letter}“.',
     animalPrompt: 'Wo lebt es in der Natur, nicht im Zoo?',
     coatSolved: 'Das ist das Wappen von {name}.',
     capitalSolved: 'Die Hauptstadt von {name} ist {capital}.',
@@ -523,9 +513,7 @@ const ui = {
     levelEasy: 'Łatwy',
     levelMedium: 'Średni',
     levelMax: 'Trudny',
-    lengthGroup: 'Długość',
-    lengthFixed: 'Runda',
-    lengthEndless: 'Bez końca',
+    levelExpert: 'Ekspert',
     playerBoard: 'Gracz i wyniki',
     playerName: 'Imię do rekordu',
     playerPlaceholder: 'Gracz1',
@@ -534,7 +522,7 @@ const ui = {
     playerPrompt: 'Wpisz imię, aby trafić do tabeli rekordów.',
     playerRejected: 'To imię nie pasuje. Wybierz inne.',
     scoreboardTitle: 'Rekordy',
-    scoreboardScope: '{mode} · {level} · {length}',
+    scoreboardScope: '{mode} · {level}',
     scoreboardEmpty: 'W tej kategorii nie ma jeszcze rekordów.',
     scoreMeta: '{correct}/{total} · {date}',
     clearScores: 'Wyczyść kategorię',
@@ -1008,7 +996,6 @@ function saveLang() {
 let lang = loadLang();
 let mode = 'flags';
 let level = 'max';
-let lengthMode = 'fixed';
 let view = 'quiz';
 let exploreKind = 'countries';
 let selectedKey = 'flag:pt';
@@ -1074,8 +1061,12 @@ function loadScores() {
   return Array.isArray(saved) ? pruneScores(saved.filter(score => score?.name && Number.isFinite(score?.score)).map(score => ({
     ...score,
     mode: score.mode || 'mixed',
-    level: score.level || 'easy',
-    lengthMode: score.lengthMode || 'fixed',
+    // Длину раунда раньше выбирали отдельным переключателем. Бесконечный
+    // сложный раунд стал уровнем «Эксперт». Бесконечные раунды на простом и
+    // среднем остаются своей категорией без кнопки: их счёт за весь каталог
+    // нечестно ставить рядом с раундами из 5 и 15 загадок.
+    level: score.lengthMode === 'endless' && score.level === 'max' ? 'expert' : score.level || 'easy',
+    lengthMode: score.lengthMode === 'endless' && score.level !== 'max' ? 'endless' : undefined,
     total: score.total || score.correct || 0,
     date: score.date || new Date(0).toISOString(),
   }))) : [];
@@ -1129,15 +1120,11 @@ function modeLabel(value = mode) {
 }
 
 function levelLabel(value = level) {
-  return tr(value === 'easy' ? 'levelEasy' : value === 'medium' ? 'levelMedium' : 'levelMax');
+  return tr(value === 'easy' ? 'levelEasy' : value === 'medium' ? 'levelMedium' : value === 'expert' ? 'levelExpert' : 'levelMax');
 }
 
-function lengthLabel(value = lengthMode) {
-  return tr(value === 'endless' ? 'lengthEndless' : 'lengthFixed');
-}
-
-function categoryKey(entry = { mode, level, lengthMode }) {
-  return `${entry.mode}|${entry.level}|${entry.lengthMode || 'fixed'}`;
+function categoryKey(entry = { mode, level }) {
+  return `${entry.mode}|${entry.level}${entry.lengthMode === 'endless' ? '|endless' : ''}`;
 }
 
 function categoryScores() {
@@ -1182,11 +1169,11 @@ function awardQuestion(revealed = false) {
     stats.reveals++;
     return;
   }
-  const levelBonus = level === 'max' ? 40 : level === 'medium' ? 20 : 0;
-  const lengthBonus = lengthMode === 'endless' ? 10 : 0;
+  // У эксперта прежние +40 сложного уровня и +10 бесконечного раунда.
+  const levelBonus = level === 'expert' ? 50 : level === 'max' ? 40 : level === 'medium' ? 20 : 0;
   const penalty = wrong.size * 15 + (hinted ? 25 : 0);
   stats.correct++;
-  stats.score += Math.max(20, 100 + levelBonus + lengthBonus - penalty);
+  stats.score += Math.max(20, 100 + levelBonus - penalty);
 }
 
 function saveFinishedScore(value) {
@@ -1205,7 +1192,6 @@ function saveFinishedScore(value) {
     total: round.length,
     mode,
     level,
-    lengthMode,
     mistakes: stats.mistakes,
     hints: stats.hints,
     reveals: stats.reveals,
@@ -1222,7 +1208,7 @@ function renderPlayerBoard() {
   const board = document.querySelector('.player-board');
   if (!board) return;
   board.setAttribute('aria-label', tr('playerBoard'));
-  $('#scoreScope').textContent = tr('scoreboardScope', { mode: modeLabel(), level: levelLabel(), length: lengthLabel() });
+  $('#scoreScope').textContent = tr('scoreboardScope', { mode: modeLabel(), level: levelLabel() });
   // Карточка показывается только на финальном экране, где счёт раунда уже
   // написан крупно ниже. Дублировать его здесь незачем, да и рядом с «рекордов
   // пока нет» число выглядело прямым враньём. Показываем лучший в категории.
@@ -1255,7 +1241,7 @@ function renderFinish() {
         <span>${tr('scoreTitle')}</span>
         <strong>${stats.score}</strong>
         <p>${tr('scoreBreakdown', { correct: stats.correct, total: round.length, mistakes: stats.mistakes, hints: stats.hints })}</p>
-        <small>${tr('scoreboardScope', { mode: modeLabel(), level: levelLabel(), length: lengthLabel() })}</small>
+        <small>${tr('scoreboardScope', { mode: modeLabel(), level: levelLabel() })}</small>
       </article>
       ${entryForm}
       ${savedText}
@@ -1468,8 +1454,16 @@ function shuffle(items) {
   return copy;
 }
 
-const levelRank = { easy: 0, medium: 1, max: 2 };
+// «Эксперт» — сложный уровень без конца: весь каталог темы подряд. Раньше это
+// был отдельный переключатель длины раунда, и на телефоне он стоил строку.
+const levelRank = { easy: 0, medium: 1, max: 2, expert: 2 };
 const fixedRoundSizes = { easy: 5, medium: 15, max: 30 };
+
+// Как выглядит загадка — варианты ответа, маски, подписи — эксперту
+// достаётся от сложного уровня; отличается только длина раунда.
+function difficulty() {
+  return level === 'expert' ? 'max' : level;
+}
 const easyIds = new Set(Object.keys(easyFlagFacts));
 const mediumFlagIds = new Set([
   ...easyIds,
@@ -1538,7 +1532,7 @@ function capitalPool() {
 }
 
 function roundLength() {
-  return lengthMode === 'endless' ? Infinity : fixedRoundSizes[level];
+  return level === 'expert' ? Infinity : fixedRoundSizes[level];
 }
 
 function takeSome(items, count) {
@@ -1568,7 +1562,7 @@ function similarFlagOptions(question, availableFlags) {
 }
 
 function flagOptions(question, availableFlags) {
-  if (level === 'max') return similarFlagOptions(question, availableFlags);
+  if (difficulty() === 'max') return similarFlagOptions(question, availableFlags);
   return shuffle([question, ...shuffle(availableFlags.filter(flag => flag.id !== question.id)).slice(0, 3)]).map(flag => flag.id);
 }
 
@@ -1586,7 +1580,7 @@ function similarCoatOptions(question, availableCoats) {
 }
 
 function coatOptions(question, availableCoats) {
-  if (level === 'max') return similarCoatOptions(question, availableCoats);
+  if (difficulty() === 'max') return similarCoatOptions(question, availableCoats);
   return shuffle([question, ...shuffle(availableCoats.filter(coat => coat.id !== question.id)).slice(0, 3)]).map(coat => coat.id);
 }
 
@@ -1604,7 +1598,7 @@ function capitalOptions(question, availableCapitals) {
 }
 
 function mixedPool(availableFlags, availableAnimals) {
-  if (lengthMode === 'endless') return shuffle([...availableFlags, ...availableAnimals]);
+  if (level === 'expert') return shuffle([...availableFlags, ...availableAnimals]);
   const total = fixedRoundSizes[level];
   const desiredAnimals = Math.min(availableAnimals.length, Math.max(2, Math.round(total * 0.28)));
   const desiredFlags = Math.min(availableFlags.length, total - desiredAnimals);
@@ -1649,7 +1643,6 @@ function setStaticText() {
   document.querySelector('.view-modes').setAttribute('aria-label', tr('viewGroup'));
   document.querySelector('.topic-modes').setAttribute('aria-label', tr('topicGroup'));
   document.querySelector('.level-modes').setAttribute('aria-label', tr('levelGroup'));
-  document.querySelector('.length-modes').setAttribute('aria-label', tr('lengthGroup'));
   document.querySelector('[data-view="quiz"]').textContent = tr('viewQuiz');
   document.querySelector('[data-view="explore"]').textContent = tr('viewExplore');
   document.querySelector('[data-mode="mixed"]').textContent = tr('modeMixed');
@@ -1664,8 +1657,7 @@ function setStaticText() {
   document.querySelector('[data-level="easy"]').textContent = tr('levelEasy');
   document.querySelector('[data-level="medium"]').textContent = tr('levelMedium');
   document.querySelector('[data-level="max"]').textContent = tr('levelMax');
-  document.querySelector('[data-length="fixed"]').textContent = tr('lengthFixed');
-  document.querySelector('[data-length="endless"]').textContent = tr('lengthEndless');
+  document.querySelector('[data-level="expert"]').textContent = tr('levelExpert');
   document.querySelector('.player-board').setAttribute('aria-label', tr('playerBoard'));
 }
 
@@ -1680,7 +1672,6 @@ function setChrome() {
   $('#title').textContent = tr(quiz ? 'quizTitle' : 'exploreTitle');
   document.querySelector('.topic-modes').hidden = !quiz || (!featureFlags.animals && !featureFlags.coats && !featureFlags.capitals);
   document.querySelector('.level-modes').hidden = !quiz;
-  document.querySelector('.length-modes').hidden = !quiz;
   document.querySelector('.player-board').hidden = !isRoundFinished();
   document.querySelectorAll('[data-view]').forEach(button => button.classList.toggle('active', button.dataset.view === view));
 }
@@ -1731,7 +1722,7 @@ function start() {
   render();
 }
 
-// Смена сложности, темы или длины посреди раунда не должна стирать набранное:
+// Смена сложности или темы посреди раунда не должна стирать набранное:
 // сыгранные вопросы и очки остаются, заново собирается только остаток.
 function retuneRound() {
   const keep = solved ? pos + 1 : pos;
@@ -1776,20 +1767,20 @@ function render() {
 
   // На простом уровне флаг показывается целиком: там задача — узнать символ,
   // а не разгадать его по обрывку. Герб прячется только на сложном уровне.
-  const hideable = q.type === 'flag' ? level !== 'easy' : q.type === 'coat' && level === 'max';
+  const hideable = q.type === 'flag' ? level !== 'easy' : q.type === 'coat' && difficulty() === 'max';
   const masked = hideable && !hinted && !solved;
   const idAnswerType = q.type === 'flag' || q.type === 'coat' || q.type === 'capital';
   const visual = q.type === 'flag'
     ? `<div class="flag-window">${flagShot(q, masked)}</div>`
     : q.type === 'coat'
-      ? `<div class="coat-window"><button type="button" class="coat-shot${masked ? ` masked masked-${level}` : ''}" data-quiz-zoom aria-label="${escapeHtml(tr('zoomCoat'))}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"><span class="zoom-badge" aria-hidden="true">${magnifierIcon}</span></button></div>`
+      ? `<div class="coat-window"><button type="button" class="coat-shot${masked ? ` masked masked-${difficulty()}` : ''}" data-quiz-zoom aria-label="${escapeHtml(tr('zoomCoat'))}"><img src="assets/coats/${q.id}.webp" alt="${escapeHtml(solved ? name(q) : tr('coatAltHidden'))}"><span class="zoom-badge" aria-hidden="true">${magnifierIcon}</span></button></div>`
     : q.type === 'capital'
       ? `<div class="capital-card"><img src="assets/flags/${q.id}.svg" alt=""><span class="tag">${tr('country')}</span><strong>${escapeHtml(name(q))}</strong></div>`
       : `<span class="animal" aria-hidden="true">${q.emoji}</span><strong>${escapeHtml(name(q))}</strong>`;
   // Карта результата на телефоне не помещается и всё равно не читается:
   // половину стран на ней не разглядеть даже на десктопе.
   const prompt = q.type === 'flag'
-    ? (masked ? tr(level === 'max' ? veilPrompts[veilFor(q).kind] : 'flagPartial') : '')
+    ? (masked ? tr(difficulty() === 'max' ? veilPrompts[veilFor(q).kind] : 'flagPartial') : '')
     : q.type === 'coat' ? (masked ? tr('coatPartial') : '') : q.type === 'capital' ? tr('capitalPrompt') : tr('animalPrompt');
   // Подсказка открывает спрятанное. Если прятать было нечего (простой уровень,
   // герб не на сложном), «теперь открыт целиком» было бы неправдой — даём
@@ -1842,7 +1833,7 @@ function render() {
   if (coatZoom) {
     coatZoom.onclick = () => {
       const img = coatZoom.querySelector('img');
-      openSymbolZoom('coat', q.id, img.naturalWidth / img.naturalHeight || 1, { named: solved, clip: masked ? level : null });
+      openSymbolZoom('coat', q.id, img.naturalWidth / img.naturalHeight || 1, { named: solved, clip: masked ? difficulty() : null });
     };
   }
 
@@ -1925,7 +1916,7 @@ function flagShot(q, masked) {
   const src = `assets/flags/${q.id}.svg`;
   const alt = escapeHtml(solved ? name(q) : tr('flagAltHidden'));
   if (!masked) return `<span class="flag-shot"><img src="${src}" alt="${alt}"></span>`;
-  if (level !== 'max') return `<span class="flag-shot masked masked-${level}"><img src="${src}" alt="${alt}"></span>`;
+  if (difficulty() !== 'max') return `<span class="flag-shot masked masked-${level}"><img src="${src}" alt="${alt}"></span>`;
   const veil = veilFor(q);
   if (veil.kind === 'corner' || veil.kind === 'strip') {
     return `<span class="flag-shot masked"><img src="${src}" alt="${alt}" style="clip-path: inset(${veil.inset})"></span>`;
@@ -2248,15 +2239,6 @@ document.querySelectorAll('[data-level]').forEach(button => {
     if (changed) retuneRound(); else render();
   };
 });
-document.querySelectorAll('[data-length]').forEach(button => {
-  button.onclick = () => {
-    const changed = lengthMode !== button.dataset.length;
-    lengthMode = button.dataset.length;
-    document.querySelectorAll('[data-length]').forEach(item => item.classList.toggle('active', item === button));
-    view = 'quiz';
-    if (changed) retuneRound(); else render();
-  };
-});
 document.querySelectorAll('[data-mode]').forEach(button => {
   button.onclick = () => {
     const availableModes = ['flags'];
@@ -2291,8 +2273,7 @@ if (document.modelContext?.registerTool) {
         type: 'object',
         properties: {
           mode: { type: 'string', enum: ['flags', ...(featureFlags.coats ? ['coats'] : []), ...(featureFlags.capitals ? ['capitals'] : []), ...(featureFlags.animals ? ['mixed', 'animals'] : [])] },
-          level: { type: 'string', enum: ['easy', 'medium', 'max'] },
-          lengthMode: { type: 'string', enum: ['fixed', 'endless'] },
+          level: { type: 'string', enum: ['easy', 'medium', 'max', 'expert'] },
         },
         required: ['mode'],
         additionalProperties: false,
@@ -2304,13 +2285,11 @@ if (document.modelContext?.registerTool) {
         if (featureFlags.capitals) availableModes.push('capitals');
         if (featureFlags.animals) availableModes.push('mixed', 'animals');
         if (!input || !availableModes.includes(input.mode)) throw Error('Invalid mode');
-        if (input.level && !['easy', 'medium', 'max'].includes(input.level)) throw Error('Invalid level');
-        if (input.lengthMode && !['fixed', 'endless'].includes(input.lengthMode)) throw Error('Invalid length mode');
+        if (input.level && !['easy', 'medium', 'max', 'expert'].includes(input.level)) throw Error('Invalid level');
         if (input.level) document.querySelector(`[data-level="${input.level}"]`).click();
-        if (input.lengthMode) document.querySelector(`[data-length="${input.lengthMode}"]`).click();
         document.querySelector(`[data-mode="${input.mode}"]`).click();
         start();
-        return { mode, level, lengthMode, questions: round.length };
+        return { mode, level, questions: round.length };
       },
     })).catch(() => {});
   } catch {}
